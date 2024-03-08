@@ -1,7 +1,7 @@
 import 'package:drop_down_list/model/selected_list_item.dart';
 import 'package:flutter/material.dart';
-import 'package:ycmedical/data/model/list.dart';
-import 'package:ycmedical/package/apptextfield.dart';
+import 'package:ycmedical/data/widget.dart/list.dart';
+import 'package:ycmedical/view/package/apptextfield.dart';
 
 class CityList extends StatefulWidget {
   const CityList({super.key});
