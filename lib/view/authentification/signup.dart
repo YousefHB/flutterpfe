@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:ycmedical/view/authentification/authpatient.dart';
+import 'package:ycmedical/view/authentification/authprofsante.dart';
 
 class SignupScreen extends StatefulWidget {
   SignupScreen({super.key});
@@ -27,6 +28,34 @@ class _SignupScreenState extends State<SignupScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmpasswordController = TextEditingController();
+  String? _validateEmail(String? value) {
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+
+    if (value == null || value.isEmpty) {
+      return 'Please enter an email';
+    } else if (!emailRegex.hasMatch(value)) {
+      return 'Please enter a valid email';
+    }
+
+    return null;
+  }
+
+  String? _validateDateOfBirth(String? value) {
+    // Regular expression for date validation in the format "dd/mm/yyyy"
+    final dateRegex = RegExp(r'^\d{2}/\d{2}/\d{4}$');
+
+    if (value == null || value.isEmpty) {
+      return 'Please enter a date of birth';
+    } else if (!dateRegex.hasMatch(value)) {
+      return 'Please enter a valid date in the format dd/mm/yyyy';
+    }
+
+    // You can add further validation logic here if needed
+    // For example, checking if the day, month, and year are within valid ranges
+
+    return null;
+  }
+
   validationform(BuildContext context) {
     if (_formKey.currentState!.validate()) {
       setState(() {
@@ -122,6 +151,11 @@ class _SignupScreenState extends State<SignupScreen> {
                                   ],
                                 ),
                                 child: TextFormField(
+                                  style: TextStyle(
+                                    fontFamily: "FSPDemoUniformPro",
+                                    fontSize: 15,
+                                    color: Color.fromARGB(239, 89, 111, 114),
+                                  ),
                                   controller: firstnameController,
                                   cursorColor: myCustomColor1,
                                   decoration: const InputDecoration(
@@ -170,6 +204,15 @@ class _SignupScreenState extends State<SignupScreen> {
                                   ],
                                 ),
                                 child: TextFormField(
+                                  style: TextStyle(
+                                    fontFamily: "FSPDemoUniformPro",
+                                    fontSize: 15,
+                                    color: Color.fromARGB(239, 89, 111, 114),
+                                  ),
+                                  onTap: () {
+                                    print(
+                                        "nom est " + firstnameController.text);
+                                  },
                                   controller: lastnameController,
                                   cursorColor: myCustomColor1,
                                   decoration: const InputDecoration(
@@ -218,9 +261,18 @@ class _SignupScreenState extends State<SignupScreen> {
                                   ],
                                 ),
                                 child: TextFormField(
+                                  onTap: () {
+                                    print("prénom est " +
+                                        lastnameController.text);
+                                  },
                                   controller: dateOfBirthController,
                                   cursorColor: myCustomColor1,
                                   keyboardType: TextInputType.datetime,
+                                  style: TextStyle(
+                                    fontFamily: "FSPDemoUniformPro",
+                                    fontSize: 15,
+                                    color: Color.fromARGB(239, 89, 111, 114),
+                                  ),
                                   decoration: InputDecoration(
                                     hintText: "Date de naissance",
                                     hintStyle: TextStyle(
@@ -233,13 +285,10 @@ class _SignupScreenState extends State<SignupScreen> {
                                     ),
                                     contentPadding: EdgeInsets.symmetric(
                                         vertical: 10, horizontal: 25),
+
                                     //alignLabelWithHint: true, // Center label vertically
                                   ),
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return '*champ obligatoire';
-                                    }
-                                  },
+                                  validator: _validateDateOfBirth,
                                 ),
                               ),
                               SizedBox(
@@ -266,6 +315,15 @@ class _SignupScreenState extends State<SignupScreen> {
                                   ],
                                 ),
                                 child: TextFormField(
+                                  onTap: () {
+                                    print("naissance est " +
+                                        dateOfBirthController.text);
+                                  },
+                                  style: TextStyle(
+                                    fontFamily: "FSPDemoUniformPro",
+                                    fontSize: 15,
+                                    color: Color.fromARGB(232, 89, 111, 114),
+                                  ),
                                   controller: emailController,
                                   cursorColor: myCustomColor1,
                                   keyboardType: TextInputType.emailAddress,
@@ -281,13 +339,10 @@ class _SignupScreenState extends State<SignupScreen> {
                                     ),
                                     contentPadding: EdgeInsets.symmetric(
                                         vertical: 10, horizontal: 25),
+
                                     //alignLabelWithHint: true, // Center label vertically
                                   ),
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return '*champ obligatoire';
-                                    }
-                                  },
+                                  validator: _validateEmail,
                                 ),
                               ),
                               const SizedBox(
@@ -315,6 +370,14 @@ class _SignupScreenState extends State<SignupScreen> {
                                   ],
                                 ),
                                 child: TextFormField(
+                                  onTap: () {
+                                    print("email est " + emailController.text);
+                                  },
+                                  style: TextStyle(
+                                    fontFamily: "FSPDemoUniformPro",
+                                    fontSize: 15,
+                                    color: Color.fromARGB(239, 89, 111, 114),
+                                  ),
                                   controller: passwordController,
                                   cursorColor: myCustomColor1,
                                   obscureText: _obscureText,
@@ -330,6 +393,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                     ),
                                     contentPadding: EdgeInsets.symmetric(
                                         vertical: 10, horizontal: 25),
+
                                     //alignLabelWithHint: true, // Center label vertically
                                   ),
                                   validator: (value) {
@@ -364,6 +428,15 @@ class _SignupScreenState extends State<SignupScreen> {
                                   ],
                                 ),
                                 child: TextFormField(
+                                  onTap: () {
+                                    print("password est " +
+                                        passwordController.text);
+                                  },
+                                  style: TextStyle(
+                                    fontFamily: "FSPDemoUniformPro",
+                                    fontSize: 15,
+                                    color: Color.fromARGB(239, 89, 111, 114),
+                                  ),
                                   controller: confirmpasswordController,
                                   cursorColor: myCustomColor1,
                                   obscureText: _obscureText,
@@ -379,6 +452,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                     ),
                                     contentPadding: EdgeInsets.symmetric(
                                         vertical: 10, horizontal: 25),
+
                                     //alignLabelWithHint: true, // Center label vertically
                                   ),
                                   validator: (value) {
@@ -479,11 +553,11 @@ class _SignupScreenState extends State<SignupScreen> {
                             child: OutlinedButton(
                               onPressed: () {
                                 print("helloooooooooooooooooo");
-                                /*Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) => SigninScreen()),
-                                          );*/
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ProfSanteSignUp()),
+                                );
                               },
                               child: Text(
                                 "Professionnel\nde la santé",

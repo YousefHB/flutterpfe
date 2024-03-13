@@ -34,6 +34,10 @@ dependencies:
   page_transition: ^2.0.0
   drop_down_list: ^0.0.6
   http:
+  file_picker: ^6.2.0
+  open_file: ^3.3.2
+  path_provider: ^2.1.2
+
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -64,6 +68,8 @@ flutter:
     - assets/image/logoblanc.png
     - assets/image/sp.gif
     - assets/image/back.png
+    - assets/image/down-arrow.png
+
 
   
   uses-material-design: true

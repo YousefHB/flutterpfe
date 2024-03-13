@@ -28,22 +28,8 @@ class _AppTextFieldState extends State<AppTextField> {
   void onTextFieldTap() {
     DropDownState(
       DropDown(
-        dropDownBackgroundColor: Color.fromARGB(255, 221, 252, 255),
+        dropDownBackgroundColor: Color.fromARGB(255, 237, 254, 255),
         isDismissible: true,
-        submitButtonChild: const Text(
-          'Done',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        clearButtonChild: const Text(
-          'Clear',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
         data: widget.cities ?? [],
         selectedItems: (List<dynamic> selectedList) {
           print(selectedList.indexed);
@@ -51,6 +37,8 @@ class _AppTextFieldState extends State<AppTextField> {
           for (var item in selectedList) {
             if (item is SelectedListItem) {
               list.add(item.name);
+              print(item.name);
+              widget.textEditingController.text = item.name;
             }
           }
         },
@@ -85,16 +73,36 @@ class _AppTextFieldState extends State<AppTextField> {
             ],
           ),
           child: TextFormField(
+            style: TextStyle(
+              fontFamily: "FSPDemoUniformPro",
+              fontSize: 15,
+              color: Color.fromARGB(239, 89, 111, 114),
+            ),
             controller: widget.textEditingController,
             cursorColor: Colors.black,
             onTap: widget.isCitySelected
                 ? () {
                     FocusScope.of(context).unfocus();
                     onTextFieldTap();
+                    setState(() {
+                      print("La ville sélectionnée est : " +
+                          widget.textEditingController.text);
+                    });
                   }
                 : null,
             decoration: InputDecoration(
-              hintText: widget.hint,
+              suffixIcon: Icon(
+                Icons
+                    .arrow_drop_down, // Replace with your desired icon from Material Icons
+                size: 24.0,
+                color: Color.fromARGB(
+                    224, 89, 111, 114), // Set your desired color here
+              ),
+
+              hintText: widget.textEditingController.text == ""
+                  ? widget.hint
+                  : widget.textEditingController.text,
+
               hintStyle: TextStyle(
                 fontFamily: "FSPDemoUniformPro",
                 fontSize: 12,
@@ -108,9 +116,6 @@ class _AppTextFieldState extends State<AppTextField> {
               //alignLabelWithHint: true, // Center label vertically
             ),
           ),
-        ),
-        const SizedBox(
-          height: 15.0,
         ),
       ],
     );

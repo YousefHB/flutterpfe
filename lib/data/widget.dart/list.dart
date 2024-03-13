@@ -24,3 +24,11 @@ List<String> ville = [
   "Tunis",
   "Zaghouan"
 ];
+List<String> specialite = [
+  "infermier",
+  "médecin",
+  "pharmacie",
+  "laboratoire",
+  "vétérinaire",
+  "kiné"
+];

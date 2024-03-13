@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ycmedical/screen/authentification/connection.dart';
-import 'package:ycmedical/screen/authentification/signup.dart';
-import 'package:ycmedical/data/cities.dart';
+import 'package:ycmedical/view/authentification/connection.dart';
+import 'package:ycmedical/view/authentification/signup.dart';
+import 'package:ycmedical/data/widget.dart/cities.dart';
 //import 'authentification/connection.dart';
 
 void main() {
