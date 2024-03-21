@@ -147,15 +147,8 @@ class _ProfSanteSignUpState extends State<ProfSanteSignUp> {
                         ],
                       ),
                       child: TextField(
-                        controller: _filecontroller,
-                        onTap: () async {
-                          FilePickerResult? result =
-                              await FilePicker.platform.pickFiles(
-                            allowMultiple: true,
-                            type: FileType.custom,
-                            allowedExtensions: ['pdf'],
-                          );
-
+                        controller: specialiteController,
+                      
                           // open file
                           final file = result!.files.first;
                           openFile(file);
