@@ -30,5 +30,6 @@ List<String> specialite = [
   "pharmacie",
   "laboratoire",
   "vétérinaire",
-  "kiné"
+  "kiné",
+  "Autre"
 ];

@@ -4,7 +4,9 @@ import 'package:ycmedical/data/widget.dart/list.dart';
 import 'package:ycmedical/view/package/apptextfield.dart';
 
 class CityList extends StatefulWidget {
-  const CityList({super.key});
+  final TextEditingController countryController;
+
+  const CityList({Key? key, required this.countryController}) : super(key: key);
 
   @override
   State<CityList> createState() => _CityListState();
@@ -20,7 +22,7 @@ class _CityListState extends State<CityList> {
           cities: [
             for (var item in ville) SelectedListItem(name: item),
           ],
-          textEditingController: Contry,
+          textEditingController: widget.countryController,
           title: "select contry",
           hint: "Ville",
           isCitySelected: true),

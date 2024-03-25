@@ -2,10 +2,15 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:ycmedical/data/widget.dart/cities.dart';
 import 'package:ycmedical/data/widget.dart/pays.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:ycmedical/config.dart';
 
 class AuthPatient extends StatefulWidget {
-  const AuthPatient({super.key});
+  final String tokenCode; // Ajouter un champ pour le token
 
+  AuthPatient(
+      {required this.tokenCode}); // Mettre à jour le constructeur pour accepter le token
   @override
   State<AuthPatient> createState() => _AuthPatientState();
 }
@@ -16,6 +21,38 @@ const String myfont = 'FSPDemoUniformPro';
 
 class _AuthPatientState extends State<AuthPatient> {
   var selectedGender;
+  final TextEditingController countryController = TextEditingController();
+  final TextEditingController _paysController = TextEditingController();
+
+  void registerPatient() async {
+    String token = widget.tokenCode;
+    print(token);
+
+    var regbody = {
+      "genre": selectedGender,
+      "pays": _paysController.text,
+      "ville": countryController.text
+    };
+
+    try {
+      var response = await http.post(
+        Uri.parse(url +
+            '/api/auth/registerPatient/$token'), // Correction du nom de la variable
+        headers: {
+          "Content-type": "application/json",
+          "Authorization":
+              "Bearer $token", // Passer le token dans l'en-tête Authorization
+        },
+        body: jsonEncode(regbody),
+      );
+
+      print(response);
+      print(response.body);
+    } catch (error) {
+      print('Error: $error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
@@ -57,11 +94,11 @@ class _AuthPatientState extends State<AuthPatient> {
                   ),
                   Container(
                     child: Column(children: [
-                      PaysList(),
+                      PaysList(paysController: _paysController),
                       SizedBox(
                         height: 20,
                       ),
-                      CityList(),
+                      CityList(countryController: countryController),
                       SizedBox(
                         height: 20,
                       ),
@@ -120,7 +157,10 @@ class _AuthPatientState extends State<AuthPatient> {
                         width: 150,
                         height: 50,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            // Récupérer les valeurs des contrôleurs
+                            registerPatient();
+                          },
                           child: Text(
                             "Crée",
                             style: TextStyle(

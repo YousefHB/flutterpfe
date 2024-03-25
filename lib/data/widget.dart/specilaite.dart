@@ -4,7 +4,10 @@ import 'package:ycmedical/data/widget.dart/list.dart';
 import 'package:ycmedical/view/package/apptextfield.dart';
 
 class SpecialiteList extends StatefulWidget {
-  const SpecialiteList({super.key});
+  final TextEditingController specController;
+
+  const SpecialiteList({Key? key, required this.specController})
+      : super(key: key);
 
   @override
   State<SpecialiteList> createState() => _SpecialiteListState();
@@ -20,7 +23,7 @@ class _SpecialiteListState extends State<SpecialiteList> {
           cities: [
             for (var item in specialite) SelectedListItem(name: item),
           ],
-          textEditingController: spec,
+          textEditingController: widget.specController,
           title: "",
           hint: "spécialité",
           isCitySelected: true),

@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:ycmedical/view/package/apptextfield.dart';
 
 class PaysList extends StatefulWidget {
-  const PaysList({super.key});
+  final TextEditingController paysController;
 
+  const PaysList({Key? key, required this.paysController}) : super(key: key);
   @override
   State<PaysList> createState() => _PaysListState();
 }
@@ -19,7 +20,7 @@ class _PaysListState extends State<PaysList> {
           cities: [
             SelectedListItem(name: "Tunisie"),
           ],
-          textEditingController: Pays,
+          textEditingController: widget.paysController,
           title: "select contry",
           hint: "Pays",
           isCitySelected: true),

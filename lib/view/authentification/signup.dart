@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:ycmedical/view/authentification/authpatient.dart';
 import 'package:ycmedical/view/authentification/authprofsante.dart';
+import 'package:ycmedical/view/authentification/passwordoublie.dart';
+import 'package:ycmedical/view/authentification/verificationEmail.dart';
 
 class SignupScreen extends StatefulWidget {
   SignupScreen({super.key});
@@ -28,6 +30,25 @@ class _SignupScreenState extends State<SignupScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmpasswordController = TextEditingController();
+  /*********************************** */
+  void registerUser() async {
+    var regbody = {
+      "firstName": firstnameController.text,
+      "lastName": lastnameController.text,
+      "dateOfBirth": dateOfBirthController.text,
+      "email": emailController.text,
+      "password": passwordController.text
+    };
+    var response = await http.post(
+      Uri.parse(registraion),
+      headers: {"Content-type": "application/json"},
+      body: jsonEncode(regbody),
+    );
+
+    print(response);
+  }
+
+  /*********************************** */
   String? _validateEmail(String? value) {
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
 
@@ -65,24 +86,11 @@ class _SignupScreenState extends State<SignupScreen> {
     }
   }
 
-  /*void registerpatient() async {
-    var regbody = {
-      "firstname": firstnameController,
-      "lastname": lastnameController,
-      "dateOfBirth": dateOfBirthController,
-      "email": emailController,
-      "password": passwordController,
-      "role": "PATIENT",
-    };
-    var response = await http.post(Uri.parse(registraion),
-        headers: {"content-type": "application/json"},
-        body: jsonEncode(regbody));
-  }*/
-
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     bool _obscureText = true;
+    bool isPatient = true;
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -477,6 +485,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
+                        registerUser();
                         if (_formKey.currentState!.validate()) {
                           setState(() {
                             isBlurred = !isBlurred;
@@ -520,10 +529,15 @@ class _SignupScreenState extends State<SignupScreen> {
                             height: 50,
                             child: ElevatedButton(
                               onPressed: () {
+                                setState(() {
+                                  isPatient = true;
+                                });
+                                true;
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => AuthPatient()),
+                                      builder: (context) => VerificationEmail(
+                                          isPatient: isPatient)),
                                 );
                               },
                               child: Text(
@@ -552,11 +566,15 @@ class _SignupScreenState extends State<SignupScreen> {
                             height: 50,
                             child: OutlinedButton(
                               onPressed: () {
-                                print("helloooooooooooooooooo");
+                                setState(() {
+                                  isPatient = false;
+                                });
+
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => ProfSanteSignUp()),
+                                      builder: (context) => VerificationEmail(
+                                          isPatient: isPatient)),
                                 );
                               },
                               child: Text(

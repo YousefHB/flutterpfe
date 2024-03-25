@@ -2,15 +2,19 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:ycmedical/config.dart';
 import 'package:ycmedical/data/widget.dart/cities.dart';
 import 'package:ycmedical/data/widget.dart/pays.dart';
 import 'package:ycmedical/data/widget.dart/specilaite.dart';
+import 'package:http_parser/http_parser.dart';
 
 class ProfSanteSignUp extends StatefulWidget {
-  const ProfSanteSignUp({super.key});
+  final String tokenCode; // Ajouter un champ pour le token
 
+  ProfSanteSignUp({required this.tokenCode});
   @override
   State<ProfSanteSignUp> createState() => _ProfSanteSignUpState();
 }
@@ -21,9 +25,18 @@ const String myfont = 'FSPDemoUniformPro';
 
 class _ProfSanteSignUpState extends State<ProfSanteSignUp> {
   var selectedGender;
-  // les **************** controller **
-  TextEditingController _filecontroller = TextEditingController();
-  String? _selectedFileName;
+  PlatformFile? selectedFile;
+  TextEditingController fileController =
+      TextEditingController(); // Nouveau contrôleur pour le champ de fichier
+
+  final TextEditingController countryController = TextEditingController();
+  final TextEditingController _paysController = TextEditingController();
+  TextEditingController specialiteController = TextEditingController();
+  File? _selectedFile;
+  List<File> _selectedFiles =
+      []; // Modifier le type de _selectedFile pour contenir une liste de fichiers
+
+  List<PlatformFile> selectedFiles = [];
 
   @override
   Widget build(BuildContext context) {
@@ -67,15 +80,15 @@ class _ProfSanteSignUpState extends State<ProfSanteSignUp> {
               Container(
                 child: Column(
                   children: [
-                    PaysList(),
+                    PaysList(paysController: _paysController),
                     SizedBox(
                       height: 20,
                     ),
-                    CityList(),
+                    CityList(countryController: countryController),
                     SizedBox(
                       height: 20,
                     ),
-                    SpecialiteList(),
+                    SpecialiteList(specController: specialiteController),
                     SizedBox(
                       height: 20,
                     ),
@@ -147,27 +160,25 @@ class _ProfSanteSignUpState extends State<ProfSanteSignUp> {
                         ],
                       ),
                       child: TextField(
-                        controller: specialiteController,
-                      
-                          // open file
-                          final file = result!.files.first;
-                          openFile(file);
-                          print('path: ${file.path}');
-                          print('extension: ${file.extension}');
-                          final newFile = await saveFilePermanenetly(file);
-                          print('From path: ${file.path}');
-                          print('To Path : ${newFile.path}');
-                          if (result != null && result.files.isNotEmpty) {
+                        onTap: () async {
+                          await _chooseFiles(); // Appeler la fonction _chooseFiles() pour choisir des fichiers
+                          if (_selectedFiles.isNotEmpty) {
                             setState(() {
-                              _selectedFileName = result.files.first.name;
+                              fileController.text = _selectedFiles
+                                  .map((file) => file.path)
+                                  .join(
+                                      ", "); // Mettre à jour le texte avec les chemins des fichiers sélectionnés
                             });
                           }
                         },
                         readOnly: true,
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.attach_file),
-                          hintText: _selectedFileName ??
-                              "Attacher votre preuved'identité médicale",
+                          hintText: _selectedFiles.isNotEmpty
+                              ? _selectedFiles.map((file) => file.path).join(
+                                  ", ") // Afficher tous les chemins de fichiers sélectionnés s'il y en a
+                              : "Sélectionnez un fichier",
+
                           hintStyle: TextStyle(
                             fontFamily: "FSPDemoUniformPro",
                             fontSize: 12,
@@ -189,7 +200,7 @@ class _ProfSanteSignUpState extends State<ProfSanteSignUp> {
                       width: 150,
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: _submitForm,
                         child: Text(
                           "Crée",
                           style: TextStyle(
@@ -217,13 +228,104 @@ class _ProfSanteSignUpState extends State<ProfSanteSignUp> {
     );
   }
 
-  Future<File> saveFilePermanenetly(PlatformFile file) async {
-    final appStorage = await getApplicationDocumentsDirectory();
-    final newFile = File('${appStorage.path}/${file.name}');
-    return File(file.path!).copy(newFile.path);
+  /*Future<void> _chooseFile() async {
+    FilePickerResult? result = await FilePicker.platform
+        .pickFiles(type: FileType.custom, allowedExtensions: ['pdf']);
+
+    if (result != null) {
+      setState(() {
+        _selectedFile = File(result.files.single.path!);
+      });
+    }
+  }*/
+  Future<void> _chooseFiles() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      allowMultiple: true, // Permettre la sélection de plusieurs fichiers
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+    );
+
+    if (result != null) {
+      setState(() {
+        _selectedFiles = result.paths.map((path) => File(path!)).toList();
+        fileController.text =
+            _selectedFiles.map((file) => file.path).join(", ");
+      });
+    }
   }
 
-  void openFile(PlatformFile file) {
-    OpenFile.open(file.path!);
+  /*Future<void> _submitForm() async {
+    print('selectedGender: $selectedGender');
+    print('countryController.text: ${countryController.text}');
+    print('_paysController.text: ${_paysController.text}');
+    print('specialiteController.text: ${specialiteController.text}');
+    print('_selectedFile: $_selectedFile');
+
+    String token = widget.tokenCode;
+
+    if (_selectedFile != null &&
+        selectedGender.isNotEmpty &&
+        countryController.text.isNotEmpty &&
+        _paysController.text.isNotEmpty &&
+        specialiteController.text.isNotEmpty) {
+      var request = http.MultipartRequest(
+          'POST', Uri.parse(url + '/api/auth/registerProfessionnel/$token'));
+      request.fields['genre'] = selectedGender;
+      request.fields['ville'] = countryController.text;
+      request.fields['pays'] = _paysController.text;
+      request.fields['specialite'] = specialiteController.text;
+      request.files.add(
+          await http.MultipartFile.fromPath('documents', _selectedFile!.path));
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        print('Professionnel inscrit avec succès');
+      } else {
+        print('Erreur lors de l\'inscription: ${response.body}');
+      }
+    } else {
+      print('Veuillez remplir tous les champs et choisir un document');
+    }
+  }*/
+  Future<void> _submitForm() async {
+    print('selectedGender: $selectedGender');
+    print('countryController.text: ${countryController.text}');
+    print('_paysController.text: ${_paysController.text}');
+    print('specialiteController.text: ${specialiteController.text}');
+    print(
+        '_selectedFiles: $_selectedFiles'); // Utiliser _selectedFiles pour afficher tous les fichiers sélectionnés
+
+    String token = widget.tokenCode;
+
+    if (_selectedFiles.isNotEmpty &&
+        selectedGender.isNotEmpty &&
+        countryController.text.isNotEmpty &&
+        _paysController.text.isNotEmpty &&
+        specialiteController.text.isNotEmpty) {
+      var request = http.MultipartRequest(
+          'POST', Uri.parse(url + '/api/auth/registerProfessionnel/$token'));
+      request.fields['genre'] = selectedGender;
+      request.fields['ville'] = countryController.text;
+      request.fields['pays'] = _paysController.text;
+      request.fields['specialite'] = specialiteController.text;
+
+      for (var file in _selectedFiles) {
+        request.files
+            .add(await http.MultipartFile.fromPath('documents', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        print('Professionnel inscrit avec succès');
+      } else {
+        print('Erreur lors de l\'inscription: ${response.body}');
+      }
+    } else {
+      print('Veuillez remplir tous les champs et choisir un document');
+    }
   }
 }
