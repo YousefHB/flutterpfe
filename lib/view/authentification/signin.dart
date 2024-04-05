@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../posts/MainHomeNavigator.dart';
 import 'passwordoublie.dart';
 import 'signup.dart';
 
@@ -172,9 +173,11 @@ class _SigninScreenState extends State<SigninScreen> {
                     height: 170,
                   ),
                   ElevatedButton(
-                    onPressed: () {
-                      // Button action
-                    },
+                     onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+                      return MainNav();
+                    }));
+                  },
                     style: ElevatedButton.styleFrom(
                       primary: myCustomColor, // Background color
                       shape: RoundedRectangleBorder(
