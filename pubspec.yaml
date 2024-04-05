@@ -70,7 +70,34 @@ flutter:
     - assets/image/sp.gif
     - assets/image/back.png
     - assets/image/down-arrow.png
-
+    - assets/image/ph1.png
+    - assets/image/loupe.png
+    - assets/image/param.png
+    - assets/image/storie.png
+    - assets/image/storieadd.png
+    - assets/image/addpost.png
+    - assets/image/home.png
+    - assets/image/invitation.png
+    - assets/image/message.png
+    - assets/image/notif.png
+    - assets/image/profile.png
+    - assets/image/camera.png
+    - assets/image/gallerie.png
+    - assets/image/localisation.png
+    - assets/image/tag.png  
+    - assets/image/video-call.png
+    - assets/image/jaime.png
+    - assets/image/commentaire.png
+    - assets/image/partager.png
+    - assets/image/enregistrement.png
+    - assets/image/groupes.png
+    - assets/image/page.png
+    - assets/image/evenements.png
+    - assets/image/suivies.png
+    - assets/image/enregistrements1.png
+    - assets/image/marketplace.png
+    - assets/image/carte.png
+    - assets/image/parameters.png 
 
   
   uses-material-design: true
