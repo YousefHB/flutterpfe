@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:flutter/material.dart';
+import 'package:ycmedical/config.dart';
 
 import 'homescreen.dart';
 
@@ -43,7 +44,7 @@ class _MyWidgetState extends State<Addpost> {
 
   void _publishPost() async {
     // URL de votre API pour publier les posts
-    final String apiUrl = 'http://192.168.56.1:3000/posts';
+    final String apiUrl = addpost;
 
     // Création de la requête HTTP pour envoyer l'image et le texte à l'API
     var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
@@ -114,16 +115,15 @@ class _MyWidgetState extends State<Addpost> {
                       ),
                       GestureDetector(
                         onTap: () {
-                   /* Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+                          /* Navigator.of(context).push(MaterialPageRoute(builder: (_) {
                       return Homescreen();
                     }));*/
-                  },
-                     child: Image.asset(
-                        'assets/image/back.png',
-                        width: 30,
-                        height: 30,
-                         
-                  ),
+                        },
+                        child: Image.asset(
+                          'assets/image/back.png',
+                          width: 30,
+                          height: 30,
+                        ),
                       ),
                       Text(
                         "Crée une publication",
@@ -251,12 +251,13 @@ class _MyWidgetState extends State<Addpost> {
                                              color: Colors.blue,
                                                ),*/
                                             ),
-                                            
                                             child: Column(
                                               children: [
                                                 Row(
                                                   children: [
-                                                    SizedBox(height: 30,),
+                                                    SizedBox(
+                                                      height: 30,
+                                                    ),
                                                     GestureDetector(
                                                       onTap: () {
                                                         _pickImageFromGallery();

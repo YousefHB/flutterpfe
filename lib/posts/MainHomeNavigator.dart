@@ -20,28 +20,28 @@ class _MainNavState extends State<MainNav> {
   @override
   Widget build(BuildContext context) {
     var items = <Widget>[
-     Image.asset(
-        'assets/images/addpost.png',
+      Image.asset(
+        'assets/image/addpost.png',
         width: 45,
         height: 45,
       ),
       Image.asset(
-        'assets/images/notif.png',
+        'assets/image/notif.png',
         width: 45,
         height: 45,
       ),
       Image.asset(
-        'assets/images/home.png',
+        'assets/image/home.png',
         width: 45,
         height: 45,
       ),
       Image.asset(
-        'assets/images/invitation.png',
+        'assets/image/invitation.png',
         width: 45,
         height: 45,
       ),
       Image.asset(
-        'assets/images/message.png',
+        'assets/image/message.png',
         width: 45,
         height: 45,
       ),

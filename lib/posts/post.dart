@@ -13,9 +13,7 @@ class Post extends StatefulWidget {
 
 class _PostState extends State<Post> {
   bool showFullText = false;
-    bool showReactionRow = false;
-
-
+  bool showReactionRow = false;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +26,7 @@ class _PostState extends State<Post> {
       ),
       child: Container(
         width: screenWidth * 0.9,
-      height: 400,
+        height: 400,
         child: Column(
           children: [
             Padding(
@@ -37,7 +35,7 @@ class _PostState extends State<Post> {
               child: Align(
                 alignment: Alignment.topLeft,
                 child: Image.asset(
-                  'assets/images/profile.png',
+                  'assets/image/profile.png',
                   width: 60,
                   height: 60,
                 ),
@@ -47,7 +45,9 @@ class _PostState extends State<Post> {
               padding:
                   const EdgeInsets.symmetric(horizontal: 25.0, vertical: 0.0),
               child: Text(
-                showFullText ? widget.content : widget.content.split(' ').take(20).join(' ') + '...',
+                showFullText
+                    ? widget.content
+                    : widget.content.split(' ').take(20).join(' ') + '...',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 15,
@@ -89,8 +89,8 @@ class _PostState extends State<Post> {
             //SizedBox(height: 50,),
             if (showReactionRow) // Check if reaction row should be visible
               Container(
-                 padding:
-                  const EdgeInsets.symmetric(horizontal: 25.0, vertical: 0.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 25.0, vertical: 0.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -106,7 +106,7 @@ class _PostState extends State<Post> {
                     GestureDetector(
                       onTap: () {
                         // Handle "J'adore"
-                         setState(() {
+                        setState(() {
                           showReactionRow = false; // Hide reaction row
                         });
                       },
@@ -115,7 +115,7 @@ class _PostState extends State<Post> {
                     GestureDetector(
                       onTap: () {
                         // Handle "Triste"
-                         setState(() {
+                        setState(() {
                           showReactionRow = false; // Hide reaction row
                         });
                       },
@@ -124,7 +124,7 @@ class _PostState extends State<Post> {
                     GestureDetector(
                       onTap: () {
                         // Handle "Wow"
-                         setState(() {
+                        setState(() {
                           showReactionRow = false; // Hide reaction row
                         });
                       },
@@ -136,14 +136,14 @@ class _PostState extends State<Post> {
             Row(
               children: [
                 GestureDetector(
-                 onLongPress: () {
-                   // the principe here will be making the row of reaction visisble
-                   setState(() {
+                  onLongPress: () {
+                    // the principe here will be making the row of reaction visisble
+                    setState(() {
                       showReactionRow = true; // Show reaction row
                     });
                   },
                   child: Image.asset(
-                    'assets/images/jaime.png',
+                    'assets/image/jaime.png',
                     width: 80,
                     height: 90,
                   ),
@@ -151,7 +151,7 @@ class _PostState extends State<Post> {
                 GestureDetector(
                   onTap: () {},
                   child: Image.asset(
-                    'assets/images/commentaire.png',
+                    'assets/image/commentaire.png',
                     width: 140,
                     height: 140,
                   ),
@@ -159,7 +159,7 @@ class _PostState extends State<Post> {
                 GestureDetector(
                   onTap: () {},
                   child: Image.asset(
-                    'assets/images/partager.png',
+                    'assets/image/partager.png',
                     width: 90,
                     height: 90,
                   ),
@@ -167,7 +167,7 @@ class _PostState extends State<Post> {
                 GestureDetector(
                   onTap: () {},
                   child: Image.asset(
-                    'assets/images/enregistrement.png',
+                    'assets/image/enregistrement.png',
                     width: 60,
                     height: 30,
                   ),

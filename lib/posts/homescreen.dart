@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:ycmedical/config.dart';
 
 import 'post.dart';
 import 'stories.dart';
@@ -22,7 +23,7 @@ class _HomescreenState extends State<Homescreen> {
   }
 
   Future<void> fetchPosts() async {
-    final url = Uri.parse("http://192.168.56.1:3000/posts/all");
+    final url = Uri.parse(getpost);
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
@@ -78,7 +79,7 @@ class _HomescreenState extends State<Homescreen> {
                     child: Align(
                       alignment: Alignment.topLeft,
                       child: Image.asset(
-                        'assets/images/logo.png',
+                        'assets/image/logo.png',
                         width: 90,
                         height: 110,
                       ),
@@ -93,7 +94,7 @@ class _HomescreenState extends State<Homescreen> {
                         child: Align(
                           alignment: Alignment.centerRight,
                           child: Image.asset(
-                            'assets/images/loupe.png',
+                            'assets/image/loupe.png',
                             width: 30,
                             height: 30,
                           ),
@@ -109,7 +110,7 @@ class _HomescreenState extends State<Homescreen> {
                         child: Align(
                           alignment: Alignment.topRight,
                           child: Image.asset(
-                            'assets/images/param.png',
+                            'assets/image/param.png',
                             width: 30,
                             height: 30,
                           ),
@@ -171,7 +172,7 @@ class _HomescreenState extends State<Homescreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Image.asset(
-                            'assets/images/back.png',
+                            'assets/image/back.png',
                             width: 30,
                             height: 30,
                           ),
@@ -184,7 +185,7 @@ class _HomescreenState extends State<Homescreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Image.asset(
-                            'assets/images/profile.png',
+                            'assets/image/profile.png',
                             width: 60,
                             height: 60,
                           ),
@@ -237,7 +238,7 @@ class _HomescreenState extends State<Homescreen> {
                   children: [
                     SizedBox(width: 20),
                     Image.asset(
-                      'assets/images/groupes.png',
+                      'assets/image/groupes.png',
                       width: 100,
                       height: 60,
                     ),
@@ -245,13 +246,13 @@ class _HomescreenState extends State<Homescreen> {
                 ),
               ),
 
-             GestureDetector(
+              GestureDetector(
                 onTap: () {},
                 child: Row(
                   children: [
                     SizedBox(width: 8),
                     Image.asset(
-                      'assets/images/page.png',
+                      'assets/image/page.png',
                       width: 90,
                       height: 40,
                     ),
@@ -264,34 +265,36 @@ class _HomescreenState extends State<Homescreen> {
                   children: [
                     SizedBox(width: 13),
                     Image.asset(
-                      'assets/images/evenements.png',
+                      'assets/image/evenements.png',
                       width: 145,
                       height: 75,
                     ),
                   ],
                 ),
               ),
-               GestureDetector(
+              GestureDetector(
                 onTap: () {},
                 child: Row(
                   children: [
-                    SizedBox(width:7),
+                    SizedBox(width: 7),
                     Image.asset(
-                      'assets/images/suivies.png',
+                      'assets/image/suivies.png',
                       width: 135,
                       height: 25,
                     ),
                   ],
                 ),
               ),
-              SizedBox(height: 5,),
+              SizedBox(
+                height: 5,
+              ),
               GestureDetector(
                 onTap: () {},
                 child: Row(
                   children: [
                     SizedBox(width: 17),
                     Image.asset(
-                      'assets/images/enregistrements1.png',
+                      'assets/image/enregistrements1.png',
                       width: 155,
                       height: 60,
                     ),
@@ -304,7 +307,7 @@ class _HomescreenState extends State<Homescreen> {
                   children: [
                     SizedBox(width: 2),
                     Image.asset(
-                      'assets/images/marketplace.png',
+                      'assets/image/marketplace.png',
                       width: 155,
                       height: 34,
                     ),
@@ -317,7 +320,7 @@ class _HomescreenState extends State<Homescreen> {
                   children: [
                     SizedBox(width: 25),
                     Image.asset(
-                      'assets/images/carte.png',
+                      'assets/image/carte.png',
                       width: 255,
                       height: 90,
                     ),
@@ -330,7 +333,7 @@ class _HomescreenState extends State<Homescreen> {
                   children: [
                     SizedBox(width: 3),
                     Image.asset(
-                      'assets/images/parameters.png',
+                      'assets/image/parameters.png',
                       width: 155,
                       height: 30,
                     ),
