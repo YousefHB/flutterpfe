@@ -119,7 +119,7 @@ class _MyWidgetState extends State<Addpost> {
                     }));*/
                   },
                      child: Image.asset(
-                        'assets/images/back.png',
+                        'assets/image/back.png',
                         width: 30,
                         height: 30,
                          
@@ -147,7 +147,7 @@ class _MyWidgetState extends State<Addpost> {
                         Row(
                           children: [
                             Image.asset(
-                              'assets/images/profile.png',
+                              'assets/image/profile.png',
                               width: 50,
                               height: 50,
                             ),
@@ -266,7 +266,7 @@ class _MyWidgetState extends State<Addpost> {
                                                       child: Row(
                                                         children: [
                                                           Image.asset(
-                                                            'assets/images/gallerie.png',
+                                                            'assets/image/gallerie.png',
                                                             width: 30,
                                                             height: 30,
                                                           ),
@@ -288,7 +288,7 @@ class _MyWidgetState extends State<Addpost> {
                                                       child: Row(
                                                         children: [
                                                           Image.asset(
-                                                            'assets/images/tag.png',
+                                                            'assets/image/tag.png',
                                                             width: 30,
                                                             height: 30,
                                                           ),
@@ -309,7 +309,7 @@ class _MyWidgetState extends State<Addpost> {
                                                       child: Row(
                                                         children: [
                                                           Image.asset(
-                                                            'assets/images/localisation.png',
+                                                            'assets/image/localisation.png',
                                                             width: 30,
                                                             height: 30,
                                                           ),
@@ -329,7 +329,7 @@ class _MyWidgetState extends State<Addpost> {
                                                       child: Row(
                                                         children: [
                                                           Image.asset(
-                                                            'assets/images/video-call.png',
+                                                            'assets/image/video-call.png',
                                                             width: 30,
                                                             height: 30,
                                                           ),
@@ -349,7 +349,7 @@ class _MyWidgetState extends State<Addpost> {
                                                       child: Row(
                                                         children: [
                                                           Image.asset(
-                                                            'assets/images/camera.png',
+                                                            'assets/image/camera.png',
                                                             width: 30,
                                                             height: 30,
                                                           ),
@@ -386,7 +386,7 @@ class _MyWidgetState extends State<Addpost> {
                                 print("gallri clicked");
                               },
                               child: Image.asset(
-                                'assets/images/gallerie.png',
+                                'assets/image/gallerie.png',
                                 width: 30,
                                 height: 30,
                               ),
@@ -396,7 +396,7 @@ class _MyWidgetState extends State<Addpost> {
                                 // Logique à exécuter lors du clic sur l'image de l'étiquette
                               },
                               child: Image.asset(
-                                'assets/images/tag.png',
+                                'assets/image/tag.png',
                                 width: 30,
                                 height: 30,
                               ),
@@ -406,7 +406,7 @@ class _MyWidgetState extends State<Addpost> {
                                 // Logique à exécuter lors du clic sur l'image de la localisation
                               },
                               child: Image.asset(
-                                'assets/images/localisation.png',
+                                'assets/image/localisation.png',
                                 width: 30,
                                 height: 30,
                               ),
@@ -416,7 +416,7 @@ class _MyWidgetState extends State<Addpost> {
                                 // Logique à exécuter lors du clic sur l'image de l'appel vidéo
                               },
                               child: Image.asset(
-                                'assets/images/video-call.png',
+                                'assets/image/video-call.png',
                                 width: 30,
                                 height: 30,
                               ),
@@ -426,7 +426,7 @@ class _MyWidgetState extends State<Addpost> {
                                 // Logique à exécuter lors du clic sur l'image de l'appareil photo
                               },
                               child: Image.asset(
-                                'assets/images/camera.png',
+                                'assets/image/camera.png',
                                 width: 30,
                                 height: 30,
                               ),
