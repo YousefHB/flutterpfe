@@ -49,7 +49,7 @@ class _SigninScreenState extends State<SigninScreen> {
                       Text(
                         "Connectez",
                         style: TextStyle(
-                          fontFamily: 'FSPDemoUniformPro',
+                          fontFamily: 'ArialRounded',
                           fontSize: 20,
                         ),
                       ),
@@ -63,7 +63,7 @@ class _SigninScreenState extends State<SigninScreen> {
                       Text(
                         "vous à votre compte",
                         style: TextStyle(
-                          fontFamily: 'FSPDemoUniformPro',
+                          fontFamily: 'ArialRounded',
                           fontSize: 20,
                         ),
                       ),
@@ -94,7 +94,7 @@ class _SigninScreenState extends State<SigninScreen> {
                       decoration: InputDecoration(
                         hintText: "Email",
                         hintStyle: TextStyle(
-                          fontFamily: "FSPDemoUniformPro",
+                          fontFamily: "ArialRounded",
                           fontSize: 12,
                           color: Color.fromARGB(224, 89, 111, 114),
                         ),
@@ -135,7 +135,7 @@ class _SigninScreenState extends State<SigninScreen> {
                           decoration: InputDecoration(
                             hintText: "Mot de passe",
                             hintStyle: TextStyle(
-                              fontFamily: "FSPDemoUniformPro",
+                              fontFamily: "ArialRounded",
                               fontSize: 12,
                               color: Color.fromARGB(224, 89, 111, 114),
                             ),
@@ -173,11 +173,12 @@ class _SigninScreenState extends State<SigninScreen> {
                     height: 170,
                   ),
                   ElevatedButton(
-                     onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-                      return MainNav();
-                    }));
-                  },
+                    onPressed: () {
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (_) {
+                        return MainNav();
+                      }));
+                    },
                     style: ElevatedButton.styleFrom(
                       primary: myCustomColor, // Background color
                       shape: RoundedRectangleBorder(
@@ -191,7 +192,7 @@ class _SigninScreenState extends State<SigninScreen> {
                     child: Text(
                       'Connecter',
                       style: TextStyle(
-                        fontFamily: 'FSPDemoUniformPro',
+                        fontFamily: 'ArialRounded',
                         color: Colors.white,
                         fontSize: 20,
                       ),

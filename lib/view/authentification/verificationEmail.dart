@@ -21,7 +21,7 @@ class VerificationEmail extends StatefulWidget {
 
 const Color myCustomColor = Color(0xFF009EE2);
 const Color myCustomColor1 = Color(0xFF38B8c4);
-const String myfont = 'FSPDemoUniformPro';
+const String myfont = 'ArialRounded';
 
 class _VerificationEmailState extends State<VerificationEmail> {
   FocusNode _focusNode1 = FocusNode();
@@ -200,7 +200,7 @@ class _VerificationEmailState extends State<VerificationEmail> {
                       child: Text(
                         "Vérifier votre email",
                         style: TextStyle(
-                            fontFamily: 'FSPDemoUniformPro',
+                            fontFamily: 'ArialRounded',
                             fontSize: 20,
                             fontWeight: FontWeight.bold),
                       ),
@@ -214,7 +214,7 @@ class _VerificationEmailState extends State<VerificationEmail> {
                         textAlign: TextAlign.center,
                         "Entrer le code de\n récupération à 6 chiffres",
                         style: TextStyle(
-                            fontFamily: 'FSPDemoUniformPro',
+                            fontFamily: 'ArialRounded',
                             fontSize: 22,
                             color: myCustomColor,
                             fontWeight: FontWeight.bold),

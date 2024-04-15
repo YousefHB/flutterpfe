@@ -74,7 +74,7 @@ class _AppTextFieldState extends State<AppTextField> {
           ),
           child: TextFormField(
             style: TextStyle(
-              fontFamily: "FSPDemoUniformPro",
+              fontFamily: "ArialRounded",
               fontSize: 15,
               color: Color.fromARGB(239, 89, 111, 114),
             ),
@@ -104,7 +104,7 @@ class _AppTextFieldState extends State<AppTextField> {
                   : widget.textEditingController.text,
 
               hintStyle: TextStyle(
-                fontFamily: "FSPDemoUniformPro",
+                fontFamily: "ArialRounded",
                 fontSize: 12,
                 color: Color.fromARGB(224, 89, 111, 114),
               ),

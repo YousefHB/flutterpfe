@@ -21,7 +21,7 @@ class ProfSanteSignUp extends StatefulWidget {
 
 const Color myCustomColor = Color(0xFF009EE2);
 const Color myCustomColor1 = Color(0xFF38B8c4);
-const String myfont = 'FSPDemoUniformPro';
+const String myfont = 'ArialRounded';
 
 class _ProfSanteSignUpState extends State<ProfSanteSignUp> {
   var selectedGender;
@@ -70,7 +70,7 @@ class _ProfSanteSignUpState extends State<ProfSanteSignUp> {
               Text(
                 "créer un compte",
                 style: TextStyle(
-                  fontFamily: 'FSPDemoUniformPro',
+                  fontFamily: 'ArialRounded',
                   fontSize: 20,
                 ),
               ),
@@ -115,7 +115,7 @@ class _ProfSanteSignUpState extends State<ProfSanteSignUp> {
                             "Genre",
                           ),
                           style: TextStyle(
-                            fontFamily: "FSPDemoUniformPro",
+                            fontFamily: "ArialRounded",
                             fontSize: 12,
                             color: Color.fromARGB(239, 89, 111, 114),
                           ),
@@ -180,7 +180,7 @@ class _ProfSanteSignUpState extends State<ProfSanteSignUp> {
                               : "Sélectionnez un fichier",
 
                           hintStyle: TextStyle(
-                            fontFamily: "FSPDemoUniformPro",
+                            fontFamily: "ArialRounded",
                             fontSize: 12,
                             color: Color.fromARGB(224, 89, 111, 114),
                           ),

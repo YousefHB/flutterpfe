@@ -70,7 +70,7 @@ class _HomescreenState extends State<Homescreen> {
         child: ListView(
           children: [
             Container(
-              margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
+              margin: EdgeInsets.fromLTRB(0, 20, 20, 0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -80,8 +80,8 @@ class _HomescreenState extends State<Homescreen> {
                       alignment: Alignment.topLeft,
                       child: Image.asset(
                         'assets/image/logo.png',
-                        width: 90,
-                        height: 110,
+                        width: 70,
+                        height: 100,
                       ),
                     ),
                   ),
@@ -101,7 +101,7 @@ class _HomescreenState extends State<Homescreen> {
                         ),
                       ),
                       SizedBox(
-                        width: 10,
+                        width: 15,
                       ),
                       GestureDetector(
                         onTap: () {
@@ -126,8 +126,6 @@ class _HomescreenState extends State<Homescreen> {
               height: 20,
             ),
             Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
               child: ListView.builder(
                 shrinkWrap: true,
                 itemCount: posts.length >= 5 ? 5 : posts.length,
@@ -143,7 +141,6 @@ class _HomescreenState extends State<Homescreen> {
                 },
               ),
             ),
-            SizedBox(height: 14.4),
           ],
         ),
       ),

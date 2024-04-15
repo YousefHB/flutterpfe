@@ -17,7 +17,7 @@ class SignupScreen extends StatefulWidget {
 
 const Color myCustomColor = Color(0xFF009EE2);
 const Color myCustomColor1 = Color(0xFF38B8c4);
-const String myfont = 'FSPDemoUniformPro';
+const String myfont = 'ArialRounded';
 
 class _SignupScreenState extends State<SignupScreen> {
   bool isBlurred = false;
@@ -122,7 +122,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       Text(
                         "créer un compte",
                         style: TextStyle(
-                          fontFamily: 'FSPDemoUniformPro',
+                          fontFamily: 'ArialRounded',
                           fontSize: 20,
                         ),
                       ),
@@ -160,7 +160,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 ),
                                 child: TextFormField(
                                   style: TextStyle(
-                                    fontFamily: "FSPDemoUniformPro",
+                                    fontFamily: "ArialRounded",
                                     fontSize: 15,
                                     color: Color.fromARGB(239, 89, 111, 114),
                                   ),
@@ -169,7 +169,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   decoration: const InputDecoration(
                                     hintText: "Prénom",
                                     hintStyle: TextStyle(
-                                      fontFamily: "FSPDemoUniformPro",
+                                      fontFamily: "ArialRounded",
                                       fontSize: 12,
                                       color: Color.fromARGB(224, 89, 111, 114),
                                     ),
@@ -213,7 +213,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 ),
                                 child: TextFormField(
                                   style: TextStyle(
-                                    fontFamily: "FSPDemoUniformPro",
+                                    fontFamily: "ArialRounded",
                                     fontSize: 15,
                                     color: Color.fromARGB(239, 89, 111, 114),
                                   ),
@@ -226,7 +226,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   decoration: const InputDecoration(
                                     hintText: "Nom",
                                     hintStyle: TextStyle(
-                                      fontFamily: "FSPDemoUniformPro",
+                                      fontFamily: "ArialRounded",
                                       fontSize: 12,
                                       color: Color.fromARGB(224, 89, 111, 114),
                                     ),
@@ -277,14 +277,14 @@ class _SignupScreenState extends State<SignupScreen> {
                                   cursorColor: myCustomColor1,
                                   keyboardType: TextInputType.datetime,
                                   style: TextStyle(
-                                    fontFamily: "FSPDemoUniformPro",
+                                    fontFamily: "ArialRounded",
                                     fontSize: 15,
                                     color: Color.fromARGB(239, 89, 111, 114),
                                   ),
                                   decoration: InputDecoration(
                                     hintText: "Date de naissance",
                                     hintStyle: TextStyle(
-                                      fontFamily: "FSPDemoUniformPro",
+                                      fontFamily: "ArialRounded",
                                       fontSize: 12,
                                       color: Color.fromARGB(224, 89, 111, 114),
                                     ),
@@ -328,7 +328,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                         dateOfBirthController.text);
                                   },
                                   style: TextStyle(
-                                    fontFamily: "FSPDemoUniformPro",
+                                    fontFamily: "ArialRounded",
                                     fontSize: 15,
                                     color: Color.fromARGB(232, 89, 111, 114),
                                   ),
@@ -338,7 +338,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   decoration: const InputDecoration(
                                     hintText: "Email",
                                     hintStyle: TextStyle(
-                                      fontFamily: "FSPDemoUniformPro",
+                                      fontFamily: "ArialRounded",
                                       fontSize: 12,
                                       color: Color.fromARGB(224, 89, 111, 114),
                                     ),
@@ -382,7 +382,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                     print("email est " + emailController.text);
                                   },
                                   style: TextStyle(
-                                    fontFamily: "FSPDemoUniformPro",
+                                    fontFamily: "ArialRounded",
                                     fontSize: 15,
                                     color: Color.fromARGB(239, 89, 111, 114),
                                   ),
@@ -392,7 +392,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   decoration: const InputDecoration(
                                     hintText: "Mot de passe",
                                     hintStyle: TextStyle(
-                                      fontFamily: "FSPDemoUniformPro",
+                                      fontFamily: "ArialRounded",
                                       fontSize: 12,
                                       color: Color.fromARGB(224, 89, 111, 114),
                                     ),
@@ -441,7 +441,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                         passwordController.text);
                                   },
                                   style: TextStyle(
-                                    fontFamily: "FSPDemoUniformPro",
+                                    fontFamily: "ArialRounded",
                                     fontSize: 15,
                                     color: Color.fromARGB(239, 89, 111, 114),
                                   ),
@@ -451,7 +451,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   decoration: const InputDecoration(
                                     hintText: "Confirmer le mot de passe",
                                     hintStyle: TextStyle(
-                                      fontFamily: "FSPDemoUniformPro",
+                                      fontFamily: "ArialRounded",
                                       fontSize: 12,
                                       color: Color.fromARGB(224, 89, 111, 114),
                                     ),

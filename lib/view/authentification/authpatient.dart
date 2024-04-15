@@ -17,7 +17,7 @@ class AuthPatient extends StatefulWidget {
 
 const Color myCustomColor = Color(0xFF009EE2);
 const Color myCustomColor1 = Color(0xFF38B8c4);
-const String myfont = 'FSPDemoUniformPro';
+const String myfont = 'ArialRounded';
 
 class _AuthPatientState extends State<AuthPatient> {
   var selectedGender;
@@ -85,7 +85,7 @@ class _AuthPatientState extends State<AuthPatient> {
                   Text(
                     "créer un compte",
                     style: TextStyle(
-                      fontFamily: 'FSPDemoUniformPro',
+                      fontFamily: 'ArialRounded',
                       fontSize: 20,
                     ),
                   ),
@@ -126,7 +126,7 @@ class _AuthPatientState extends State<AuthPatient> {
                               "Genre",
                             ),
                             style: TextStyle(
-                              fontFamily: "FSPDemoUniformPro",
+                              fontFamily: "ArialRounded",
                               fontSize: 12,
                               color: Color.fromARGB(224, 89, 111, 114),
                             ),

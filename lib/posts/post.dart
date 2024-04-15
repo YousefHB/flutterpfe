@@ -25,7 +25,7 @@ class _PostState extends State<Post> {
         side: BorderSide(color: Colors.blue, width: 2.0),
       ),
       child: Container(
-        width: screenWidth * 0.9,
+        width: screenWidth * 0.7,
         height: 400,
         child: Column(
           children: [
@@ -50,7 +50,7 @@ class _PostState extends State<Post> {
                     : widget.content.split(' ').take(20).join(' ') + '...',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 15,
+                  fontSize: 12,
                 ),
               ),
             ),
