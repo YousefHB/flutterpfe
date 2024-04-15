@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:flutter/material.dart';
+import 'package:ycmedical/config.dart';
 
 import 'MainHomeNavigator.dart';
 import 'homescreen.dart';
@@ -44,7 +45,7 @@ class _MyWidgetState extends State<Addpost> {
 
   void _publishPost() async {
     // URL de votre API pour publier les posts
-    final String apiUrl = 'http://192.168.56.1:3000/posts';
+    final String apiUrl = addpost;
 
     // Création de la requête HTTP pour envoyer l'image et le texte à l'API
     var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
@@ -115,6 +116,7 @@ class _MyWidgetState extends State<Addpost> {
                       ),
                       GestureDetector(
                         onTap: () {
+<<<<<<< HEAD
                      /*    Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (_) => Homescreen()));
 
@@ -124,6 +126,11 @@ class _MyWidgetState extends State<Addpost> {
                   .setState(() => context
                       .findAncestorStateOfType<MainNavState>()!.index= 2); 
             }*/
+=======
+                          /* Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+                      return Homescreen();
+                    }));*/
+>>>>>>> 6bf9029b916192be53752f40c5efa8809c377ab4
                         },
                         child: Image.asset(
                           'assets/image/back.png',

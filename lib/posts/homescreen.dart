@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:ycmedical/config.dart';
 
 import 'post.dart';
 import 'stories.dart';
@@ -22,7 +23,7 @@ class _HomescreenState extends State<Homescreen> {
   }
 
   Future<void> fetchPosts() async {
-    final url = Uri.parse("http://192.168.56.1:3000/posts/all");
+    final url = Uri.parse(getpost);
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
@@ -245,7 +246,7 @@ class _HomescreenState extends State<Homescreen> {
                 ),
               ),
 
-             GestureDetector(
+              GestureDetector(
                 onTap: () {},
                 child: Row(
                   children: [
@@ -271,11 +272,11 @@ class _HomescreenState extends State<Homescreen> {
                   ],
                 ),
               ),
-               GestureDetector(
+              GestureDetector(
                 onTap: () {},
                 child: Row(
                   children: [
-                    SizedBox(width:7),
+                    SizedBox(width: 7),
                     Image.asset(
                       'assets/image/suivies.png',
                       width: 135,
@@ -284,7 +285,9 @@ class _HomescreenState extends State<Homescreen> {
                   ],
                 ),
               ),
-              SizedBox(height: 5,),
+              SizedBox(
+                height: 5,
+              ),
               GestureDetector(
                 onTap: () {},
                 child: Row(

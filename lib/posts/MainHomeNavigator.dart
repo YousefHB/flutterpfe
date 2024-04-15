@@ -20,7 +20,11 @@ class MainNavState extends State<MainNav> {
   @override
   Widget build(BuildContext context) {
     var items = <Widget>[
+<<<<<<< HEAD
      Image.asset(
+=======
+      Image.asset(
+>>>>>>> 6bf9029b916192be53752f40c5efa8809c377ab4
         'assets/image/addpost.png',
         width: 45,
         height: 45,
