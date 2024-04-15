@@ -14,12 +14,9 @@ class Post extends StatefulWidget {
 class _PostState extends State<Post> {
   bool showFullText = false;
   bool showReactionRow = false;
-<<<<<<< HEAD
   bool showCommentSection = false; // Nouvel état pour contrôler la visibilité de la section de commentaire
   TextEditingController commentController = TextEditingController(); // Contrôleur pour le champ de texte du commentaire
   List<String> comments = ['Commentaire 1', 'Commentaire 2']; // Liste de commentaires fictifs
-=======
->>>>>>> 6bf9029b916192be53752f40c5efa8809c377ab4
 
   @override
   Widget build(BuildContext context) {
@@ -32,11 +29,7 @@ class _PostState extends State<Post> {
       ),
       child: Container(
         width: screenWidth * 0.9,
-<<<<<<< HEAD
         height: showCommentSection ? 700 : 400, // Augmentez la hauteur si la section de commentaire est visible
-=======
-        height: 400,
->>>>>>> 6bf9029b916192be53752f40c5efa8809c377ab4
         child: Column(
           children: [
             Padding(
@@ -93,69 +86,13 @@ class _PostState extends State<Post> {
                 ),
               ),
             ),
-<<<<<<< HEAD
            
-=======
-            //SizedBox(height: 50,),
-            if (showReactionRow) // Check if reaction row should be visible
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 25.0, vertical: 0.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        // Handle "J'aime"
-                        setState(() {
-                          showReactionRow = false; // Hide reaction row
-                        });
-                      },
-                      child: Icon(Icons.thumb_up),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        // Handle "J'adore"
-                        setState(() {
-                          showReactionRow = false; // Hide reaction row
-                        });
-                      },
-                      child: Icon(Icons.favorite),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        // Handle "Triste"
-                        setState(() {
-                          showReactionRow = false; // Hide reaction row
-                        });
-                      },
-                      child: Icon(Icons.sentiment_dissatisfied),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        // Handle "Wow"
-                        setState(() {
-                          showReactionRow = false; // Hide reaction row
-                        });
-                      },
-                      child: Icon(Icons.star),
-                    ),
-                  ],
-                ),
-              ),
->>>>>>> 6bf9029b916192be53752f40c5efa8809c377ab4
             Row(
               children: [
                 GestureDetector(
                   onLongPress: () {
-<<<<<<< HEAD
                     setState(() {
                       showReactionRow = true; // Afficher la rangée de réaction
-=======
-                    // the principe here will be making the row of reaction visisble
-                    setState(() {
-                      showReactionRow = true; // Show reaction row
->>>>>>> 6bf9029b916192be53752f40c5efa8809c377ab4
                     });
                   },
                   child: Image.asset(

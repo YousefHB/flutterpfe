@@ -116,7 +116,6 @@ class _MyWidgetState extends State<Addpost> {
                       ),
                       GestureDetector(
                         onTap: () {
-<<<<<<< HEAD
                      /*    Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (_) => Homescreen()));
 
@@ -126,11 +125,6 @@ class _MyWidgetState extends State<Addpost> {
                   .setState(() => context
                       .findAncestorStateOfType<MainNavState>()!.index= 2); 
             }*/
-=======
-                          /* Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-                      return Homescreen();
-                    }));*/
->>>>>>> 6bf9029b916192be53752f40c5efa8809c377ab4
                         },
                         child: Image.asset(
                           'assets/image/back.png',
