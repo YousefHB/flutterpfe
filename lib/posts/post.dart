@@ -13,9 +13,10 @@ class Post extends StatefulWidget {
 
 class _PostState extends State<Post> {
   bool showFullText = false;
-    bool showReactionRow = false;
-
-
+  bool showReactionRow = false;
+  bool showCommentSection = false; // Nouvel état pour contrôler la visibilité de la section de commentaire
+  TextEditingController commentController = TextEditingController(); // Contrôleur pour le champ de texte du commentaire
+  List<String> comments = ['Commentaire 1', 'Commentaire 2']; // Liste de commentaires fictifs
 
   @override
   Widget build(BuildContext context) {
@@ -28,24 +29,22 @@ class _PostState extends State<Post> {
       ),
       child: Container(
         width: screenWidth * 0.9,
-      height: 400,
+        height: showCommentSection ? 700 : 400, // Augmentez la hauteur si la section de commentaire est visible
         child: Column(
           children: [
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+              padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
               child: Align(
                 alignment: Alignment.topLeft,
                 child: Image.asset(
-                  'assets/images/profile.png',
+                  'assets/image/profile.png',
                   width: 60,
                   height: 60,
                 ),
               ),
             ),
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 25.0, vertical: 0.0),
+              padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 0.0),
               child: Text(
                 showFullText ? widget.content : widget.content.split(' ').take(20).join(' ') + '...',
                 style: TextStyle(
@@ -73,8 +72,7 @@ class _PostState extends State<Post> {
                   scrollDirection: Axis.horizontal,
                   children: widget.images.map((imageUrl) {
                     return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 25.0, vertical: 0.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 0.0),
                       child: Image.network(
                         imageUrl,
                         width: 300,
@@ -86,72 +84,29 @@ class _PostState extends State<Post> {
                 ),
               ),
             ),
-            //SizedBox(height: 50,),
-            if (showReactionRow) // Check if reaction row should be visible
-              Container(
-                 padding:
-                  const EdgeInsets.symmetric(horizontal: 25.0, vertical: 0.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        // Handle "J'aime"
-                        setState(() {
-                          showReactionRow = false; // Hide reaction row
-                        });
-                      },
-                      child: Icon(Icons.thumb_up),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        // Handle "J'adore"
-                         setState(() {
-                          showReactionRow = false; // Hide reaction row
-                        });
-                      },
-                      child: Icon(Icons.favorite),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        // Handle "Triste"
-                         setState(() {
-                          showReactionRow = false; // Hide reaction row
-                        });
-                      },
-                      child: Icon(Icons.sentiment_dissatisfied),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        // Handle "Wow"
-                         setState(() {
-                          showReactionRow = false; // Hide reaction row
-                        });
-                      },
-                      child: Icon(Icons.star),
-                    ),
-                  ],
-                ),
-              ),
+           
             Row(
               children: [
                 GestureDetector(
-                 onLongPress: () {
-                   // the principe here will be making the row of reaction visisble
-                   setState(() {
-                      showReactionRow = true; // Show reaction row
+                  onLongPress: () {
+                    setState(() {
+                      showReactionRow = true; // Afficher la rangée de réaction
                     });
                   },
                   child: Image.asset(
-                    'assets/images/jaime.png',
+                    'assets/image/jaime.png',
                     width: 80,
                     height: 90,
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    setState(() {
+                      showCommentSection = !showCommentSection; // Afficher ou masquer la section de commentaire
+                    });
+                  },
                   child: Image.asset(
-                    'assets/images/commentaire.png',
+                    'assets/image/commentaire.png',
                     width: 140,
                     height: 140,
                   ),
@@ -159,7 +114,7 @@ class _PostState extends State<Post> {
                 GestureDetector(
                   onTap: () {},
                   child: Image.asset(
-                    'assets/images/partager.png',
+                    'assets/image/partager.png',
                     width: 90,
                     height: 90,
                   ),
@@ -167,13 +122,51 @@ class _PostState extends State<Post> {
                 GestureDetector(
                   onTap: () {},
                   child: Image.asset(
-                    'assets/images/enregistrement.png',
+                    'assets/image/enregistrement.png',
                     width: 60,
                     height: 30,
                   ),
                 ),
               ],
-            )
+            ),
+             if (showCommentSection) // Afficher la section de commentaire si nécessaire
+              Container(
+
+              
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: commentController,
+                      decoration: InputDecoration(
+                        hintText: 'Entrez votre commentaire',
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              comments.add(commentController.text);
+                              commentController.clear();
+                            });
+                          },
+                          icon: Icon(Icons.send),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: comments.map((comment) {
+                        return Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 60.0, vertical: 0.0),
+                decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(10),
+          ),    
+                          child: Text(comment),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+              ),
           ],
         ),
       ),

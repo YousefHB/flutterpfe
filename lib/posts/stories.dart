@@ -9,7 +9,7 @@ class storie extends StatelessWidget {
           print("add stories");
         },
         child: Image.asset(
-          'assets/images/storieadd.png',
+          'assets/image/storieadd.png',
           width: 90,
           height: 90,
         ),
@@ -29,7 +29,7 @@ class storie extends StatelessWidget {
                       child: Column(
                         children: [
                           Image.asset(
-                            'assets/images/storie.png',
+                            'assets/image/storie.png',
                             width: 90,
                             height: 90,
                           ),
@@ -43,42 +43,42 @@ class storie extends StatelessWidget {
                     ),
                   ),
                   Image.asset(
-                    'assets/images/storie.png',
+                    'assets/image/storie.png',
                     width: 90,
                     height: 90,
                   ),
                   Image.asset(
-                    'assets/images/storie.png',
+                    'assets/image/storie.png',
                     width: 90,
                     height: 90,
                   ),
                   Image.asset(
-                    'assets/images/storie.png',
+                    'assets/image/storie.png',
                     width: 90,
                     height: 90,
                   ),
                   Image.asset(
-                    'assets/images/storie.png',
+                    'assets/image/storie.png',
                     width: 90,
                     height: 90,
                   ),
                   Image.asset(
-                    'assets/images/storie.png',
+                    'assets/image/storie.png',
                     width: 90,
                     height: 90,
                   ),
                   Image.asset(
-                    'assets/images/storie.png',
+                    'assets/image/storie.png',
                     width: 90,
                     height: 90,
                   ),
                   Image.asset(
-                    'assets/images/storie.png',
+                    'assets/image/storie.png',
                     width: 90,
                     height: 90,
                   ),
                   Image.asset(
-                    'assets/images/storie.png',
+                    'assets/image/storie.png',
                     width: 90,
                     height: 90,
                   ),

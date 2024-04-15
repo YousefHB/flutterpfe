@@ -11,37 +11,37 @@ class MainNav extends StatefulWidget {
   const MainNav({super.key});
 
   @override
-  State<MainNav> createState() => _MainNavState();
+  State<MainNav> createState() => MainNavState();
 }
 
-class _MainNavState extends State<MainNav> {
+class MainNavState extends State<MainNav> {
   final navigationKey = GlobalKey<CurvedNavigationBarState>();
   int index = 2;
   @override
   Widget build(BuildContext context) {
     var items = <Widget>[
      Image.asset(
-        'assets/images/addpost.png',
+        'assets/image/addpost.png',
         width: 45,
         height: 45,
       ),
       Image.asset(
-        'assets/images/notif.png',
+        'assets/image/notif.png',
         width: 45,
         height: 45,
       ),
       Image.asset(
-        'assets/images/home.png',
+        'assets/image/home.png',
         width: 45,
         height: 45,
       ),
       Image.asset(
-        'assets/images/invitation.png',
+        'assets/image/invitation.png',
         width: 45,
         height: 45,
       ),
       Image.asset(
-        'assets/images/message.png',
+        'assets/image/message.png',
         width: 45,
         height: 45,
       ),

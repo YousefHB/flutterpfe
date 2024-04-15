@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:flutter/material.dart';
 
+import 'MainHomeNavigator.dart';
 import 'homescreen.dart';
 
 class Addpost extends StatefulWidget {
@@ -114,16 +115,21 @@ class _MyWidgetState extends State<Addpost> {
                       ),
                       GestureDetector(
                         onTap: () {
-                   /* Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-                      return Homescreen();
-                    }));*/
-                  },
-                     child: Image.asset(
-                        'assets/image/back.png',
-                        width: 30,
-                        height: 30,
-                         
-                  ),
+                     /*    Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (_) => Homescreen()));
+
+            // Update navigation state in MainNav
+            if (context.findAncestorStateOfType<MainNavState>() != null) {
+              context.findAncestorStateOfType<MainNavState>()!
+                  .setState(() => context
+                      .findAncestorStateOfType<MainNavState>()!.index= 2); 
+            }*/
+                        },
+                        child: Image.asset(
+                          'assets/image/back.png',
+                          width: 30,
+                          height: 30,
+                        ),
                       ),
                       Text(
                         "Crée une publication",
@@ -251,12 +257,13 @@ class _MyWidgetState extends State<Addpost> {
                                              color: Colors.blue,
                                                ),*/
                                             ),
-                                            
                                             child: Column(
                                               children: [
                                                 Row(
                                                   children: [
-                                                    SizedBox(height: 30,),
+                                                    SizedBox(
+                                                      height: 30,
+                                                    ),
                                                     GestureDetector(
                                                       onTap: () {
                                                         _pickImageFromGallery();
