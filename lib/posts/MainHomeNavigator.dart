@@ -11,10 +11,10 @@ class MainNav extends StatefulWidget {
   const MainNav({super.key});
 
   @override
-  State<MainNav> createState() => _MainNavState();
+  State<MainNav> createState() => MainNavState();
 }
 
-class _MainNavState extends State<MainNav> {
+class MainNavState extends State<MainNav> {
   final navigationKey = GlobalKey<CurvedNavigationBarState>();
   int index = 2;
   @override

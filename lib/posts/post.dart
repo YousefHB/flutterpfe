@@ -14,6 +14,14 @@ class Post extends StatefulWidget {
 class _PostState extends State<Post> {
   bool showFullText = false;
   bool showReactionRow = false;
+  bool showCommentSection =
+      false; // Nouvel état pour contrôler la visibilité de la section de commentaire
+  TextEditingController commentController =
+      TextEditingController(); // Contrôleur pour le champ de texte du commentaire
+  List<String> comments = [
+    'Commentaire 1',
+    'Commentaire 2'
+  ]; // Liste de commentaires fictifs
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +33,10 @@ class _PostState extends State<Post> {
         side: BorderSide(color: Colors.blue, width: 2.0),
       ),
       child: Container(
-        width: screenWidth * 0.7,
-        height: 400,
+        width: screenWidth * 0.9,
+        height: showCommentSection
+            ? 700
+            : 400, // Augmentez la hauteur si la section de commentaire est visible
         child: Column(
           children: [
             Padding(
@@ -86,60 +96,12 @@ class _PostState extends State<Post> {
                 ),
               ),
             ),
-            //SizedBox(height: 50,),
-            if (showReactionRow) // Check if reaction row should be visible
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 25.0, vertical: 0.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        // Handle "J'aime"
-                        setState(() {
-                          showReactionRow = false; // Hide reaction row
-                        });
-                      },
-                      child: Icon(Icons.thumb_up),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        // Handle "J'adore"
-                        setState(() {
-                          showReactionRow = false; // Hide reaction row
-                        });
-                      },
-                      child: Icon(Icons.favorite),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        // Handle "Triste"
-                        setState(() {
-                          showReactionRow = false; // Hide reaction row
-                        });
-                      },
-                      child: Icon(Icons.sentiment_dissatisfied),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        // Handle "Wow"
-                        setState(() {
-                          showReactionRow = false; // Hide reaction row
-                        });
-                      },
-                      child: Icon(Icons.star),
-                    ),
-                  ],
-                ),
-              ),
             Row(
               children: [
                 GestureDetector(
                   onLongPress: () {
-                    // the principe here will be making the row of reaction visisble
                     setState(() {
-                      showReactionRow = true; // Show reaction row
+                      showReactionRow = true; // Afficher la rangée de réaction
                     });
                   },
                   child: Image.asset(
@@ -149,7 +111,12 @@ class _PostState extends State<Post> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    setState(() {
+                      showCommentSection =
+                          !showCommentSection; // Afficher ou masquer la section de commentaire
+                    });
+                  },
                   child: Image.asset(
                     'assets/image/commentaire.png',
                     width: 140,
@@ -173,7 +140,44 @@ class _PostState extends State<Post> {
                   ),
                 ),
               ],
-            )
+            ),
+            if (showCommentSection) // Afficher la section de commentaire si nécessaire
+              Container(
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: commentController,
+                      decoration: InputDecoration(
+                        hintText: 'Entrez votre commentaire',
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              comments.add(commentController.text);
+                              commentController.clear();
+                            });
+                          },
+                          icon: Icon(Icons.send),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: comments.map((comment) {
+                        return Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 60.0, vertical: 0.0),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(comment),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+              ),
           ],
         ),
       ),

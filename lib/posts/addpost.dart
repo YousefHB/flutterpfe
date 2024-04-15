@@ -7,6 +7,7 @@ import 'package:http_parser/http_parser.dart';
 import 'package:flutter/material.dart';
 import 'package:ycmedical/config.dart';
 
+import 'MainHomeNavigator.dart';
 import 'homescreen.dart';
 
 class Addpost extends StatefulWidget {
@@ -115,9 +116,15 @@ class _MyWidgetState extends State<Addpost> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          /* Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-                      return Homescreen();
-                    }));*/
+                     /*    Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (_) => Homescreen()));
+
+            // Update navigation state in MainNav
+            if (context.findAncestorStateOfType<MainNavState>() != null) {
+              context.findAncestorStateOfType<MainNavState>()!
+                  .setState(() => context
+                      .findAncestorStateOfType<MainNavState>()!.index= 2); 
+            }*/
                         },
                         child: Image.asset(
                           'assets/image/back.png',
