@@ -5,6 +5,7 @@ import 'package:ycmedical/data/widget.dart/pays.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:ycmedical/config.dart';
+import 'package:ycmedical/view/authentification/signin.dart';
 
 class AuthPatient extends StatefulWidget {
   final String tokenCode; // Ajouter un champ pour le token
@@ -30,8 +31,8 @@ class _AuthPatientState extends State<AuthPatient> {
 
     var regbody = {
       "genre": selectedGender,
-      "pays": _paysController.text,
-      "ville": countryController.text
+      "country": _paysController.text,
+      "city": countryController.text
     };
 
     try {
@@ -46,8 +47,15 @@ class _AuthPatientState extends State<AuthPatient> {
         body: jsonEncode(regbody),
       );
 
-      print(response);
-      print(response.body);
+      if (response.statusCode == 200) {
+        print('Request accepted.');
+        // Ajoutez votre logique supplémentaire ici si nécessaire
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => SigninScreen()));
+      } else {
+        print('Request failed with status: ${response.statusCode}');
+        print('Message d\'erreur : ${response.body}');
+      }
     } catch (error) {
       print('Error: $error');
     }

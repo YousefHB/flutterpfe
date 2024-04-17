@@ -10,6 +10,7 @@ import 'package:ycmedical/data/widget.dart/cities.dart';
 import 'package:ycmedical/data/widget.dart/pays.dart';
 import 'package:ycmedical/data/widget.dart/specilaite.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:ycmedical/view/authentification/signin.dart';
 
 class ProfSanteSignUp extends StatefulWidget {
   final String tokenCode; // Ajouter un champ pour le token
@@ -307,9 +308,9 @@ class _ProfSanteSignUpState extends State<ProfSanteSignUp> {
       var request = http.MultipartRequest(
           'POST', Uri.parse(url + '/api/auth/registerProfessionnel/$token'));
       request.fields['genre'] = selectedGender;
-      request.fields['ville'] = countryController.text;
-      request.fields['pays'] = _paysController.text;
-      request.fields['specialite'] = specialiteController.text;
+      request.fields['city'] = countryController.text;
+      request.fields['country'] = _paysController.text;
+      request.fields['specialty'] = specialiteController.text;
 
       for (var file in _selectedFiles) {
         request.files
@@ -321,6 +322,8 @@ class _ProfSanteSignUpState extends State<ProfSanteSignUp> {
 
       if (response.statusCode == 200) {
         print('Professionnel inscrit avec succès');
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => SigninScreen()));
       } else {
         print('Erreur lors de l\'inscription: ${response.body}');
       }

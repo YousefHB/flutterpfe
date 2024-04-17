@@ -7,6 +7,7 @@ import 'package:ycmedical/view/authentification/authpatient.dart';
 import 'package:ycmedical/view/authentification/authprofsante.dart';
 import 'package:ycmedical/view/authentification/passwordoublie.dart';
 import 'package:ycmedical/view/authentification/verificationEmail.dart';
+import 'package:intl/intl.dart';
 
 class SignupScreen extends StatefulWidget {
   SignupScreen({super.key});
@@ -32,20 +33,52 @@ class _SignupScreenState extends State<SignupScreen> {
   TextEditingController confirmpasswordController = TextEditingController();
   /*********************************** */
   void registerUser() async {
+    // Convertir la chaîne de date en objet DateTime
+    DateTime dateOfBirth = parseDate(dateOfBirthController.text);
+
+    // Formatage de la date pour MongoDB (format ISO 8601)
+    String formattedDate =
+        DateFormat('yyyy-MM-ddTHH:mm:ss').format(dateOfBirth);
+    print(formattedDate);
+
     var regbody = {
       "firstName": firstnameController.text,
       "lastName": lastnameController.text,
-      "dateOfBirth": dateOfBirthController.text,
+      "dateOfBirth": formattedDate,
       "email": emailController.text,
       "password": passwordController.text
     };
+    // Afficher le contenu de regbody
+    print('Contenu de regbody:');
+    regbody.forEach((key, value) {
+      print('$key: $value');
+    });
     var response = await http.post(
       Uri.parse(registraion),
       headers: {"Content-type": "application/json"},
       body: jsonEncode(regbody),
     );
+    if (response.statusCode == 200) {
+      print('Les données ont été envoyées avec succès !');
+      print('Réponse du serveur : ${response.body}');
+    } else {
+      print(
+          'Erreur lors de l\'envoi des données. Code d\'erreur : ${response.statusCode}');
+      print('Message d\'erreur : ${response.body}');
+    }
+  }
 
-    print(response);
+  DateTime parseDate(String dateString) {
+    // Diviser la chaîne de date en parties séparées par '/'
+    List<String> parts = dateString.split('/');
+
+    // Extraire l'année, le mois et le jour
+    int day = int.parse(parts[0]);
+    int month = int.parse(parts[1]);
+    int year = int.parse(parts[2]);
+
+    // Créer un objet DateTime
+    return DateTime(year, month, day);
   }
 
   /*********************************** */
