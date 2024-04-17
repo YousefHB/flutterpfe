@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -43,44 +44,49 @@ class _MyWidgetState extends State<Addpost> {
     }
   }
 
-  void _publishPost() async {
-    // URL de votre API pour publier les posts
-    final String apiUrl = addpost;
+ void _publishPost() async {
+  // URL de votre API pour publier les posts
+  final String apiUrl = addpost;
 
-    // Création de la requête HTTP pour envoyer l'image et le texte à l'API
-    var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
+  // Récupération du token JWT de l'utilisateur
+  final storage = FlutterSecureStorage();
+  final accessToken = await storage.read(key: 'accessToken');
 
-    // Ajouter l'image avec le bon type de contenu
-    request.files.add(await http.MultipartFile.fromPath(
-      'images',
-      _selectedImagePath!,
-      contentType: MediaType('image',
-          'png'), // Spécifier le type de contenu directement comme 'image/png'
+  // Création de la requête HTTP pour envoyer l'image, le texte et le token JWT à l'API
+  var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
+  request.headers['Authorization'] = 'Bearer $accessToken'; // Ajout du token JWT dans l'en-tête de la requête
+
+  // Ajouter l'image avec le bon type de contenu
+  request.files.add(await http.MultipartFile.fromPath(
+    'images',
+    _selectedImagePath!,
+    contentType: MediaType('image', 'png'),
+  ));
+
+  // Ajout du texte du champ de texte à la requête
+  request.fields['content'] = _textFieldController.text;
+
+  // Envoi de la requête à l'API
+  var response = await request.send();
+
+  // Vérification du code de réponse de l'API
+  if (response.statusCode == 201) {
+    print('Publication réussie !');
+
+    // Effacer le contenu du TextField et réinitialiser l'image sélectionnée
+    _textFieldController.clear(); // Effacer le contenu du TextField
+    setState(() {
+      _selectedImagePath = null; // Réinitialiser l'image sélectionnée
+    });
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: const Text("publication reussi"),
+      action: SnackBarAction(label: "undo", onPressed: () {}),
     ));
-
-    // Ajout du texte du champ de texte à la requête
-    request.fields['content'] = _textFieldController.text;
-
-    // Envoi de la requête à l'API
-    var response = await request.send();
-
-    // Vérification du code de réponse de l'API
-    if (response.statusCode == 201) {
-      print('Publication réussie !');
-
-      // Effacer le contenu du TextField et réinitialiser l'image sélectionnée
-      _textFieldController.clear(); // Effacer le contenu du TextField
-      setState(() {
-        _selectedImagePath = null; // Réinitialiser l'image sélectionnée
-      });
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: const Text("publication reussi"),
-        action: SnackBarAction(label: "undo", onPressed: () {}),
-      ));
-    } else {
-      print('Échec de la publication. Code d\'état: ${response.statusCode}');
-    }
+  } else {
+    print('Échec de la publication. Code d\'état: ${response.statusCode}');
   }
+}
+
 
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;

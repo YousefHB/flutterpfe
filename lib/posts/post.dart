@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Post extends StatefulWidget {
-  final String content;
+   final String content;
   final List<String> images;
-
-  const Post({Key? key, required this.content, required this.images})
-      : super(key: key);
+  final String? firstName; 
+  final String? lastName; 
+  final String? createdAt; 
+  const Post({
+    Key? key,
+    required this.content,
+    required this.images,
+    required this.firstName,
+    required this.lastName,
+    required this.createdAt,
+  }) : super(key: key);
 
   @override
   _PostState createState() => _PostState();
@@ -22,6 +31,36 @@ class _PostState extends State<Post> {
     'Commentaire 1',
     'Commentaire 2'
   ]; // Liste de commentaires fictifs
+String calculateTimestamp() {
+  if (widget.createdAt != null) {
+    // Convert createdAt to DateTime object
+    DateTime createdAtDateTime = DateTime.parse(widget.createdAt!);
+
+    // Calculate the difference between current time and createdAt time
+    Duration difference = DateTime.now().difference(createdAtDateTime);
+
+    // Calculate the difference in minutes, hours, and days
+    int differenceInMinutes = difference.inMinutes;
+    int differenceInHours = difference.inHours;
+    int differenceInDays = difference.inDays;
+
+    if (differenceInMinutes < 60) {
+      // If less than an hour, display minutes
+      return 'il y a $differenceInMinutes min';
+    } else if (differenceInHours < 24) {
+      // If less than a day, display hours
+      return 'il y a $differenceInHours h';
+    } else if (differenceInDays == 1) {
+      // If exactly one day, display "1 J"
+      return 'il y a 1 J';
+    } else {
+      // If more than one day, display number of days
+      return 'il y a $differenceInDays J';
+    }
+  } else {
+    return 'Unknown'; // Handle case when createdAt is null
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -39,17 +78,29 @@ class _PostState extends State<Post> {
             : 400, // Augmentez la hauteur si la section de commentaire est visible
         child: Column(
           children: [
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: Image.asset(
-                  'assets/image/profile.png',
-                  width: 60,
-                  height: 60,
+            Row(
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Image.asset(
+                      'assets/image/profile.png',
+                      width: 60,
+                      height: 60,
+                    ),
+                  ),
                 ),
-              ),
+                Column(
+                  children: [
+                    Text(widget.firstName!+" "+widget.lastName!),
+                    Text(calculateTimestamp(),
+                    style: TextStyle(color: Colors.blue),
+                    ),
+                  ],
+                ),
+              ],
             ),
             Padding(
               padding:

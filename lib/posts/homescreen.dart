@@ -104,6 +104,15 @@ class _HomescreenState extends State<Homescreen> {
               return image.toString().replaceAll('localhost', '10.0.2.2');
             }).toList();
             item['images'] = images;
+             final createdBy = item['createdBy'];
+          final firstName = createdBy['firstName'];
+          final lastName = createdBy['lastName'];
+          final createdAt = item['createdAt'];
+
+          // Updating item with user details
+          item['firstName'] = firstName;
+          item['lastName'] = lastName;
+          item['createdAt'] = createdAt;
             return item;
           }));
         });
@@ -202,10 +211,15 @@ class _HomescreenState extends State<Homescreen> {
                   final postData = posts[index];
                   final postContent = postData['content'];
                   final postImages = postData['images'];
-
+                  final firstName = postData['firstName'];
+                  final lastName = postData['lastName'];
+                  final createdAt = postData['createdAt'];
                   return Post(
                     content: postContent,
                     images: postImages,
+                    firstName: firstName,
+                    lastName: lastName,
+                    createdAt: createdAt,
                   );
                 },
               ),
