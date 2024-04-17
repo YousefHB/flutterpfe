@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:ycmedical/config.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:ycmedical/profil/profilpatient.dart';
 
 import 'post.dart';
 import 'stories.dart';
@@ -15,11 +17,78 @@ class _HomescreenState extends State<Homescreen> {
   List<Map<String, dynamic>> posts = [];
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  late Map<String, dynamic> _userInfo; // Déclaration de _userInfo
 
   @override
   void initState() {
     super.initState();
     fetchPosts();
+    _userInfo = {};
+    _fetchUserInfo(); // Appelez fetchUserInfo lors de l'initialisation du widget pour récupérer les informations de l'utilisateur
+  }
+
+  String userName = '';
+  Future<void> _fetchUserInfo() async {
+    final storage = FlutterSecureStorage();
+    String? accessToken = await storage.read(key: 'accessToken');
+
+    if (accessToken == null) {
+      // Gérer le cas où aucun jeton d'accès n'est trouvé dans le stockage sécurisé
+      return;
+    }
+
+    try {
+      final Map<String, dynamic> fetchedUserInfo =
+          await fetchUserInfo(accessToken);
+      setState(() {
+        _userInfo =
+            fetchedUserInfo; // Mise à jour de _userInfo avec les informations de l'utilisateur
+      });
+    } catch (error) {
+      print(
+          'Erreur lors de la récupération des informations de l\'utilisateur: $error');
+    }
+  }
+
+  /*Future<Map<String, dynamic>> fetchUserInfo(String accessToken) async {
+    try {
+      final response = await http.get(
+        Uri.parse(
+            userinfo), // Remplacez 'URL_DE_VOTRE_API/getUserInfo' par votre propre URL
+        headers: {'Authorization': 'Bearer $accessToken'},
+      );
+
+      if (response.statusCode == 200) {
+        // Si la réponse est réussie, convertissez le corps de la réponse en un Map
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to load user info: ${response.statusCode}');
+      }
+    } catch (error) {
+      throw Exception('Failed to load user info: $error');
+    }
+  }*/
+  Future<Map<String, dynamic>> fetchUserInfo(String accessToken) async {
+    try {
+      final response = await http.get(
+        Uri.parse(
+            userinfo), // Replace 'URL_DE_VOTRE_API/getUserInfo' with your own URL
+        headers: {'Authorization': 'Bearer $accessToken'},
+      );
+
+      if (response.statusCode == 200) {
+        // If the response is successful, replace 'localhost' with your local IP address
+        final Map<String, dynamic> userInfo = jsonDecode(response.body);
+        String photoProfilUrl = userInfo['user']['photoProfil'];
+        photoProfilUrl = photoProfilUrl.replaceAll('localhost', '10.0.2.2');
+        userInfo['user']['photoProfil'] = photoProfilUrl;
+        return userInfo;
+      } else {
+        throw Exception('Failed to load user info: ${response.statusCode}');
+      }
+    } catch (error) {
+      throw Exception('Failed to load user info: $error');
+    }
   }
 
   Future<void> fetchPosts() async {
@@ -32,7 +101,7 @@ class _HomescreenState extends State<Homescreen> {
           posts = List<Map<String, dynamic>>.from(data.map((item) {
             List<String> images =
                 (item['images'] as List<dynamic>).map((image) {
-              return image.toString().replaceAll('localhost', '192.168.56.1');
+              return image.toString().replaceAll('localhost', '10.0.2.2');
             }).toList();
             item['images'] = images;
             return item;
@@ -181,13 +250,15 @@ class _HomescreenState extends State<Homescreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Image.asset(
-                            'assets/image/profile.png',
-                            width: 60,
-                            height: 60,
+                          Image.network(
+                            'https://tse4.mm.bing.net/th?id=OIP.ItvA9eX1ZIYT8NHePqeuCgHaHa&pid=Api&P=0&h=180', // Utilisez l'URL de l'image de l'utilisateur si disponible, sinon utilisez une URL par défaut
+                            width: 30,
+                            height: 30,
                           ),
                           Text(
-                            "Lorem ipsum",
+                            _userInfo.isNotEmpty
+                                ? '${_userInfo['user']['firstName']} ${_userInfo['user']['lastName']}'
+                                : 'Chargement...',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 18,
@@ -206,7 +277,14 @@ class _HomescreenState extends State<Homescreen> {
                                 width: 100,
                                 height: 28,
                                 child: TextButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ProfilPatient()),
+                                    );
+                                  },
                                   style: TextButton.styleFrom(
                                     backgroundColor: Colors.transparent,
                                     foregroundColor: Colors.white,

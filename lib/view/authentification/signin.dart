@@ -1,7 +1,12 @@
+import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 import 'package:flutter/material.dart';
+import 'package:ycmedical/config.dart';
 import '../../posts/MainHomeNavigator.dart';
 import 'passwordoublie.dart';
 import 'signup.dart';
+import 'package:http/http.dart' as http;
 
 class SigninScreen extends StatefulWidget {
   const SigninScreen({super.key});
@@ -14,6 +19,44 @@ const Color myCustomColor = Color(0xFF009EE2);
 const Color myCustomColor1 = Color(0xFF38B8c4);
 
 class _SigninScreenState extends State<SigninScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  void loginUser() async {
+    var regbody = {
+      "email": emailController.text,
+      "password": passwordController.text,
+    };
+
+    try {
+      var response = await http.post(
+        Uri.parse(login), // Correction du nom de la variable
+        headers: {"Content-type": "application/json"},
+
+        body: jsonEncode(regbody),
+      );
+
+      if (response.statusCode == 200) {
+        var responseBody = json.decode(response.body);
+        var accessToken = responseBody['data']['access_token'];
+
+        // Stockage du token localement
+
+        // Pour Flutter mobile
+        final storage = FlutterSecureStorage();
+        await storage.write(key: 'accessToken', value: accessToken);
+
+        print('Token JWT récupéré: $accessToken');
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => MainNav()));
+      } else {
+        // Gérer les erreurs de connexion
+        print('Erreur lors de la connexion: ${response.body}');
+      }
+    } catch (error) {
+      print('Error: $error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
@@ -89,9 +132,10 @@ class _SigninScreenState extends State<SigninScreen> {
                         ),
                       ],
                     ),
-                    child: const TextField(
+                    child: TextField(
+                      controller: emailController,
                       cursorColor: myCustomColor1,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: "Email",
                         hintStyle: TextStyle(
                           fontFamily: "ArialRounded",
@@ -130,9 +174,10 @@ class _SigninScreenState extends State<SigninScreen> {
                             ),
                           ],
                         ),
-                        child: const TextField(
+                        child: TextField(
+                          controller: passwordController,
                           cursorColor: myCustomColor1,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: "Mot de passe",
                             hintStyle: TextStyle(
                               fontFamily: "ArialRounded",
@@ -174,10 +219,7 @@ class _SigninScreenState extends State<SigninScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (_) {
-                        return MainNav();
-                      }));
+                      loginUser();
                     },
                     style: ElevatedButton.styleFrom(
                       primary: myCustomColor, // Background color

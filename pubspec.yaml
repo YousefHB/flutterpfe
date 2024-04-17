@@ -38,6 +38,8 @@ dependencies:
   open_file: ^3.3.2
   path_provider: ^2.1.2
   image_picker: ^1.0.7
+  flutter_secure_storage: ^5.0.0
+
 
 
   
