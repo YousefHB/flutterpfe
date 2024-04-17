@@ -106,7 +106,12 @@ flutter:
     - assets/image/parameters.png 
     - assets/image/menudot.png 
     - assets/image/people.png 
-    - assets/image/pen.png 
+    - assets/image/pen.png
+    - assets/image/add-post-icon.png
+    - assets/image/home-icon.png 
+    - assets/image/message-icon.png
+    - assets/image/inv-icone.png
+    - assets/image/notification-icon.png
 
 
 

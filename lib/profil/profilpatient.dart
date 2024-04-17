@@ -1,4 +1,9 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:ycmedical/config.dart';
 
 class ProfilPatient extends StatefulWidget {
   const ProfilPatient({super.key});
@@ -12,7 +17,70 @@ const Color myCustomColor1 = Color(0xFF38B8c4);
 const String myfont = 'ArialRounded';
 
 class _ProfilPatientState extends State<ProfilPatient> {
+  List<Map<String, dynamic>> posts = [];
+
+  late Map<String, dynamic> _userInfo;
+
+// Déclaration de _userInfo
+
   @override
+  void initState() {
+    super.initState();
+
+    _userInfo = {};
+    _fetchUserInfo(); // Appelez fetchUserInfo lors de l'initialisation du widget pour récupérer les informations de l'utilisateur
+  }
+
+  String userName = '';
+  Future<void> _fetchUserInfo() async {
+    final storage = FlutterSecureStorage();
+    String? accessToken = await storage.read(key: 'accessToken');
+
+    if (accessToken == null) {
+      // Gérer le cas où aucun jeton d'accès n'est trouvé dans le stockage sécurisé
+      return;
+    }
+
+    try {
+      final Map<String, dynamic> fetchedUserInfo =
+          await fetchUserInfo(accessToken);
+      setState(() {
+        _userInfo =
+            fetchedUserInfo; // Mise à jour de _userInfo avec les informations de l'utilisateur
+      });
+    } catch (error) {
+      print(
+          'Erreur lors de la récupération des informations de l\'utilisateur: $error');
+    }
+  }
+
+// Définissez une fonction pour convertir les URLs d'images
+  String convertImageUrl(String imageUrl) {
+    return imageUrl.replaceAll('localhost', '10.0.2.2');
+  }
+
+// Dans votre méthode fetchUserInfo
+  Future<Map<String, dynamic>> fetchUserInfo(String accessToken) async {
+    try {
+      final response = await http.get(
+        Uri.parse(
+            userinfo), // Replace 'URL_DE_VOTRE_API/getUserInfo' with your own URL
+        headers: {'Authorization': 'Bearer $accessToken'},
+      );
+
+      if (response.statusCode == 200) {
+        // If the response is successful, replace 'localhost' with your local IP address
+        final Map<String, dynamic> userInfo = jsonDecode(response.body);
+
+        return userInfo;
+      } else {
+        throw Exception('Failed to load user info: ${response.statusCode}');
+      }
+    } catch (error) {
+      throw Exception('Failed to load user info: $error');
+    }
+  }
+
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
 
@@ -51,7 +119,10 @@ class _ProfilPatientState extends State<ProfilPatient> {
                             width: 30,
                             height: 30,
                           )),
-                      const Text("Lorem Lopsem", // le nom de patient ici
+                      Text(
+                          _userInfo.isNotEmpty
+                              ? '${_userInfo['user']['firstName']} ${_userInfo['user']['lastName']}'
+                              : 'Chargement...', // le nom de patient ici
                           style: TextStyle(
                             fontFamily: myfont,
                             fontSize: 20,
@@ -71,24 +142,21 @@ class _ProfilPatientState extends State<ProfilPatient> {
                   height: 40,
                 ),
                 Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      gradient: LinearGradient(
-                        colors: [myCustomColor, myCustomColor1],
-                      ),
-                      border: Border.all(
-                        color: Colors.transparent,
-                        width: 1,
-                      ),
+                  width: 700,
+                  height: 700,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(
+                      colors: [myCustomColor, myCustomColor1],
                     ),
-                    padding: EdgeInsets.all(2),
-                    child: CircleAvatar(
-                      radius: 47,
-                      backgroundColor: Colors.transparent,
-                      backgroundImage: AssetImage("assets/image/people.png"),
-                    )),
+                    border: Border.all(
+                      color: Colors.transparent,
+                      width: 1,
+                    ),
+                  ),
+                  padding: EdgeInsets.all(2),
+                  child: Image.network('${_userInfo['user']['photoProfil']} '),
+                ),
                 SizedBox(
                   height: 40,
                 ),

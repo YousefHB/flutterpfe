@@ -19,7 +19,7 @@ class MainNavState extends State<MainNav> {
   int index = 2;
   @override
   Widget build(BuildContext context) {
-    var items = <Widget>[
+    List<Widget> _iconpardefaut = <Widget>[
       Image.asset(
         'assets/image/addpost.png',
         width: 45,
@@ -47,11 +47,31 @@ class MainNavState extends State<MainNav> {
       ),
     ];
     List<Widget> _replacementIcons = [
-      Icon(Icons.add_a_photo, size: 30),
-      Icon(Icons.notification_add, size: 30),
-      Icon(Icons.home, size: 30),
-      Icon(Icons.insert_invitation, size: 30),
-      Icon(Icons.message, size: 30),
+      Image.asset(
+        'assets/image/add-post-icon.png',
+        width: 50,
+        height: 50,
+      ),
+      Image.asset(
+        'assets/image/notification-icon.png',
+        width: 50,
+        height: 50,
+      ),
+      Image.asset(
+        'assets/image/home-icon.png',
+        width: 50,
+        height: 50,
+      ),
+      Image.asset(
+        'assets/image/inv-icone.png',
+        width: 50,
+        height: 50,
+      ),
+      Image.asset(
+        'assets/image/message-icon.png',
+        width: 50,
+        height: 50,
+      ),
     ];
     final List<Widget> _screens = [
       Addpost(),
@@ -62,31 +82,28 @@ class MainNavState extends State<MainNav> {
     ];
     return Scaffold(
       body: _screens[index],
-      // Theme(
-      //data: Theme.of(context).copyWith(
-
-      //  ),
       bottomNavigationBar: CurvedNavigationBar(
-        color: Color.fromARGB(207, 182, 234, 238),
+        color: Color.fromARGB(207, 210, 252, 255),
         key: navigationKey,
         backgroundColor: Colors.transparent,
         height: 60,
         index: index,
-        items: items.asMap().entries.map((entry) {
-          final index = entry.key;
-          final item = entry.value;
+        items: _iconpardefaut.asMap().entries.map((entry) {
+          final int currentIndex = entry.key;
+          final Widget currentWidget = entry.value;
 
           return GestureDetector(
             onTap: () => setState(() {
-              this.index = index;
-              items[index] = items[index] == _replacementIcons[index]
-                  ? item
-                  : _replacementIcons[index];
+              index = currentIndex;
             }),
-            child: item,
+            child: currentIndex == index
+                ? _replacementIcons[currentIndex]
+                : currentWidget,
           );
         }).toList(),
-        onTap: (newIndex) => setState(() => this.index = newIndex),
+        onTap: (newIndex) => setState(() {
+          index = newIndex;
+        }),
       ),
     );
   }

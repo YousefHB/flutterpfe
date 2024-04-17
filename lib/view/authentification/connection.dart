@@ -51,7 +51,6 @@ class _ConnectionState extends State<Connection> {
                       "BEINVENUE A",
                       style: TextStyle(
                         fontSize: 27,
-                        fontWeight: FontWeight.bold,
                         fontFamily: myfont,
                       ),
                     ),
@@ -63,7 +62,6 @@ class _ConnectionState extends State<Connection> {
                       style: TextStyle(
                         fontSize: 27,
                         color: myCustomColor,
-                        fontWeight: FontWeight.bold,
                         fontFamily: myfont,
                       ),
                     )
@@ -88,7 +86,7 @@ class _ConnectionState extends State<Connection> {
                         child: Text(
                           "SE CONNECTER",
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 18,
                             fontFamily: myfont,
                           ),
                         ),
@@ -123,7 +121,7 @@ class _ConnectionState extends State<Connection> {
                         child: Text(
                           "S'INSCRIRE",
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 18,
                             fontFamily: myfont,
                           ),
                         ),
