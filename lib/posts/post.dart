@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class Post extends StatefulWidget {
-   final String content;
+  final String content;
   final List<String> images;
-  final String? firstName; 
-  final String? lastName; 
-  final String? createdAt; 
+  final String? firstName;
+  final String? lastName;
+  final String? createdAt;
+  final String? profilePhotoUrl;
   const Post({
     Key? key,
     required this.content,
@@ -14,6 +15,7 @@ class Post extends StatefulWidget {
     required this.firstName,
     required this.lastName,
     required this.createdAt,
+    required this.profilePhotoUrl,
   }) : super(key: key);
 
   @override
@@ -31,36 +33,36 @@ class _PostState extends State<Post> {
     'Commentaire 1',
     'Commentaire 2'
   ]; // Liste de commentaires fictifs
-String calculateTimestamp() {
-  if (widget.createdAt != null) {
-    // Convert createdAt to DateTime object
-    DateTime createdAtDateTime = DateTime.parse(widget.createdAt!);
+  String calculateTimestamp() {
+    if (widget.createdAt != null) {
+      // Convert createdAt to DateTime object
+      DateTime createdAtDateTime = DateTime.parse(widget.createdAt!);
 
-    // Calculate the difference between current time and createdAt time
-    Duration difference = DateTime.now().difference(createdAtDateTime);
+      // Calculate the difference between current time and createdAt time
+      Duration difference = DateTime.now().difference(createdAtDateTime);
 
-    // Calculate the difference in minutes, hours, and days
-    int differenceInMinutes = difference.inMinutes;
-    int differenceInHours = difference.inHours;
-    int differenceInDays = difference.inDays;
+      // Calculate the difference in minutes, hours, and days
+      int differenceInMinutes = difference.inMinutes;
+      int differenceInHours = difference.inHours;
+      int differenceInDays = difference.inDays;
 
-    if (differenceInMinutes < 60) {
-      // If less than an hour, display minutes
-      return 'il y a $differenceInMinutes min';
-    } else if (differenceInHours < 24) {
-      // If less than a day, display hours
-      return 'il y a $differenceInHours h';
-    } else if (differenceInDays == 1) {
-      // If exactly one day, display "1 J"
-      return 'il y a 1 J';
+      if (differenceInMinutes < 60) {
+        // If less than an hour, display minutes
+        return 'il y a $differenceInMinutes min';
+      } else if (differenceInHours < 24) {
+        // If less than a day, display hours
+        return 'il y a $differenceInHours h';
+      } else if (differenceInDays == 1) {
+        // If exactly one day, display "1 J"
+        return 'il y a 1 J';
+      } else {
+        // If more than one day, display number of days
+        return 'il y a $differenceInDays J';
+      }
     } else {
-      // If more than one day, display number of days
-      return 'il y a $differenceInDays J';
+      return 'Unknown'; // Handle case when createdAt is null
     }
-  } else {
-    return 'Unknown'; // Handle case when createdAt is null
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -81,22 +83,47 @@ String calculateTimestamp() {
             Row(
               children: [
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 10.0, vertical: 10.0),
                   child: Align(
                     alignment: Alignment.topLeft,
-                    child: Image.asset(
-                      'assets/image/profile.png',
+                    child: Container(
                       width: 60,
                       height: 60,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color:
+                              Colors.grey, // Change the border color as needed
+                          width: 2,
+                        ),
+                      ),
+                      child: widget.profilePhotoUrl != null
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(
+                                  30), // Half of the width/height to make it circular
+                              child: Image.network(
+                                widget.profilePhotoUrl!,
+                                width: 60,
+                                height: 60,
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          : Image.asset(
+                              'assets/image/profile.png',
+                              width: 60,
+                              height: 60,
+                              fit: BoxFit.cover,
+                            ),
                     ),
                   ),
                 ),
                 Column(
                   children: [
-                    Text(widget.firstName!+" "+widget.lastName!),
-                    Text(calculateTimestamp(),
-                    style: TextStyle(color: Colors.blue),
+                    Text(widget.firstName! + " " + widget.lastName!),
+                    Text(
+                      calculateTimestamp(),
+                      style: TextStyle(color: Colors.blue),
                     ),
                   ],
                 ),
