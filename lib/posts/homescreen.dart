@@ -108,11 +108,23 @@ class _HomescreenState extends State<Homescreen> {
             final firstName = createdBy['firstName'];
             final lastName = createdBy['lastName'];
             final createdAt = item['createdAt'];
+            String profilePhotoUrl =
+                (item['createdBy']['photoProfil']['url'] as String)
+                    .replaceAll('localhost', '10.0.2.2');
+            final createdBy = item['createdBy'];
+            final firstName = createdBy['firstName'];
+            final lastName = createdBy['lastName'];
+            final createdAt = item['createdAt'];
 
             // Updating item with user details
             item['firstName'] = firstName;
             item['lastName'] = lastName;
             item['createdAt'] = createdAt;
+            // Updating item with user details
+            item['firstName'] = firstName;
+            item['lastName'] = lastName;
+            item['createdAt'] = createdAt;
+            item['profilePhotoUrl'] = profilePhotoUrl;
             return item;
           }));
         });
@@ -214,12 +226,15 @@ class _HomescreenState extends State<Homescreen> {
                   final firstName = postData['firstName'];
                   final lastName = postData['lastName'];
                   final createdAt = postData['createdAt'];
+                  final photoProfil = postData['profilePhotoUrl'];
+                  print('photoProfil: $photoProfil');
                   return Post(
                     content: postContent,
                     images: postImages,
                     firstName: firstName,
                     lastName: lastName,
                     createdAt: createdAt,
+                    profilePhotoUrl: photoProfil,
                   );
                 },
               ),
@@ -429,6 +444,41 @@ class _HomescreenState extends State<Homescreen> {
                   ],
                 ),
               ),
+              Container(
+                height: 50, // Augmenter la hauteur du bouton
+                width: 50, // Augmenter la largeur du bouton
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5), // Couleur de l'ombre
+                      spreadRadius: 5, // Rayon d'étalement de l'ombre
+                      blurRadius: 7, // Flou de l'ombre
+                      offset: Offset(0, 3), // Décalage de l'ombre
+                    ),
+                  ],
+                ),
+                child: TextButton(
+                  onPressed: () {},
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.white,
+                    side: BorderSide(
+                      color: Color.fromARGB(255, 56, 184, 196),
+                      width: 1.0,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(40.0),
+                    ),
+                  ),
+                  child: Text(
+                    "deconnexion",
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 56, 184, 196),
+                    ),
+                  ),
+                ),
+              )
+
               // Ajouter plus d'éléments au besoin
             ],
           ),
