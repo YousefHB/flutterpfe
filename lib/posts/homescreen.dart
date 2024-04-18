@@ -104,15 +104,15 @@ class _HomescreenState extends State<Homescreen> {
               return image.toString().replaceAll('localhost', '10.0.2.2');
             }).toList();
             item['images'] = images;
-             final createdBy = item['createdBy'];
-          final firstName = createdBy['firstName'];
-          final lastName = createdBy['lastName'];
-          final createdAt = item['createdAt'];
+            final createdBy = item['createdBy'];
+            final firstName = createdBy['firstName'];
+            final lastName = createdBy['lastName'];
+            final createdAt = item['createdAt'];
 
-          // Updating item with user details
-          item['firstName'] = firstName;
-          item['lastName'] = lastName;
-          item['createdAt'] = createdAt;
+            // Updating item with user details
+            item['firstName'] = firstName;
+            item['lastName'] = lastName;
+            item['createdAt'] = createdAt;
             return item;
           }));
         });

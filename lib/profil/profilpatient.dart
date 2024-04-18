@@ -55,6 +55,7 @@ class _ProfilPatientState extends State<ProfilPatient> {
   }
 
 // Définissez une fonction pour convertir les URLs d'images
+
   String convertImageUrl(String imageUrl) {
     return imageUrl.replaceAll('localhost', '10.0.2.2');
   }
@@ -70,7 +71,16 @@ class _ProfilPatientState extends State<ProfilPatient> {
 
       if (response.statusCode == 200) {
         // If the response is successful, replace 'localhost' with your local IP address
-        final Map<String, dynamic> userInfo = jsonDecode(response.body);
+        Map<String, dynamic> userInfo = jsonDecode(response.body);
+        print('User Info: $userInfo');
+        print('**************');
+
+        userInfo['user']['photoProfil'] =
+            convertImageUrl(userInfo['user']['photoProfil']);
+        userInfo['user']['photoCouverture'] =
+            convertImageUrl(userInfo['user']['photoCouverture']);
+
+        print('User Info aprés modification: $userInfo');
 
         return userInfo;
       } else {
@@ -142,21 +152,28 @@ class _ProfilPatientState extends State<ProfilPatient> {
                   height: 40,
                 ),
                 Container(
-                  width: 700,
-                  height: 700,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: LinearGradient(
-                      colors: [myCustomColor, myCustomColor1],
+                    width: 120,
+                    height: 120,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: LinearGradient(
+                        colors: [myCustomColor, myCustomColor1],
+                      ),
+                      border: Border.all(
+                        color: Colors.transparent,
+                        width: 1,
+                      ),
                     ),
-                    border: Border.all(
-                      color: Colors.transparent,
-                      width: 1,
+                    padding: EdgeInsets.all(2),
+                    child: ClipOval(
+                      child: Image.network(
+                        _userInfo['user']['photoProfil'],
+                        fit: BoxFit.cover,
+                        width: 100,
+                        height: 100, // Ajustez l'image pour couvrir le widget
+                      ),
+                    ) // Placeholder ou tout autre widget de remplacement si l'image est null
                     ),
-                  ),
-                  padding: EdgeInsets.all(2),
-                  child: Image.network('${_userInfo['user']['photoProfil']} '),
-                ),
                 SizedBox(
                   height: 40,
                 ),
