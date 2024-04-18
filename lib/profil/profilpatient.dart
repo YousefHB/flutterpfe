@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:ycmedical/config.dart';
+import 'package:ycmedical/posts/post.dart';
 
 class ProfilPatient extends StatefulWidget {
   const ProfilPatient({super.key});
@@ -18,7 +19,6 @@ const String myfont = 'ArialRounded';
 
 class _ProfilPatientState extends State<ProfilPatient> {
   List<Map<String, dynamic>> posts = [];
-
   late Map<String, dynamic> _userInfo;
 
 // Déclaration de _userInfo
@@ -26,7 +26,7 @@ class _ProfilPatientState extends State<ProfilPatient> {
   @override
   void initState() {
     super.initState();
-
+    fetchPosts();
     _userInfo = {};
     _fetchUserInfo(); // Appelez fetchUserInfo lors de l'initialisation du widget pour récupérer les informations de l'utilisateur
   }
@@ -276,11 +276,80 @@ class _ProfilPatientState extends State<ProfilPatient> {
                     ],
                   ),
                 ),
+                Container(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: posts.length >= 5 ? 5 : posts.length,
+                    itemBuilder: (context, index) {
+                      final postData = posts[index];
+                      final postContent = postData['content'];
+                      final postImages = postData['images'];
+                      final firstName = postData['firstName'];
+                      final lastName = postData['lastName'];
+                      final createdAt = postData['createdAt'];
+                      final photoProfil = postData['profilePhotoUrl'];
+                      print('photoProfil: $photoProfil');
+                      return Post(
+                        content: postContent,
+                        images: postImages,
+                        firstName: firstName,
+                        lastName: lastName,
+                        createdAt: createdAt,
+                        profilePhotoUrl: photoProfil,
+                      );
+                    },
+                  ),
+                ),
               ],
             ),
           ),
         )),
       ),
     );
+  }
+
+  Future<void> fetchPosts() async {
+    final url = Uri.parse(getmypost);
+    final storage = FlutterSecureStorage();
+    final accessToken = await storage.read(key: 'accessToken');
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+        },
+      );
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        setState(() {
+          posts = List<Map<String, dynamic>>.from(data.map((item) {
+            List<String> images =
+                (item['images'] as List<dynamic>).map((image) {
+              return image.toString().replaceAll('localhost', '10.0.2.2');
+            }).toList();
+            item['images'] = images;
+            final createdBy = item['createdBy'];
+            final firstName = createdBy['firstName'];
+            final lastName = createdBy['lastName'];
+            final createdAt = item['createdAt'];
+            String profilePhotoUrl =
+                (item['createdBy']['photoProfil']['url'] as String)
+                    .replaceAll('localhost', '10.0.2.2');
+
+            // Updating item with user details
+            item['firstName'] = firstName;
+            item['lastName'] = lastName;
+            item['createdAt'] = createdAt;
+            item['profilePhotoUrl'] = profilePhotoUrl;
+            return item;
+          }));
+        });
+      } else {
+        throw Exception('Failed to load posts');
+      }
+    } catch (e) {
+      print('Error fetching posts: $e');
+    }
   }
 }

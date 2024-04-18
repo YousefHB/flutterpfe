@@ -127,6 +127,11 @@ class _PostState extends State<Post> {
                     ),
                   ],
                 ),
+                Image.asset(
+                  "assets/image/menudot.png",
+                  width: 15,
+                  height: 15,
+                )
               ],
             ),
             Padding(

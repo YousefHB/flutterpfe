@@ -111,10 +111,9 @@ class _HomescreenState extends State<Homescreen> {
             String profilePhotoUrl =
                 (item['createdBy']['photoProfil']['url'] as String)
                     .replaceAll('localhost', '10.0.2.2');
-           
 
             // Updating item with user details
-           
+
             // Updating item with user details
             item['firstName'] = firstName;
             item['lastName'] = lastName;
@@ -122,6 +121,8 @@ class _HomescreenState extends State<Homescreen> {
             item['profilePhotoUrl'] = profilePhotoUrl;
             return item;
           }));
+          /*posts.sort((a, b) => DateTime.parse(a['createdAt'])
+              .compareTo(DateTime.parse(b['createdAt'])));*/
         });
       } else {
         throw Exception('Failed to load posts');
