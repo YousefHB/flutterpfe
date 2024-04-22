@@ -50,24 +50,6 @@ class _HomescreenState extends State<Homescreen> {
     }
   }
 
-  /*Future<Map<String, dynamic>> fetchUserInfo(String accessToken) async {
-    try {
-      final response = await http.get(
-        Uri.parse(
-            userinfo), // Remplacez 'URL_DE_VOTRE_API/getUserInfo' par votre propre URL
-        headers: {'Authorization': 'Bearer $accessToken'},
-      );
-
-      if (response.statusCode == 200) {
-        // Si la réponse est réussie, convertissez le corps de la réponse en un Map
-        return jsonDecode(response.body);
-      } else {
-        throw Exception('Failed to load user info: ${response.statusCode}');
-      }
-    } catch (error) {
-      throw Exception('Failed to load user info: $error');
-    }
-  }*/
   Future<Map<String, dynamic>> fetchUserInfo(String accessToken) async {
     try {
       final response = await http.get(
@@ -153,86 +135,94 @@ class _HomescreenState extends State<Homescreen> {
             stops: [0.0, 0.4, 0.6, 1],
           ),
         ),
-        child: ListView(
-          children: [
-            Container(
-              margin: EdgeInsets.fromLTRB(0, 20, 20, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    onTap: () {},
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Image.asset(
-                        'assets/image/logo.png',
-                        width: 70,
-                        height: 100,
-                      ),
-                    ),
-                  ),
-                  Row(
+        child: CustomScrollView(
+          slivers: [
+            SliverPadding(
+              padding: EdgeInsets.fromLTRB(0, 20, 20, 0),
+              sliver: SliverToBoxAdapter(
+                child: Container(
+                  margin: EdgeInsets.fromLTRB(0, 20, 20, 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GestureDetector(
-                        onTap: () {
-                          print("loupe pressed");
-                        },
+                        onTap: () {},
                         child: Align(
-                          alignment: Alignment.centerRight,
+                          alignment: Alignment.topLeft,
                           child: Image.asset(
-                            'assets/image/loupe.png',
-                            width: 30,
-                            height: 30,
+                            'assets/image/logo.png',
+                            width: 70,
+                            height: 100,
                           ),
                         ),
                       ),
-                      SizedBox(
-                        width: 15,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          scaffoldKey.currentState!.openEndDrawer();
-                        },
-                        child: Align(
-                          alignment: Alignment.topRight,
-                          child: Image.asset(
-                            'assets/image/param.png',
-                            width: 30,
-                            height: 30,
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              print("loupe pressed");
+                            },
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Image.asset(
+                                'assets/image/loupe.png',
+                                width: 30,
+                                height: 30,
+                              ),
+                            ),
                           ),
-                        ),
-                      )
+                          SizedBox(
+                            width: 15,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              scaffoldKey.currentState!.openEndDrawer();
+                            },
+                            child: Align(
+                              alignment: Alignment.topRight,
+                              child: Image.asset(
+                                'assets/image/param.png',
+                                width: 30,
+                                height: 30,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     ],
                   ),
-                ],
+                ),
               ),
             ),
-            Container(child: storie()),
-            SizedBox(
-              height: 20,
+            SliverToBoxAdapter(
+              child: Container(
+                child: storie(),
+              ),
             ),
-            Container(
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: posts.length >= 5 ? 5 : posts.length,
-                itemBuilder: (context, index) {
-                  final postData = posts[index];
-                  final postContent = postData['content'];
-                  final postImages = postData['images'];
-                  final firstName = postData['firstName'];
-                  final lastName = postData['lastName'];
-                  final createdAt = postData['createdAt'];
-                  final photoProfil = postData['profilePhotoUrl'];
-                  print('photoProfil: $photoProfil');
-                  return Post(
-                    content: postContent,
-                    images: postImages,
-                    firstName: firstName,
-                    lastName: lastName,
-                    createdAt: createdAt,
-                    profilePhotoUrl: photoProfil,
-                  );
-                },
+            SliverPadding(
+              padding: EdgeInsets.symmetric(vertical: 20),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final postData = posts[index];
+                    final postContent = postData['content'];
+                    final postImages = postData['images'];
+                    final firstName = postData['firstName'];
+                    final lastName = postData['lastName'];
+                    final createdAt = postData['createdAt'];
+                    final photoProfil = postData['profilePhotoUrl'];
+                    print('photoProfil: $photoProfil');
+                    return Post(
+                      content: postContent,
+                      images: postImages,
+                      firstName: firstName,
+                      lastName: lastName,
+                      createdAt: createdAt,
+                      profilePhotoUrl: photoProfil,
+                    );
+                  },
+                  childCount: posts.length,
+                ),
               ),
             ),
           ],
