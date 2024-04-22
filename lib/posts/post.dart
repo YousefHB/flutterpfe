@@ -179,6 +179,59 @@ class _PostState extends State<Post> {
                 ),
               ),
             ),
+            if (showReactionRow)
+            Row(
+              children: [
+                GestureDetector(
+                  onTap : () {
+                      setState(() {
+                      showReactionRow = false; 
+                    });
+                  },
+               child: Image.asset(
+                    'assets/image/Rjaime.png',
+                    width: 50,
+                    height: 50,
+                  ),
+                  ),
+                  GestureDetector(
+                  onTap : () {
+                      setState(() {
+                      showReactionRow = false; 
+                    });
+                  },
+               child: Image.asset(
+                    'assets/image/jadore.png',
+                    width: 50,
+                    height: 50,
+                  ),
+                  ),
+                 GestureDetector(
+                  onTap : () {
+                      setState(() {
+                      showReactionRow = false; 
+                    });
+                  },
+               child: Image.asset(
+                    'assets/image/bravo.png',
+                    width: 50,
+                    height: 50,
+                  ),
+                  ),
+                  GestureDetector(
+                  onTap : () {
+                      setState(() {
+                      showReactionRow = false; 
+                    });
+                  },
+               child: Image.asset(
+                    'assets/image/trist.png',
+                    width: 50,
+                    height: 50,
+                  ),
+                  ),
+              ],
+            ),
             Row(
               children: [
                 GestureDetector(
