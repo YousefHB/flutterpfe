@@ -6,70 +6,70 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:ycmedical/config.dart';
 import 'package:ycmedical/posts/post.dart';
 
-class ProfilPatient extends StatefulWidget {
-  const ProfilPatient({Key? key}) : super(key: key);
+class AutreProfilPatient extends StatefulWidget {
+  final String userId;
+
+  const AutreProfilPatient({Key? key, required this.userId}) : super(key: key);
 
   @override
-  State<ProfilPatient> createState() => _ProfilPatientState();
+  State<AutreProfilPatient> createState() => _AutreProfilPatientState();
 }
 
-class _ProfilPatientState extends State<ProfilPatient> {
+class _AutreProfilPatientState extends State<AutreProfilPatient> {
   List<Map<String, dynamic>> posts = [];
-  late Map<String, dynamic> _userInfo;
+  late Map<String, dynamic> _userInfo =
+      {}; // Initialisation avec une valeur par défaut vide
 
+  @override
   @override
   void initState() {
     super.initState();
     fetchPosts();
-    _userInfo = {};
-    _fetchUserInfo();
-  }
-
-  Future<void> _fetchUserInfo() async {
     final storage = FlutterSecureStorage();
-    String? accessToken = await storage.read(key: 'accessToken');
-
-    if (accessToken == null) {
-      return;
-    }
-
-    try {
-      final Map<String, dynamic> fetchedUserInfo =
-          await fetchUserInfo(accessToken);
-      setState(() {
-        _userInfo = fetchedUserInfo;
-      });
-    } catch (error) {
-      print('Error fetching user info: $error');
-    }
+    storage.read(key: 'accessToken').then((accessToken) {
+      if (accessToken != null) {
+        fetchUserInfo(widget.userId, accessToken).then((userInfo) {
+          setState(() {
+            _userInfo = userInfo;
+          });
+        }).catchError((error) {
+          print('Error fetching user info: $error');
+        });
+      } else {
+        print('Access token is null');
+      }
+    }).catchError((error) {
+      print('Error fetching access token: $error');
+    });
   }
 
-  String convertImageUrl(String imageUrl) {
-    return imageUrl.replaceAll('localhost', '10.0.2.2');
-  }
+  Future<Map<String, dynamic>> fetchUserInfo(
+      String userId, String accessToken) async {
+    final url = Uri.parse('http://10.0.2.2:3000/api/user/profil/$userId');
 
-  Future<Map<String, dynamic>> fetchUserInfo(String accessToken) async {
     try {
       final response = await http.get(
-        Uri.parse(userinfo),
-        headers: {'Authorization': 'Bearer $accessToken'},
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization':
+              'Bearer $accessToken', // Ajoutez le jeton d'authentification ici
+        },
       );
 
       if (response.statusCode == 200) {
-        Map<String, dynamic> userInfo = jsonDecode(response.body);
-
-        userInfo['user']['photoProfil'] =
-            convertImageUrl(userInfo['user']['photoProfil']);
-        userInfo['user']['photoCouverture'] =
-            convertImageUrl(userInfo['user']['photoCouverture']);
-
-        return userInfo;
+        print('Fetching user info for ID: $userId');
+        return jsonDecode(response.body);
       } else {
         throw Exception('Failed to load user info: ${response.statusCode}');
       }
     } catch (error) {
       throw Exception('Failed to load user info: $error');
     }
+  }
+
+  String convertImageUrl(String imageUrl) {
+    return imageUrl.replaceAll('localhost', '10.0.2.2');
   }
 
   Widget build(BuildContext context) {
@@ -132,7 +132,7 @@ class _ProfilPatientState extends State<ProfilPatient> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(height: 20),
-                    Container(
+                    /* Container(
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
@@ -156,7 +156,7 @@ class _ProfilPatientState extends State<ProfilPatient> {
                               'assets/image/people.png',
                         ),
                       ),
-                    ),
+                    ),*/
 
                     SizedBox(height: 10),
                     _userInfo.isNotEmpty
@@ -192,7 +192,7 @@ class _ProfilPatientState extends State<ProfilPatient> {
                       OutlinedButton(
                         onPressed: () {},
                         child: Text(
-                          "+ Ajouter à la story",
+                          "+ Ajouter ami(e)",
                           style: TextStyle(
                             fontSize: 12,
                             fontFamily: myfont,
@@ -218,12 +218,12 @@ class _ProfilPatientState extends State<ProfilPatient> {
                         child: Row(
                           children: [
                             Image.asset(
-                              "assets/image/pen.png",
+                              "assets/image/chat.png",
                               width: 15,
                               height: 15,
                             ),
                             Text(
-                              " Modifier le profil",
+                              " Envoyer un message",
                               style: TextStyle(
                                 fontSize: 12,
                                 fontFamily: myfont,

@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:ycmedical/config.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:ycmedical/profil/profilpatient.dart';
+import 'package:ycmedical/profil/visiteprofilpatient.dart';
 
 import 'post.dart';
 import 'stories.dart';
@@ -85,6 +86,7 @@ class _HomescreenState extends State<Homescreen> {
                 (item['images'] as List<dynamic>).map((image) {
               return image.toString().replaceAll('localhost', '10.0.2.2');
             }).toList();
+
             item['images'] = images;
             final createdBy = item['createdBy'];
             final firstName = createdBy['firstName'];
@@ -130,18 +132,18 @@ class _HomescreenState extends State<Homescreen> {
               Color.fromARGB(127, 219, 252, 255),
               Color.fromARGB(207, 182, 234, 238),
               Color.fromARGB(172, 187, 253, 248),
-              Color.fromARGB(171, 219, 252, 255),
+              Color.fromARGB(255, 223, 252, 255),
             ],
-            stops: [0.0, 0.4, 0.6, 1],
+            stops: [0.0, 0.4, 0.8, 1],
           ),
         ),
         child: CustomScrollView(
           slivers: [
             SliverPadding(
-              padding: EdgeInsets.fromLTRB(0, 20, 20, 0),
+              padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
               sliver: SliverToBoxAdapter(
                 child: Container(
-                  margin: EdgeInsets.fromLTRB(0, 20, 20, 0),
+                  margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -151,8 +153,8 @@ class _HomescreenState extends State<Homescreen> {
                           alignment: Alignment.topLeft,
                           child: Image.asset(
                             'assets/image/logo.png',
-                            width: 70,
-                            height: 100,
+                            width: 85,
+                            height: 120,
                           ),
                         ),
                       ),
@@ -166,13 +168,13 @@ class _HomescreenState extends State<Homescreen> {
                               alignment: Alignment.centerRight,
                               child: Image.asset(
                                 'assets/image/loupe.png',
-                                width: 30,
-                                height: 30,
+                                width: 20,
+                                height: 20,
                               ),
                             ),
                           ),
                           SizedBox(
-                            width: 15,
+                            width: 20,
                           ),
                           GestureDetector(
                             onTap: () {
@@ -182,8 +184,8 @@ class _HomescreenState extends State<Homescreen> {
                               alignment: Alignment.topRight,
                               child: Image.asset(
                                 'assets/image/param.png',
-                                width: 30,
-                                height: 30,
+                                width: 20,
+                                height: 20,
                               ),
                             ),
                           )
@@ -207,11 +209,14 @@ class _HomescreenState extends State<Homescreen> {
                     final postData = posts[index];
                     final postContent = postData['content'];
                     final postImages = postData['images'];
+
                     final firstName = postData['firstName'];
                     final lastName = postData['lastName'];
                     final createdAt = postData['createdAt'];
                     final photoProfil = postData['profilePhotoUrl'];
-                    print('photoProfil: $photoProfil');
+                    final userId = postData['createdBy']['_id'];
+                    // Ajouter l'ID de l'utilisateur
+
                     return Post(
                       content: postContent,
                       images: postImages,
@@ -219,6 +224,19 @@ class _HomescreenState extends State<Homescreen> {
                       lastName: lastName,
                       createdAt: createdAt,
                       profilePhotoUrl: photoProfil,
+                      createdByUserId: userId,
+                      onTapUserName: (userId) {
+                        print('User ID: $userId');
+                        // Naviguer vers l'écran UserProfileScreen en passant userId
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                AutreProfilPatient(userId: userId),
+                          ),
+                        );
+                      },
+                      // Par exemple, imprime l'ID de l'utilisateur dans la console
                     );
                   },
                   childCount: posts.length,
@@ -265,16 +283,23 @@ class _HomescreenState extends State<Homescreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Image.network(
-                            'https://tse4.mm.bing.net/th?id=OIP.ItvA9eX1ZIYT8NHePqeuCgHaHa&pid=Api&P=0&h=180', // Utilisez l'URL de l'image de l'utilisateur si disponible, sinon utilisez une URL par défaut
-                            width: 30,
-                            height: 30,
+                          _userInfo.isNotEmpty
+                              ? CircleAvatar(
+                                  radius: 25,
+                                  backgroundImage: NetworkImage(
+                                    _userInfo['user']['photoProfil'],
+                                  ),
+                                )
+                              : CircularProgressIndicator(),
+                          SizedBox(
+                            width: 25,
                           ),
                           Text(
                             _userInfo.isNotEmpty
                                 ? '${_userInfo['user']['firstName']} ${_userInfo['user']['lastName']}'
                                 : 'Chargement...',
                             style: TextStyle(
+                              fontFamily: myfont,
                               color: Colors.white,
                               fontSize: 18,
                             ),
@@ -290,7 +315,7 @@ class _HomescreenState extends State<Homescreen> {
                             color: Colors.transparent,
                             child: SizedBox(
                                 width: 100,
-                                height: 28,
+                                height: 35,
                                 child: TextButton(
                                   onPressed: () {
                                     Navigator.push(
@@ -312,7 +337,9 @@ class _HomescreenState extends State<Homescreen> {
                                   child: Text(
                                     'Voir profile',
                                     style: TextStyle(
-                                        fontSize: 10.0, color: Colors.white),
+                                        fontSize: 10.0,
+                                        color: Colors.white,
+                                        fontFamily: myfont),
                                   ),
                                 )),
                           )
@@ -431,8 +458,8 @@ class _HomescreenState extends State<Homescreen> {
                 ),
               ),
               Container(
-                height: 50, // Augmenter la hauteur du bouton
-                width: 50, // Augmenter la largeur du bouton
+                height: 10, // Augmenter la hauteur du bouton
+                width: 10, // Augmenter la largeur du bouton
                 decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
