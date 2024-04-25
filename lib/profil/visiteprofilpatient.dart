@@ -24,7 +24,7 @@ class _AutreProfilPatientState extends State<AutreProfilPatient> {
   @override
   void initState() {
     super.initState();
-    fetchPosts();
+    fetchPosts(widget.userId);
     final storage = FlutterSecureStorage();
     storage.read(key: 'accessToken').then((accessToken) {
       if (accessToken != null) {
@@ -318,8 +318,8 @@ class _AutreProfilPatientState extends State<AutreProfilPatient> {
     );
   }
 
-  Future<void> fetchPosts() async {
-    final url = Uri.parse(getmypost);
+  Future<void> fetchPosts(String userId) async {
+    final url = Uri.parse('http://10.0.2.2:3000/posts/$userId');
     final storage = FlutterSecureStorage();
     final accessToken = await storage.read(key: 'accessToken');
 
