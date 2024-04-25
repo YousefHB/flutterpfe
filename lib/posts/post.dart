@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'package:ycmedical/config.dart';
 
 class Post extends StatefulWidget {
   final String content;
@@ -9,10 +14,12 @@ class Post extends StatefulWidget {
   final String? createdAt;
   final String? profilePhotoUrl;
   final String createdByUserId;
+  final String postid;
   final Function(String userId) onTapUserName;
 
   const Post({
     Key? key,
+    required this.postid,
     required this.content,
     required this.images,
     required this.firstName,
@@ -73,9 +80,97 @@ class _PostState extends State<Post> {
     }
   }
 
+  String reactionAsset = 'assets/image/jaime.png';
+  @override
+  void initState() {
+    super.initState();
+    fetchUserReactions(); 
+  }
   void _handleTapUserName() {
     // Call the callback function with the user's ID
     widget.onTapUserName(widget.createdByUserId);
+  }
+
+  // Function to handle creating or updating reactions
+  Future<void> handleReaction(String type) async {
+    final String api = addreaction;
+    final storage = FlutterSecureStorage();
+    final accessToken = await storage.read(key: 'accessToken');
+
+    final response = await http.post(
+      Uri.parse(api),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+      },
+      body: jsonEncode({
+        "post": widget.postid,
+        "type": type,
+      }),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+    } else {
+      print(type);
+      print('token ${accessToken}');
+      print('Failed to create/update reaction: ${response.statusCode}');
+    }
+  }
+
+  Future<List<String>> fetchUserReactionsOnPost(String postId) async {
+    final String apireaction = apireactiontoget + postId;
+    final storage = FlutterSecureStorage();
+    final accessToken = await storage.read(key: 'accessToken');
+
+    final response = await http.get(
+      Uri.parse(apireaction),
+      headers: {
+        'Authorization': 'Bearer $accessToken',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      // Parse response body
+      final List<dynamic> userReactions = jsonDecode(response.body);
+
+      // Extract reaction types from the response
+      final List<String> reactionTypes =
+          userReactions.map((reaction) => reaction['type'] as String).toList();
+
+      return reactionTypes;
+    } else {
+      // If the server did not return a 200 OK response,
+      // throw an exception.
+      throw Exception('Failed to fetch user reactions on post');
+    }
+  }
+
+  Future<void> fetchUserReactions() async {
+    try {
+      List<String> userReactions =
+          await fetchUserReactionsOnPost(widget.postid);
+
+      if (userReactions.contains("like")) {
+        setState(() {
+          reactionAsset = 'assets/image/Rjaime.png';
+        });
+      } else if (userReactions.contains("bravo")) {
+        setState(() {
+          reactionAsset = 'assets/image/bravo.png';
+        });
+      } else if (userReactions.contains("love")) {
+        setState(() {
+          reactionAsset = 'assets/image/jadore.png';
+        });
+      } else if (userReactions.contains("triste")) {
+        setState(() {
+          reactionAsset = 'assets/image/trist.png';
+        });
+      }
+    } catch (error) {
+      // Gérer l'erreur lors de la récupération des réactions
+      print('Erreur lors de la récupération des réactions : $error');
+    }
   }
 
   @override
@@ -226,6 +321,8 @@ class _PostState extends State<Post> {
                     GestureDetector(
                       onTap: () {
                         setState(() {
+                          print('Post ID: ${widget.postid}');
+                          handleReaction("like");
                           showReactionRow = false;
                         });
                       },
@@ -238,6 +335,7 @@ class _PostState extends State<Post> {
                     GestureDetector(
                       onTap: () {
                         setState(() {
+                          handleReaction("love");
                           showReactionRow = false;
                         });
                       },
@@ -250,6 +348,7 @@ class _PostState extends State<Post> {
                     GestureDetector(
                       onTap: () {
                         setState(() {
+                          handleReaction("bravo");
                           showReactionRow = false;
                         });
                       },
@@ -262,6 +361,7 @@ class _PostState extends State<Post> {
                     GestureDetector(
                       onTap: () {
                         setState(() {
+                          handleReaction("triste");
                           showReactionRow = false;
                         });
                       },
@@ -278,14 +378,16 @@ class _PostState extends State<Post> {
                 child: Row(
                   children: [
                     GestureDetector(
-                      onLongPress: () {
-                        setState(() {
-                          showReactionRow =
-                              true; // Afficher la rangée de réaction
-                        });
+                      onLongPress: ()  {
+                        
+
+                          setState(() {
+                            showReactionRow = true;
+                          });
+                        
                       },
                       child: Image.asset(
-                        'assets/image/jaime.png',
+                        reactionAsset,
                         width: 70,
                         height: 80,
                       ),

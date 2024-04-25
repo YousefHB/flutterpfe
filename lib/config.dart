@@ -6,3 +6,5 @@ final addpost = url + '/posts/Auth';
 final login = url + '/api/auth/login';
 final userinfo = url + '/api/user/getUserInfo';
 final getmypost = url + '/posts/profile';
+final addreaction = url + '/reaction';
+final apireactiontoget = url +'/reaction/userreactions/';

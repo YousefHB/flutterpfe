@@ -282,6 +282,7 @@ class _AutreProfilPatientState extends State<AutreProfilPatient> {
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
                   final postData = posts[index];
+                  final postid = postData['_id'];
                   final postContent = postData['content'];
                   final postImages = postData['images'];
 
@@ -293,6 +294,7 @@ class _AutreProfilPatientState extends State<AutreProfilPatient> {
                   // Ajouter l'ID de l'utilisateur
 
                   return Post(
+                    postid: postid,
                     content: postContent,
                     images: postImages,
                     firstName: firstName,
@@ -338,6 +340,7 @@ class _AutreProfilPatientState extends State<AutreProfilPatient> {
             }).toList();
             item['images'] = images;
             final createdBy = item['createdBy'];
+            final id = item['_id'];
             final firstName = createdBy['firstName'];
             final lastName = createdBy['lastName'];
             final createdAt = item['createdAt'];
@@ -349,6 +352,7 @@ class _AutreProfilPatientState extends State<AutreProfilPatient> {
             item['lastName'] = lastName;
             item['createdAt'] = createdAt;
             item['profilePhotoUrl'] = profilePhotoUrl;
+            item['_id'] = id ;
             return item;
           }));
         });

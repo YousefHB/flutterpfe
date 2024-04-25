@@ -88,6 +88,7 @@ class _HomescreenState extends State<Homescreen> {
             }).toList();
 
             item['images'] = images;
+            final id = item['_id'];
             final createdBy = item['createdBy'];
             final firstName = createdBy['firstName'];
             final lastName = createdBy['lastName'];
@@ -99,6 +100,7 @@ class _HomescreenState extends State<Homescreen> {
             // Updating item with user details
 
             // Updating item with user details
+            item['_id'] = id ;
             item['firstName'] = firstName;
             item['lastName'] = lastName;
             item['createdAt'] = createdAt;
@@ -206,7 +208,9 @@ class _HomescreenState extends State<Homescreen> {
               sliver: SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
+                    
                     final postData = posts[index];
+                    final postid = postData['_id'];
                     final postContent = postData['content'];
                     final postImages = postData['images'];
 
@@ -225,11 +229,13 @@ class _HomescreenState extends State<Homescreen> {
                       createdAt: createdAt,
                       profilePhotoUrl: photoProfil,
                       createdByUserId: userId,
+                      postid: postid,
                       onTapUserName: (userId) {
                         String currentUserId = _userInfo['user']['id'];
 
                         print('User ID: $userId');
                         print(currentUserId);
+                        print(postid);
                         // Naviguer vers l'écran UserProfileScreen en passant userId
                         if (currentUserId == userId) {
                           Navigator.push(
