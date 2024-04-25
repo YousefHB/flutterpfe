@@ -93,7 +93,7 @@ class _PostState extends State<Post> {
           width: screenWidth * 0.8,
           height: showCommentSection
               ? 700
-              : 550, // Augmentez la hauteur si la section de commentaire est visible
+              : 500, // Augmentez la hauteur si la section de commentaire est visible
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -138,18 +138,21 @@ class _PostState extends State<Post> {
                         },
                         child: Text(
                           widget.firstName! + " " + widget.lastName!,
+                          textAlign: TextAlign.start,
                           style: TextStyle(
                               fontFamily: myfont,
-                              fontSize: 12,
+                              letterSpacing: 1.4,
+                              fontSize: 14,
                               fontWeight: FontWeight.bold),
                         ),
                       ),
                       Text(
                         calculateTimestamp(),
+                        textAlign: TextAlign.start,
                         style: TextStyle(
-                            color: myCustomColor1,
+                            color: myCustomColor,
                             fontFamily: myfont,
-                            fontSize: 12),
+                            fontSize: 11),
                       ),
                     ],
                   ),
@@ -161,18 +164,17 @@ class _PostState extends State<Post> {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(25, 20, 25, 10),
+                padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
                 child: Text(
                   textAlign: TextAlign.start,
                   showFullText
                       ? widget.content
-                      : widget.content.split(' ').take(20).join(' ') + '...',
+                      : widget.content.split(' ').take(10).join(' ') + '...',
                   style: TextStyle(
                     fontFamily: myfont,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.2,
+                    letterSpacing: 1.4,
                     height: 1.7,
-                    fontSize: 12,
+                    fontSize: 14,
                   ),
                 ),
               ),
@@ -190,23 +192,33 @@ class _PostState extends State<Post> {
                 ),
               Expanded(
                 child: Container(
-                    width: double.infinity,
-                    child: Center(
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: widget.images.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 25.0, vertical: 0.0),
-                            child: Image.network(
-                              widget.images[index],
-                              fit: BoxFit.cover,
-                            ),
-                          );
-                        },
-                      ),
-                    )),
+                  height:
+                      double.infinity, // Ajustez la hauteur selon vos besoins
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: widget.images.length,
+                    itemBuilder: (context, index) {
+                      return Center(
+                        child: Container(
+                          width: MediaQuery.of(context)
+                              .size
+                              .width, // Prend la largeur totale de l'écran
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.network(
+                                widget.images[index],
+                                fit: BoxFit.cover,
+                                height: double
+                                    .infinity, // Prend toute la hauteur du conteneur
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ),
               if (showReactionRow)
                 Row(

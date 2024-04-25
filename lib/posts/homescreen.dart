@@ -226,15 +226,25 @@ class _HomescreenState extends State<Homescreen> {
                       profilePhotoUrl: photoProfil,
                       createdByUserId: userId,
                       onTapUserName: (userId) {
+                        String currentUserId = _userInfo['user']['id'];
+
                         print('User ID: $userId');
+                        print(currentUserId);
                         // Naviguer vers l'écran UserProfileScreen en passant userId
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                AutreProfilPatient(userId: userId),
-                          ),
-                        );
+                        if (currentUserId == userId) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ProfilPatient()),
+                          );
+                        } else
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  AutreProfilPatient(userId: userId),
+                            ),
+                          );
                       },
                       // Par exemple, imprime l'ID de l'utilisateur dans la console
                     );

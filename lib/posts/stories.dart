@@ -4,16 +4,6 @@ class storie extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(children: [
-      GestureDetector(
-        onTap: () {
-          print("add stories");
-        },
-        child: Image.asset(
-          'assets/image/storieadd.png',
-          width: 90,
-          height: 90,
-        ),
-      ),
       const SizedBox(width: 10.0),
       Expanded(
           child: SingleChildScrollView(
@@ -30,13 +20,8 @@ class storie extends StatelessWidget {
                         children: [
                           Image.asset(
                             'assets/image/storie.png',
-                            width: 90,
-                            height: 90,
-                          ),
-                          SizedBox(width: 10),
-                          Text(
-                            'Votre Texte ici',
-                            style: TextStyle(fontSize: 10),
+                            width: 80,
+                            height: 80,
                           ),
                         ],
                       ),
@@ -44,43 +29,43 @@ class storie extends StatelessWidget {
                   ),
                   Image.asset(
                     'assets/image/storie.png',
-                    width: 90,
-                    height: 90,
+                    width: 80,
+                    height: 80,
                   ),
                   Image.asset(
                     'assets/image/storie.png',
-                    width: 90,
-                    height: 90,
+                    width: 80,
+                    height: 80,
                   ),
                   Image.asset(
                     'assets/image/storie.png',
-                    width: 90,
-                    height: 90,
+                    width: 80,
+                    height: 80,
                   ),
                   Image.asset(
                     'assets/image/storie.png',
-                    width: 90,
-                    height: 90,
+                    width: 80,
+                    height: 80,
                   ),
                   Image.asset(
                     'assets/image/storie.png',
-                    width: 90,
-                    height: 90,
+                    width: 80,
+                    height: 80,
                   ),
                   Image.asset(
                     'assets/image/storie.png',
-                    width: 90,
-                    height: 90,
+                    width: 80,
+                    height: 80,
                   ),
                   Image.asset(
                     'assets/image/storie.png',
-                    width: 90,
-                    height: 90,
+                    width: 80,
+                    height: 80,
                   ),
                   Image.asset(
                     'assets/image/storie.png',
-                    width: 90,
-                    height: 90,
+                    width: 80,
+                    height: 80,
                   ),
                 ],
               )))
