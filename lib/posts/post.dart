@@ -110,6 +110,7 @@ class _PostState extends State<Post> {
     );
 
     if (response.statusCode == 200 || response.statusCode == 201) {
+      await fetchUserReactions();
     } else {
       print(type);
       print('token ${accessToken}');
