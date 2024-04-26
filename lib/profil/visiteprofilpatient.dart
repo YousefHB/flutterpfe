@@ -19,11 +19,13 @@ class _AutreProfilPatientState extends State<AutreProfilPatient> {
   List<Map<String, dynamic>> posts = [];
   late Map<String, dynamic> _userInfo =
       {}; // Initialisation avec une valeur par défaut vide
-
+  bool invitationSent = false;
   @override
   @override
   void initState() {
     super.initState();
+    invitationSent = false;
+
     fetchPosts(widget.userId);
     final storage = FlutterSecureStorage();
     storage.read(key: 'accessToken').then((accessToken) {
@@ -65,6 +67,39 @@ class _AutreProfilPatientState extends State<AutreProfilPatient> {
       }
     } catch (error) {
       throw Exception('Failed to load user info: $error');
+    }
+  }
+
+  Future<void> sendFriendInvitation(String receiverId) async {
+    final storage = FlutterSecureStorage();
+    String? accessToken = await storage.read(key: 'accessToken');
+    try {
+      final String apiUrl =
+          'http://10.0.2.2:3000/api/user/sendFriendInvitation';
+      final Map<String, dynamic> body = {'receiverId': receiverId};
+
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization':
+              'Bearer $accessToken', // Ajoutez le jeton d'authentification dans les en-têtes
+        },
+        body: jsonEncode(body),
+      );
+
+      if (response.statusCode == 200) {
+        print('Invitation envoyée avec succès');
+        setState(() {
+          invitationSent = true;
+        });
+      } else {
+        print(
+            'Erreur lors de l\'envoi de l\'invitation: ${response.statusCode}');
+        print(jsonDecode(response.body)['errorMsg']);
+      }
+    } catch (error) {
+      print('Erreur lors de l\'envoi de l\'invitation: $error');
     }
   }
 
@@ -190,9 +225,16 @@ class _AutreProfilPatientState extends State<AutreProfilPatient> {
                             color: myCustomColor,
                           )),
                       OutlinedButton(
-                        onPressed: () {},
+                        onPressed: invitationSent
+                            ? null // Désactivez le bouton si l'invitation a déjà été envoyée
+                            : () {
+                                // Appeler la fonction sendFriendInvitation lorsque l'utilisateur appuie sur le bouton
+                                sendFriendInvitation(widget.userId);
+                              },
                         child: Text(
-                          "+ Ajouter ami(e)",
+                          invitationSent
+                              ? 'Invitation envoyée'
+                              : '+ Ajouter ami(e)', // Modifier le texte en fonction de l'état
                           style: TextStyle(
                             fontSize: 12,
                             fontFamily: myfont,
@@ -352,7 +394,7 @@ class _AutreProfilPatientState extends State<AutreProfilPatient> {
             item['lastName'] = lastName;
             item['createdAt'] = createdAt;
             item['profilePhotoUrl'] = profilePhotoUrl;
-            item['_id'] = id ;
+            item['_id'] = id;
             return item;
           }));
         });
