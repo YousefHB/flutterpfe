@@ -84,8 +84,9 @@ class _PostState extends State<Post> {
   @override
   void initState() {
     super.initState();
-    fetchUserReactions(); 
+    fetchUserReactions();
   }
+
   void _handleTapUserName() {
     // Call the callback function with the user's ID
     widget.onTapUserName(widget.createdByUserId);
@@ -262,33 +263,51 @@ class _PostState extends State<Post> {
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
-                  child: Text(
-                    textAlign: TextAlign.start,
-                    showFullText
-                        ? widget.content
-                        : widget.content.split(' ').take(10).join(' ') + '...',
-                    style: TextStyle(
-                      fontFamily: myfont,
-                      letterSpacing: 1.4,
-                      height: 1.7,
-                      fontSize: 14,
-                    ),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      final int wordLimit = constraints.maxWidth <= 200
+                          ? 5
+                          : 10; // Limite de mots basée sur la largeur du conteneur
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            textAlign: TextAlign.start,
+                            showFullText
+                                ? widget.content
+                                : widget.content
+                                        .split(' ')
+                                        .take(wordLimit)
+                                        .join(' ') +
+                                    '...',
+                            style: TextStyle(
+                              fontFamily: myfont,
+                              letterSpacing: 1.4,
+                              height: 1.7,
+                              fontSize: 14,
+                            ),
+                          ),
+                          if (widget.content.split(' ').length > wordLimit)
+                            TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  showFullText = !showFullText;
+                                });
+                              },
+                              child: Text(
+                                showFullText ? 'Voir moins' : 'Voir plus',
+                                style: TextStyle(color: myCustomColor),
+                              ),
+                            ),
+                        ],
+                      );
+                    },
                   ),
                 ),
-                if (widget.content.split(' ').length > 20)
-                  TextButton(
-                    onPressed: () {
-                      setState(() {
-                        showFullText = !showFullText;
-                      });
-                    },
-                    child: Text(
-                      showFullText ? 'Voir moins' : 'Voir plus',
-                      style: TextStyle(color: myCustomColor),
-                    ),
-                  ),
                 Expanded(
                   child: Container(
+                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+
                     height:
                         double.infinity, // Ajustez la hauteur selon vos besoins
                     child: ListView.builder(
@@ -303,12 +322,13 @@ class _PostState extends State<Post> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Image.network(
-                                  widget.images[index],
-                                  fit: BoxFit.cover,
-                                  height: double
-                                      .infinity, // Prend toute la hauteur du conteneur
-                                ),
+                                Image.network(widget.images[index],
+                                    fit: BoxFit.cover,
+                                    height: MediaQuery.of(context).size.height,
+                                    width: MediaQuery.of(context)
+                                        .size
+                                        .width // Prend toute la hauteur du conteneur
+                                    ),
                               ],
                             ),
                           ),
@@ -318,63 +338,63 @@ class _PostState extends State<Post> {
                   ),
                 ),
                 if (showReactionRow)
-                   Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          print('Post ID: ${widget.postid}');
-                          handleReaction("like");
-                          showReactionRow = false;
-                        });
-                      },
-                      child: Image.asset(
-                        'assets/image/Rjaime.png',
-                        width: 50,
-                        height: 50,
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            print('Post ID: ${widget.postid}');
+                            handleReaction("like");
+                            showReactionRow = false;
+                          });
+                        },
+                        child: Image.asset(
+                          'assets/image/Rjaime.png',
+                          width: 50,
+                          height: 50,
+                        ),
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          handleReaction("love");
-                          showReactionRow = false;
-                        });
-                      },
-                      child: Image.asset(
-                        'assets/image/jadore.png',
-                        width: 50,
-                        height: 50,
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            handleReaction("love");
+                            showReactionRow = false;
+                          });
+                        },
+                        child: Image.asset(
+                          'assets/image/jadore.png',
+                          width: 50,
+                          height: 50,
+                        ),
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          handleReaction("bravo");
-                          showReactionRow = false;
-                        });
-                      },
-                      child: Image.asset(
-                        'assets/image/bravo.png',
-                        width: 50,
-                        height: 50,
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            handleReaction("bravo");
+                            showReactionRow = false;
+                          });
+                        },
+                        child: Image.asset(
+                          'assets/image/bravo.png',
+                          width: 50,
+                          height: 50,
+                        ),
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          handleReaction("triste");
-                          showReactionRow = false;
-                        });
-                      },
-                      child: Image.asset(
-                        'assets/image/trist.png',
-                        width: 50,
-                        height: 50,
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            handleReaction("triste");
+                            showReactionRow = false;
+                          });
+                        },
+                        child: Image.asset(
+                          'assets/image/trist.png',
+                          width: 50,
+                          height: 50,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
                 Container(
                   margin: EdgeInsets.fromLTRB(25, 0, 20, 0),
                   child: Row(
