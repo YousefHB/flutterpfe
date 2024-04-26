@@ -388,8 +388,8 @@ class _PostState extends State<Post> {
                         },
                         child: Image.asset(
                           reactionAsset,
-                          width: 70,
-                          height: 80,
+                          width: 50,
+                          height: 50,
                         ),
                       ),
                       SizedBox(
