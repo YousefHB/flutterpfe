@@ -352,7 +352,7 @@ class _ProfilPatientState extends State<ProfilPatient> {
             item['lastName'] = lastName;
             item['createdAt'] = createdAt;
             item['profilePhotoUrl'] = profilePhotoUrl;
-            item['_id'] = id ;
+            item['_id'] = id;
             return item;
           }));
         });

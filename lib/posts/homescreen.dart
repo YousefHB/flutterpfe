@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:ycmedical/config.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:ycmedical/controller/search.dart';
 import 'package:ycmedical/profil/profilpatient.dart';
 import 'package:ycmedical/profil/visiteprofilpatient.dart';
 
@@ -100,7 +101,7 @@ class _HomescreenState extends State<Homescreen> {
             // Updating item with user details
 
             // Updating item with user details
-            item['_id'] = id ;
+            item['_id'] = id;
             item['firstName'] = firstName;
             item['lastName'] = lastName;
             item['createdAt'] = createdAt;
@@ -164,6 +165,11 @@ class _HomescreenState extends State<Homescreen> {
                         children: [
                           GestureDetector(
                             onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => UserSearchScreen()),
+                              );
                               print("loupe pressed");
                             },
                             child: Align(
@@ -208,7 +214,6 @@ class _HomescreenState extends State<Homescreen> {
               sliver: SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    
                     final postData = posts[index];
                     final postid = postData['_id'];
                     final postContent = postData['content'];

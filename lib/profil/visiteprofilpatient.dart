@@ -61,7 +61,17 @@ class _AutreProfilPatientState extends State<AutreProfilPatient> {
 
       if (response.statusCode == 200) {
         print('Fetching user info for ID: $userId');
-        return jsonDecode(response.body);
+        Map<String, dynamic> userInfo = jsonDecode(response.body);
+
+        // Accéder à la clé 'photoProfil' et imprimer le nom de l'image
+        var photoProfilName = userInfo['user']['photoProfil']['url'];
+        print('Nom de l\'image de profil: $photoProfilName');
+        userInfo['user']['photoProfil']['url'] =
+            convertImageUrl(userInfo['user']['photoProfil']['url']);
+        var photoProfilame = userInfo['user']['photoProfil']['url'];
+        print('***Nom de l\'image de profil aprés modif: $photoProfilame');
+
+        return userInfo;
       } else {
         throw Exception('Failed to load user info: ${response.statusCode}');
       }
@@ -133,12 +143,15 @@ class _AutreProfilPatientState extends State<AutreProfilPatient> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
-                        onPressed: () {},
-                        icon: Image.asset(
-                          "assets/image/back.png",
-                          width: 30,
-                          height: 30,
-                        )),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      icon: Image.asset(
+                        "assets/image/back.png",
+                        width: 30,
+                        height: 30,
+                      ),
+                    ),
                     Text(
                         _userInfo.isNotEmpty
                             ? '${_userInfo['user']['firstName']} ${_userInfo['user']['lastName']}'
@@ -167,7 +180,7 @@ class _AutreProfilPatientState extends State<AutreProfilPatient> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(height: 20),
-                    /* Container(
+                    Container(
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
@@ -187,12 +200,11 @@ class _AutreProfilPatientState extends State<AutreProfilPatient> {
                       child: CircleAvatar(
                         radius: 65,
                         backgroundImage: NetworkImage(
-                          _userInfo['user']['photoProfil'] ??
+                          _userInfo['user']['photoProfil']['url'] ??
                               'assets/image/people.png',
                         ),
                       ),
-                    ),*/
-
+                    ),
                     SizedBox(height: 10),
                     _userInfo.isNotEmpty
                         ? Text(
