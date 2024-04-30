@@ -2,27 +2,27 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:ycmedical/posts/invitresu.dart';
+import 'package:ycmedical/profil/ami.dart';
 import 'package:http/http.dart' as http;
-import 'post.dart';
-typedef InvitationUpdateCallback = void Function();
-class Invit extends StatefulWidget {
-   final InvitationUpdateCallback? onUpdateInvitations;
+import '../posts/post.dart';
+typedef FriendUpdateCallback = void Function();
+class ListAmie extends StatefulWidget {
+  final FriendUpdateCallback? onUpdateFriendList;
 
-  Invit({Key? key, this.onUpdateInvitations}) : super(key: key);
+  const ListAmie({super.key ,this.onUpdateFriendList});
 
   @override
-  State<Invit> createState() => _InvitState();
+  State<ListAmie> createState() => _ListAmieState();
 }
 
-class _InvitState extends State<Invit> {
-  List<Map<String, dynamic>> invits = [];
-  Future<void> fetchReceivedInvitations() async {
+class _ListAmieState extends State<ListAmie> {
+  List<Map<String, dynamic>> friends = [];
+  Future<void> fetchFriend() async {
     final storage = FlutterSecureStorage();
     final accessToken = await storage.read(key: 'accessToken');
 
     final url =
-        'http://10.0.2.2:3000/api/user/listReceivedInvitations'; // Remplacez par votre URL de l'endpoint Node.js
+        'http://10.0.2.2:3000/api/user/listFriends'; // Remplacez par votre URL de l'endpoint Node.js
 
     final response = await http.get(
       Uri.parse(url),
@@ -33,9 +33,9 @@ class _InvitState extends State<Invit> {
     final Map<String, dynamic> responseData = json.decode(response.body);
     if (response.statusCode == 200) {
       final List<dynamic> data =
-          responseData['receivedInvitations']; // Access the list of invitations
+          responseData['friends']; // Access the list of invitations
       setState(() {
-        invits = List<Map<String, dynamic>>.from(data.map((item) {
+        friends = List<Map<String, dynamic>>.from(data.map((item) {
           final id = item['id'];
           final firstName = item['firstName'];
           final lastName = item['lastName'];
@@ -61,12 +61,11 @@ class _InvitState extends State<Invit> {
   @override
   void initState() {
     super.initState();
-    fetchReceivedInvitations();
+    fetchFriend();
   }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return  Scaffold(
       body: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
@@ -105,7 +104,7 @@ class _InvitState extends State<Invit> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "Invitations",
+                              "List d'ami(e)",
                               style: TextStyle(
                                 fontFamily: myfont,
                                 fontSize: 20,
@@ -119,33 +118,33 @@ class _InvitState extends State<Invit> {
                   ),
                 ),
               ),
-              SliverList(
+               SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    final invitData = invits[index];
+                    final friendData = friends[index];
 
-                    final firstName = invitData['firstName'];
-                    final lastName = invitData['lastName'];
-                    final photoProfil = invitData['profilePhotoUrl'];
-                    final id = invitData[
+                    final firstName = friendData['firstName'];
+                    final lastName = friendData['lastName'];
+                    final photoProfil = friendData['profilePhotoUrl'];
+                    final id = friendData[
                         'id']; // Assurez-vous de récupérer l'ID correctement
 
                     // Vous devez fournir les valeurs requises pour créer une instance de InvitResu
-                    return InvitResu(
+                    return Ami(
                       firstName: firstName,
                       lastName: lastName,
-                      senderid: id, // Utilisez l'ID ici
+                      friendid: id, // Utilisez l'ID ici
                       profilePhotoUrl: photoProfil,
-                      onUpdateInvitations: fetchReceivedInvitations
+                     onUpdateFriendList: fetchFriend,
                     );
                   },
-                  childCount: invits.length,
+                  childCount: friends.length,
                   
                 ),
               ),
-            ],
+                ],
           )
-          ),
+   ),
     );
   }
 }

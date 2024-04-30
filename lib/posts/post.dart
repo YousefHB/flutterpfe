@@ -15,6 +15,7 @@ class Post extends StatefulWidget {
   final String? profilePhotoUrl;
   final String createdByUserId;
   final String postid;
+  //final List<String> videos;
   final Function(String userId) onTapUserName;
 
   const Post({
@@ -22,6 +23,7 @@ class Post extends StatefulWidget {
     required this.postid,
     required this.content,
     required this.images,
+   // required this.videos,
     required this.firstName,
     required this.lastName,
     required this.createdAt,
