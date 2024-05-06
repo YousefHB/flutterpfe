@@ -307,7 +307,7 @@ class _ProfilPatientState extends State<ProfilPatient> {
                   final photoProfil = postData['profilePhotoUrl'];
                   final userId = postData['createdBy']['_id'];
                   // Ajouter l'ID de l'utilisateur
-
+                    
                   return Post(
                     content: postContent,
                     postid: postid,
