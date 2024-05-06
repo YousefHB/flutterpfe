@@ -49,7 +49,7 @@ class _PostState extends State<Post> {
       false; // Nouvel état pour contrôler la visibilité de la section de commentaire
   TextEditingController commentController =
       TextEditingController(); // Contrôleur pour le champ de texte du commentaire
-  List<Map<String, dynamic>> comments= [];// Changez le type de la liste
+  List<Map<String, dynamic>> comments = []; // Changez le type de la liste
   String calculateTimestamp() {
     if (widget.createdAt != null) {
       // Convert createdAt to DateTime object
@@ -82,8 +82,8 @@ class _PostState extends State<Post> {
   }
 
   String reactionAsset = 'assets/image/jaime.png';
- //  String currentUserId = '';
- /*  Future<void> isCurrentUserPost() async {
+  //  String currentUserId = '';
+  /*  Future<void> isCurrentUserPost() async {
   final storage = FlutterSecureStorage();
   final accessToken = await storage.read(key: 'accessToken');
   if (accessToken != null) {
@@ -106,7 +106,7 @@ class _PostState extends State<Post> {
   void initState() {
     super.initState();
     fetchUserReactions();
-   // isCurrentUserPost();
+    // isCurrentUserPost();
   }
 
   void _handleTapUserName() {
@@ -229,373 +229,378 @@ class _PostState extends State<Post> {
   }
 
   Future<void> FetchPostComment(String post) async {
-  try {
-    final storage = FlutterSecureStorage();
-    final accessToken = await storage.read(key: 'accessToken');
-    final url = 'http://10.0.2.2:3000/comment/$post';
+    try {
+      final storage = FlutterSecureStorage();
+      final accessToken = await storage.read(key: 'accessToken');
+      final url = 'http://10.0.2.2:3000/comment/$post';
 
-    final response = await http.get(
-      Uri.parse(url),
-      headers: {
-        'Authorization': 'Bearer $accessToken',
-        'Content-Type': 'application/json',
-      },
-    );
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json',
+        },
+      );
 
-    if (response.statusCode == 200) {
-       final List<dynamic> data = json.decode(response.body);
-      setState(() {
-        comments = List<Map<String, dynamic>>.from(data.map((item) {
-          final user = item['user'] as Map<String, dynamic>;
-         // final photoProfil = user['photoProfil'] as Map<String, dynamic>;
-           final images = (item['user']['photoProfil']['url'] as String)
-          .replaceAll('localhost', '10.0.2.2'); // Replace 'localhost' with '10.0.2.2' // Access the URL directly
-          final id = item['_id'];
-          final firstName = user['firstName'].toString();
-          final lastName = user['lastName'].toString();
-          final specialty = user['specialty'] != null ? user['specialty'].toString() : ''; // Vérifiez si specialty est null
-          final content = item['content'].toString();
-         // final createdAt = item['createdAt'].toString();
-          final isOwner = item['isOwner'] as bool; // Add isOwner field
-          return {
-            '_id': id,
-            'firstName': firstName,
-            'lastName': lastName,
-            'user': {'specialty': specialty}, // Mettez la spécialité dans la structure user
-            'content': content,
-            'images': images,
-            'specialty':specialty,
-            'isOwner': isOwner, // Include isOwner field in the comment
-           // 'createdAt': createdAt,
-          };
-        }));
-      });
-    } else {
-      throw Exception('Failed to load comments');
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        setState(() {
+          comments = List<Map<String, dynamic>>.from(data.map((item) {
+            final user = item['user'] as Map<String, dynamic>;
+            // final photoProfil = user['photoProfil'] as Map<String, dynamic>;
+            final images = (item['user']['photoProfil']['url'] as String)
+                .replaceAll('localhost',
+                    '10.0.2.2'); // Replace 'localhost' with '10.0.2.2' // Access the URL directly
+            final id = item['_id'];
+            final firstName = user['firstName'].toString();
+            final lastName = user['lastName'].toString();
+            final specialty = user['specialty'] != null
+                ? user['specialty'].toString()
+                : ''; // Vérifiez si specialty est null
+            final content = item['content'].toString();
+            // final createdAt = item['createdAt'].toString();
+            final isOwner = item['isOwner'] as bool; // Add isOwner field
+            return {
+              '_id': id,
+              'firstName': firstName,
+              'lastName': lastName,
+              'user': {
+                'specialty': specialty
+              }, // Mettez la spécialité dans la structure user
+              'content': content,
+              'images': images,
+              'specialty': specialty,
+              'isOwner': isOwner, // Include isOwner field in the comment
+              // 'createdAt': createdAt,
+            };
+          }));
+        });
+      } else {
+        throw Exception('Failed to load comments');
+      }
+    } catch (e) {
+      print('Error fetching comments: $e');
     }
-  } catch (e) {
-    print('Error fetching comments: $e');
   }
-}
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-  return Container(
-    margin: EdgeInsets.fromLTRB(5, 5, 5, 0),
-    child: Expanded(
-      child: Card(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-          side: BorderSide(color: myCustomColor, width: 1.0),
-        ),
-        child: Container(
-          width: screenWidth * 0.8,
-          height: (widget.images.isNotEmpty || showFullText) && !showCommentSection ? 550 : 700,
+    return Container(
+      margin: EdgeInsets.fromLTRB(5, 5, 5, 0),
+      child: Expanded(
+        child: Card(
+          color: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+            side: BorderSide(color: myCustomColor, width: 1.0),
+          ),
+          child: Container(
+            width: screenWidth * 0.8,
+            height: (widget.images.isNotEmpty || showFullText) &&
+                    !showCommentSection
+                ? 550
+                : 700,
 
-          // Augmentez la hauteur si la section de commentaire est visible
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Container(
-                        width: 60,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                        ),
-                        child: widget.profilePhotoUrl != null
-                            ? ClipRRect(
-                                borderRadius: BorderRadius.circular(
-                                    30), // Half of the width/height to make it circular
-                                child: Image.network(
-                                  widget.profilePhotoUrl!,
+            // Augmentez la hauteur si la section de commentaire est visible
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                          ),
+                          child: widget.profilePhotoUrl != null
+                              ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(
+                                      30), // Half of the width/height to make it circular
+                                  child: Image.network(
+                                    widget.profilePhotoUrl!,
+                                    width: 60,
+                                    height: 60,
+                                    fit: BoxFit.cover,
+                                  ),
+                                )
+                              : Image.asset(
+                                  'assets/image/profile.png',
                                   width: 60,
                                   height: 60,
                                   fit: BoxFit.cover,
                                 ),
-                              )
-                            : Image.asset(
-                                'assets/image/profile.png',
-                                width: 60,
-                                height: 60,
-                                fit: BoxFit.cover,
-                              ),
-                      ),
-                    ),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          _handleTapUserName();
-                        },
-                        child: Text(
-                          widget.firstName! + " " + widget.lastName!,
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              fontFamily: myfont,
-                              letterSpacing: 1.4,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold),
                         ),
                       ),
-                      Text(
-                        calculateTimestamp(),
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            color: myCustomColor,
-                            fontFamily: myfont,
-                            fontSize: 11),
-                      ),
-                      /*Text(
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            _handleTapUserName();
+                          },
+                          child: Text(
+                            widget.firstName! + " " + widget.lastName!,
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                fontFamily: myfont,
+                                letterSpacing: 1.4,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Text(
+                          calculateTimestamp(),
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              color: myCustomColor,
+                              fontFamily: myfont,
+                              fontSize: 11),
+                        ),
+                        /*Text(
                         currentUserId
                       ),*/
-                    ],
-                  ),
-                  // Inside your build method, compare the access token directly with the post id
-                     //  if (currentUserId == widget.createdByUserId) // Compare with createdByUserId
-
-                  GestureDetector(
-                    onTap: () {
-                      // Handle onTap action
-                    },
-                    child: Image.asset(
-                      "assets/image/menudot.png",
-                      width: 15,
-                      height: 15,
+                      ],
                     ),
-                  ),
-// Then, conditionally show the button based on whether the user is viewing their own post
-             
+                    // Inside your build method, compare the access token directly with the post id
+                    //  if (currentUserId == widget.createdByUserId) // Compare with createdByUserId
 
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    final int wordLimit = constraints.maxWidth <= 200
-                        ? 5
-                        : 10; // Limite de mots basée sur la largeur du conteneur
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          textAlign: TextAlign.start,
-                          showFullText
-                              ? widget.content
-                              : widget.content
-                                      .split(' ')
-                                      .take(wordLimit)
-                                      .join(' ') +
-                                  '...',
-                          style: TextStyle(
-                            fontFamily: myfont,
-                            letterSpacing: 1.4,
-                            height: 1.7,
-                            fontSize: 14,
-                          ),
-                        ),
-                        if (widget.content.split(' ').length > wordLimit)
-                          TextButton(
-                            onPressed: () {
-                              setState(() {
-                                showFullText = !showFullText;
-                              });
-                            },
-                            child: Text(
-                              showFullText ? 'Voir moins' : 'Voir plus',
-                              style: TextStyle(color: myCustomColor),
+                    GestureDetector(
+                      onTap: () {
+                        // Handle onTap action
+                      },
+                      child: Image.asset(
+                        "assets/image/menudot.png",
+                        width: 15,
+                        height: 15,
+                      ),
+                    ),
+// Then, conditionally show the button based on whether the user is viewing their own post
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      final int wordLimit = constraints.maxWidth <= 200
+                          ? 5
+                          : 10; // Limite de mots basée sur la largeur du conteneur
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            textAlign: TextAlign.start,
+                            showFullText
+                                ? widget.content
+                                : widget.content
+                                        .split(' ')
+                                        .take(wordLimit)
+                                        .join(' ') +
+                                    '...',
+                            style: TextStyle(
+                              fontFamily: myfont,
+                              letterSpacing: 1.4,
+                              height: 1.7,
+                              fontSize: 14,
                             ),
                           ),
-                      ],
-                    );
-                  },
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-
-                  height:
-                      double.infinity, // Ajustez la hauteur selon vos besoins
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: widget.images.length,
-                    itemBuilder: (context, index) {
-                      return Center(
-                        child: Container(
-                          width: MediaQuery.of(context)
-                              .size
-                              .width, // Prend la largeur totale de l'écran
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.network(widget.images[index],
-                                  fit: BoxFit.cover,
-                                  height: MediaQuery.of(context).size.height,
-                                  width: MediaQuery.of(context)
-                                      .size
-                                      .width // Prend toute la hauteur du conteneur
-                                  ),
-                            ],
-                          ),
-                        ),
+                          if (widget.content.split(' ').length > wordLimit)
+                            TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  showFullText = !showFullText;
+                                });
+                              },
+                              child: Text(
+                                showFullText ? 'Voir moins' : 'Voir plus',
+                                style: TextStyle(color: myCustomColor),
+                              ),
+                            ),
+                        ],
                       );
                     },
                   ),
                 ),
-              ),
-              if (showReactionRow)
-                Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          print('Post ID: ${widget.postid}');
-                          handleReaction("like");
-                          showReactionRow = false;
-                        });
-                      },
-                      child: Image.asset(
-                        'assets/image/Rjaime.png',
-                        width: 50,
-                        height: 50,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          handleReaction("love");
-                          showReactionRow = false;
-                        });
-                      },
-                      child: Image.asset(
-                        'assets/image/jadore.png',
-                        width: 50,
-                        height: 50,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          handleReaction("bravo");
-                          showReactionRow = false;
-                        });
-                      },
-                      child: Image.asset(
-                        'assets/image/bravo.png',
-                        width: 50,
-                        height: 50,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          handleReaction("triste");
-                          showReactionRow = false;
-                        });
-                      },
-                      child: Image.asset(
-                        'assets/image/trist.png',
-                        width: 50,
-                        height: 50,
-                      ),
-                    ),
-                  ],
-                ),
-              Container(
-                margin: EdgeInsets.fromLTRB(25, 0, 20, 0),
-                child: Row(
-                  children: [
-                    GestureDetector(
-                      onLongPress: () {
-                        setState(() {
-                          showReactionRow =
-                              true; // Afficher la rangée de réaction
-                        });
-                      },
-                      child: Image.asset(
-                        reactionAsset,
-                        width: 50,
-                        height: 50,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          showCommentSection =
-                              !showCommentSection; // Afficher ou masquer la section de commentaire
-                        });
-                        FetchPostComment(widget.postid);
-                      },
-                      child: Image.asset(
-                        'assets/image/commentaire.png',
-                        width: 90,
-                        height: 65,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Image.asset(
-                        'assets/image/partager.png',
-                        width: 70,
-                        height: 80,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 40,
-                    ),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Image.asset(
-                        'assets/image/enregistrement.png',
-                        width: 25,
-                        height: 20,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              // Comments section
-              if (showCommentSection)
                 Expanded(
-                  child: Column(
-                    children: [
-                      // Text field for entering comments
-                      TextField(
-                        controller: commentController,
-                        decoration: InputDecoration(
-                          hintText: 'Enter your comment',
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              PostComment(
-                                  commentController.text, widget.postid);
-                                  setState(() {
-                                  
-                                  commentController.clear();
-                                });
-                            },
-                            icon: Icon(Icons.send),
+                  child: Container(
+                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+
+                    height:
+                        double.infinity, // Ajustez la hauteur selon vos besoins
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: widget.images.length,
+                      itemBuilder: (context, index) {
+                        return Center(
+                          child: Container(
+                            width: MediaQuery.of(context)
+                                .size
+                                .width, // Prend la largeur totale de l'écran
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.network(widget.images[index],
+                                    fit: BoxFit.cover,
+                                    height: MediaQuery.of(context).size.height,
+                                    width: MediaQuery.of(context)
+                                        .size
+                                        .width // Prend toute la hauteur du conteneur
+                                    ),
+                              ],
+                            ),
                           ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                if (showReactionRow)
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            print('Post ID: ${widget.postid}');
+                            handleReaction("like");
+                            showReactionRow = false;
+                          });
+                        },
+                        child: Image.asset(
+                          'assets/image/Rjaime.png',
+                          width: 50,
+                          height: 50,
                         ),
                       ),
-                      SizedBox(height: 10),
-                    /*  Expanded(
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            handleReaction("love");
+                            showReactionRow = false;
+                          });
+                        },
+                        child: Image.asset(
+                          'assets/image/jadore.png',
+                          width: 50,
+                          height: 50,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            handleReaction("bravo");
+                            showReactionRow = false;
+                          });
+                        },
+                        child: Image.asset(
+                          'assets/image/bravo.png',
+                          width: 50,
+                          height: 50,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            handleReaction("triste");
+                            showReactionRow = false;
+                          });
+                        },
+                        child: Image.asset(
+                          'assets/image/trist.png',
+                          width: 50,
+                          height: 50,
+                        ),
+                      ),
+                    ],
+                  ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(25, 0, 20, 0),
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onLongPress: () {
+                          setState(() {
+                            showReactionRow =
+                                true; // Afficher la rangée de réaction
+                          });
+                        },
+                        child: Image.asset(
+                          reactionAsset,
+                          width: 50,
+                          height: 50,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 15,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            showCommentSection =
+                                !showCommentSection; // Afficher ou masquer la section de commentaire
+                          });
+                          FetchPostComment(widget.postid);
+                        },
+                        child: Image.asset(
+                          'assets/image/commentaire.png',
+                          width: 90,
+                          height: 65,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 15,
+                      ),
+                      GestureDetector(
+                        onTap: () {},
+                        child: Image.asset(
+                          'assets/image/partager.png',
+                          width: 70,
+                          height: 80,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 40,
+                      ),
+                      GestureDetector(
+                        onTap: () {},
+                        child: Image.asset(
+                          'assets/image/enregistrement.png',
+                          width: 25,
+                          height: 20,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // Comments section
+                if (showCommentSection)
+                  Expanded(
+                    child: Column(
+                      children: [
+                        // Text field for entering comments
+                        TextField(
+                          controller: commentController,
+                          decoration: InputDecoration(
+                            hintText: 'Enter your comment',
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                PostComment(
+                                    commentController.text, widget.postid);
+                                setState(() {
+                                  commentController.clear();
+                                });
+                              },
+                              icon: Icon(Icons.send),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        /*  Expanded(
         child: Container(
           // Height for the comment section
           child: ListView.builder(
@@ -623,51 +628,45 @@ class _PostState extends State<Post> {
           ),
         ),
       ),*/
-    
-                      // List of comments
-                      Container(
-                        child: Expanded(
-                        child: CustomScrollView(
-                          slivers: [
-                             SliverPadding(
-                              padding: EdgeInsets.all(8.0),
-                              sliver: SliverList(
-                                delegate: SliverChildBuilderDelegate(
-                                  (BuildContext context, int index) {
-                                    final comment = comments[index];
-                                    return Comment(
-                                            commenterPhotoUrl: comment['images'],
-                                            commenterFName: comment['firstName'],
-                                            commenterLFName: comment['lastName'],
-                                            content: comment['content'],
-                                            specialty: comment['specialty'] ?? '',
-                                            id: comment['_id'],
-                                            userid: comment['user']['_id'],
-                                            isOwner: comment['isOwner'],
-                                    );
-                                  },
-                                  childCount: comments.length,
+
+                        // List of comments
+                        Container(
+                          child: Expanded(
+                            child: CustomScrollView(
+                              slivers: [
+                                SliverPadding(
+                                  padding: EdgeInsets.all(8.0),
+                                  sliver: SliverList(
+                                    delegate: SliverChildBuilderDelegate(
+                                      (BuildContext context, int index) {
+                                        final comment = comments[index];
+                                        return Comment(
+                                          commenterPhotoUrl: comment['images'],
+                                          commenterFName: comment['firstName'],
+                                          commenterLFName: comment['lastName'],
+                                          content: comment['content'],
+                                          specialty: comment['specialty'] ?? '',
+                                          id: comment['_id'],
+                                          userid: comment['user']['_id'],
+                                          isOwner: comment['isOwner'],
+                                        );
+                                      },
+                                      childCount: comments.length,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
-                                              ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
-<<<<<<< HEAD
-    ),
-  );
-}
-}
-=======
     );
   }
 }
->>>>>>> 7de239d8545aef7cca70ff2690835981bdad284a
