@@ -661,7 +661,13 @@ class _PostState extends State<Post> {
           ),
         ),
       ),
+<<<<<<< HEAD
     ),
   );
 }
 }
+=======
+    );
+  }
+}
+>>>>>>> 7de239d8545aef7cca70ff2690835981bdad284a

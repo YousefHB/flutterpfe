@@ -26,6 +26,7 @@ android {
     namespace "com.example.ycmedical"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
+    compileSdkVersion 34
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -50,7 +51,11 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+<<<<<<< HEAD
         multiDexEnabled true
+=======
+        multiDexEnabled true 
+>>>>>>> 7de239d8545aef7cca70ff2690835981bdad284a
     }
 
     buildTypes {

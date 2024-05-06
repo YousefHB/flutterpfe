@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:ycmedical/messagerie/discussion.dart';
 
 import 'Invit.dart';
-import 'Message.dart';
+import '../messagerie/Message.dart';
 import 'Notif.dart';
 import 'addpost.dart';
 import 'homescreen.dart';
@@ -78,7 +79,7 @@ class MainNavState extends State<MainNav> {
       Notif(),
       Homescreen(),
       Invit(),
-      Message(),
+      Messagea(),
     ];
     return Scaffold(
       body: _screens[index],
