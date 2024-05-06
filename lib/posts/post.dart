@@ -23,7 +23,7 @@ class Post extends StatefulWidget {
     required this.postid,
     required this.content,
     required this.images,
-   // required this.videos,
+    // required this.videos,
     required this.firstName,
     required this.lastName,
     required this.createdAt,

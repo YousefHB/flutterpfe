@@ -87,11 +87,10 @@ class _HomescreenState extends State<Homescreen> {
                 (item['images'] as List<dynamic>).map((image) {
               return image.toString().replaceAll('localhost', '10.0.2.2');
             }).toList();
-            List<String> video =
-                (item['videos'] as List<dynamic>).map((video) {
+            List<String> video = (item['videos'] as List<dynamic>).map((video) {
               return video.toString().replaceAll('localhost', '10.0.2.2');
             }).toList();
-            item['videos']= video;
+            item['videos'] = video;
             item['images'] = images;
             final id = item['_id'];
             final createdBy = item['createdBy'];
@@ -190,7 +189,7 @@ class _HomescreenState extends State<Homescreen> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              scaffoldKey.currentState!.openEndDrawer();
+                              scaffoldKey.currentState?.openEndDrawer();
                             },
                             child: Align(
                               alignment: Alignment.topRight,
@@ -208,11 +207,11 @@ class _HomescreenState extends State<Homescreen> {
                 ),
               ),
             ),
-            SliverToBoxAdapter(
+            /*SliverToBoxAdapter(
               child: Container(
                 child: storie(),
               ),
-            ),
+            ),*/
             SliverPadding(
               padding: EdgeInsets.symmetric(vertical: 20),
               sliver: SliverList(
@@ -222,7 +221,7 @@ class _HomescreenState extends State<Homescreen> {
                     final postid = postData['_id'];
                     final postContent = postData['content'];
                     final postImages = postData['images'];
-                  //  final postVideo = postData['videos'];
+                    //  final postVideo = postData['videos'];
                     final firstName = postData['firstName'];
                     final lastName = postData['lastName'];
                     final createdAt = postData['createdAt'];
@@ -233,7 +232,7 @@ class _HomescreenState extends State<Homescreen> {
                     return Post(
                       content: postContent,
                       images: postImages,
-                   //   videos: postVideo,
+                      //   videos: postVideo,
                       firstName: firstName,
                       lastName: lastName,
                       createdAt: createdAt,

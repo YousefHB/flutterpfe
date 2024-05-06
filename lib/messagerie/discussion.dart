@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:ycmedical/messagerie/Message.dart';
 
-class Message extends StatefulWidget {
+class Messagea extends StatefulWidget {
   @override
-  State<Message> createState() => _NotifState();
+  State<Messagea> createState() => _MessageaState();
 }
 
 const Color myCustomColor = Color(0xFF009EE2);
 const Color myCustomColor1 = Color(0xFF38B8c4);
 const String myfont = 'ArialRounded';
 
-class _NotifState extends State<Message> {
+class _MessageaState extends State<Messagea> {
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -68,59 +69,59 @@ class _NotifState extends State<Message> {
                 ),
               ),
             ),
+            SliverToBoxAdapter(
+              child: SizedBox(height: 20),
+            ),
             // Boutons pour basculer entre Discussions et Amies
             SliverToBoxAdapter(
               child: Container(
-                margin: const EdgeInsets.symmetric(vertical: 10),
+                margin: const EdgeInsets.only(top: 40),
+                padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ElevatedButton(
+                    TextButton(
                       onPressed: () => _onItemTapped(0),
-                      child: Text('Discussions',
-                          style: TextStyle(
-                            fontFamily: myfont,
-                            fontSize: 15,
-                            color: Colors.white,
-                          )),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: myCustomColor, // Background color
-                        foregroundColor: Colors.white,
+                      child: Text(
+                        'Discussion',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: myfont,
+                          letterSpacing: 1.5,
+                          color: _selectedIndex == 0
+                              ? Colors.white
+                              : myCustomColor, // Utiliser la couleur blanche si sélectionné
+                        ),
+                      ),
+                      style: TextButton.styleFrom(
                         padding:
                             EdgeInsets.symmetric(vertical: 0, horizontal: 6),
-                        shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(15.0), // Rounded corners
-                        ),
-                        side: BorderSide(
-                          color: myCustomColor, // Border color
-                          width: 2.0, // Border width
-                        ),
+                        backgroundColor: _selectedIndex == 0
+                            ? myCustomColor
+                            : Colors
+                                .transparent, // Utiliser la couleur de fond bleue si sélectionné
                       ),
                     ),
-                    ElevatedButton(
+                    TextButton(
                       onPressed: () => _onItemTapped(1),
                       child: Text(
-                        'Amies',
+                        'Ami(e)s',
                         style: TextStyle(
-                          fontSize: 13,
+                          fontSize: 16,
                           fontFamily: myfont,
+                          letterSpacing: 1.5,
+                          color: _selectedIndex == 1
+                              ? Colors.white
+                              : myCustomColor, // Utiliser la couleur blanche si sélectionné
                         ),
                       ),
-                      style: ElevatedButton.styleFrom(
+                      style: TextButton.styleFrom(
                         padding:
                             EdgeInsets.symmetric(vertical: 0, horizontal: 6),
-                        backgroundColor: Color.fromARGB(
-                            255, 255, 255, 255), // Background color
-                        foregroundColor: myCustomColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(15.0), // Rounded corners
-                        ),
-                        side: BorderSide(
-                          color: myCustomColor, // Border color
-                          width: 2.0, // Border width
-                        ),
+                        backgroundColor: _selectedIndex == 1
+                            ? myCustomColor
+                            : Colors
+                                .transparent, // Utiliser la couleur de fond bleue si sélectionné
                       ),
                     ),
                   ],
@@ -130,18 +131,7 @@ class _NotifState extends State<Message> {
             // Partie qui change en fonction du bouton sélectionné
             _selectedIndex == 0
                 ? SliverToBoxAdapter(
-                    child: Container(
-                      child: Center(
-                        child: Text(
-                            "Bienvenue dans la messagerie ! \n N'hésitez pas à commencer une nouvelle \n conversation avec un collègue ou un patient",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontFamily: myfont,
-                              fontSize: 15,
-                              color: myCustomColor,
-                            )),
-                      ),
-                    ),
+                    child: Container(child: DiscussionWidget()),
                   )
                 : SliverToBoxAdapter(
                     child: Container(

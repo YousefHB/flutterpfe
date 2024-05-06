@@ -104,9 +104,14 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
                       child: TextField(
                         decoration: InputDecoration(
                           labelText: 'Recherche',
-                          hintText: 'Entrez le prénom de l\'utilisateur',
-                          prefixIcon: Icon(Icons.search),
-                          border: OutlineInputBorder(),
+                          hintText: 'Rechercher',
+                          filled: true, // Activer le remplissage
+                          fillColor: const Color.fromARGB(
+                              255, 255, 255, 255), // Couleur de fond
+                          border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.circular(10.0), // Rayon de bordure
+                          ),
                         ),
                         onChanged: (value) {
                           setState(() {
@@ -127,11 +132,17 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
                   var user = _searchResults[index];
-                  return ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: NetworkImage(user['photoProfil'].replaceAll('localhost', '10.0.2.2')),
-                    ),
-                    title: Text('${user['firstName']} ${user['lastName']}'),
+                  return Column(
+                    children: <Widget>[
+                      ListTile(
+                        leading: CircleAvatar(
+                          backgroundImage: NetworkImage(user['photoProfil']
+                              .replaceAll('localhost', '10.0.2.2')),
+                        ),
+                        title: Text('${user['firstName']} ${user['lastName']}'),
+                      ),
+                      Divider(), // Ajouter un séparateur entre chaque élément
+                    ],
                   );
                 },
                 childCount: _searchResults.length,

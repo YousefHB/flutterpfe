@@ -25,6 +25,14 @@ class _ProfilPatientState extends State<ProfilPatient> {
     fetchPosts();
     _userInfo = {};
     _fetchUserInfo();
+    fetchNumberOfFriends().then((value) {
+      setState(() {
+        numberOfFriends = value;
+      });
+    }).catchError((error) {
+      // Gestion des erreurs
+      print('Erreur: $error');
+    });
   }
 
   Future<void> _fetchUserInfo() async {
@@ -73,6 +81,31 @@ class _ProfilPatientState extends State<ProfilPatient> {
       throw Exception('Failed to load user info: $error');
     }
   }
+
+  Future<int> fetchNumberOfFriends() async {
+    final storage = FlutterSecureStorage();
+    final accessToken = await storage.read(key: 'accessToken');
+
+    final response = await http.get(
+      Uri.parse(url + '/api/user/count-friends'),
+      headers: <String, String>{
+        'Authorization': 'Bearer $accessToken',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      // Conversion de la réponse JSON en un objet Dart
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      // Récupération du nombre d'amis à partir de la réponse
+      final int numberOfFriends = data['numberOfFriends'];
+      return numberOfFriends;
+    } else {
+      // Gestion des erreurs
+      throw Exception('Failed to load number of friends');
+    }
+  }
+
+  int numberOfFriends = 0;
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -185,17 +218,9 @@ class _ProfilPatientState extends State<ProfilPatient> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    ListAmie(),
-                                    ), // Remplacez NextWidget() par le widget de destination
-                          );
-                        },
+                        onTap: () {},
                         child: Text(
-                          "200 \n Ami(e)s",
+                          '$numberOfFriends Ami(e)s',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: myfont,
@@ -205,9 +230,16 @@ class _ProfilPatientState extends State<ProfilPatient> {
                         ),
                       ),
                       OutlinedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ListAmie(),
+                            ), // Remplacez NextWidget() par le widget de destination
+                          );
+                        },
                         child: Text(
-                          "+ Ajouter à la story",
+                          "Liste d'ami(e)s",
                           style: TextStyle(
                             fontSize: 12,
                             fontFamily: myfont,
@@ -300,7 +332,7 @@ class _ProfilPatientState extends State<ProfilPatient> {
                   final postid = postData['_id'];
                   final postContent = postData['content'];
                   final postImages = postData['images'];
-                 // final postVideo = postData['videos'];
+                  // final postVideo = postData['videos'];
                   final firstName = postData['firstName'];
                   final lastName = postData['lastName'];
                   final createdAt = postData['createdAt'];
@@ -312,7 +344,7 @@ class _ProfilPatientState extends State<ProfilPatient> {
                     content: postContent,
                     postid: postid,
                     images: postImages,
-                   // videos: postVideo,
+                    // videos: postVideo,
                     firstName: firstName,
                     lastName: lastName,
                     createdAt: createdAt,
