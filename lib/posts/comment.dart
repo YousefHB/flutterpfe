@@ -60,10 +60,68 @@ class _MyWidgetState extends State<Comment> {
                   "Specialite: ${widget.specialty!}",
                   style: TextStyle(color: Colors.blue), // Couleur du texte en bleu
                 ),
-                if (widget.isOwner)
-                Image.asset(
-                  'assets/image/menudot.png'
-                )
+                if (widget.isOwner) 
+  GestureDetector(
+    onTap: () {
+      final RenderBox overlay = Overlay.of(context)!.context.findRenderObject() as RenderBox;
+      final RelativeRect position = RelativeRect.fromSize(
+        Rect.fromLTRB(MediaQuery.of(context).size.width - 10, 100, MediaQuery.of(context).size.width, 0),
+        overlay.size,
+      );
+
+      showMenu(
+        context: context,
+        position: position,
+        items: [
+          PopupMenuItem(
+            onTap: () {
+            
+            },
+            child: Row(
+              children: [
+                Icon(
+                  Icons.edit,
+                  color: Colors.blue, // Couleur de l'icône
+                ),
+                SizedBox(width: 10), // Espacement entre le texte et l'icône
+                Text(
+                  'Modifier commentaire',
+                  style: TextStyle(
+                    color: Colors.blue, // Couleur du texte
+                  ),
+                ),
+              ],
+            ),
+          ),
+          PopupMenuItem(
+            onTap: () {
+             
+            },
+            child: Row(
+              children: [
+                Icon(
+                  Icons.delete,
+                  color: Colors.blue, // Couleur de l'icône
+                ),
+                SizedBox(width: 10), // Espacement entre le texte et l'icône
+                Text(
+                  'Supprimer commentaire',
+                  style: TextStyle(
+                    color: Colors.blue, // Couleur du texte
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+        elevation: 8.0,
+        color: Colors.white, // Couleur de fond du menu déroulant
+      );
+    },
+    child: Image.asset(
+      'assets/image/menudot.png'
+    ),
+  ),
             ],
           ),
          

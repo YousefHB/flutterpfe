@@ -338,6 +338,7 @@ class _ProfilPatientState extends State<ProfilPatient> {
                   final createdAt = postData['createdAt'];
                   final photoProfil = postData['profilePhotoUrl'];
                   final userId = postData['createdBy']['_id'];
+                   final isOwner = postData['isOwner'];
                   // Ajouter l'ID de l'utilisateur
                     
                   return Post(
@@ -350,6 +351,8 @@ class _ProfilPatientState extends State<ProfilPatient> {
                     createdAt: createdAt,
                     profilePhotoUrl: photoProfil,
                     createdByUserId: userId,
+                    isOwner: isOwner,
+                    onDelete: fetchPosts,
                     onTapUserName: (userId) {
                       // Définir le comportement lorsqu'on clique sur le nom de l'utilisateur
                       print(

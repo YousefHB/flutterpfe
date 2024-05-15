@@ -21,30 +21,39 @@ class Addpost extends StatefulWidget {
 class _MyWidgetState extends State<Addpost> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  String? _selectedImagePath;
+  List<String>? _selectedImagePaths;
   final TextEditingController _textFieldController = TextEditingController();
   @override
   void initState() {
     super.initState();
-    _selectedImagePath =
+    _selectedImagePaths =
         null; // Initialisation de _selectedImagePath à null dans initState
   }
 
-  void _pickImageFromGallery() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedFile == null) {
-      print('Aucune image sélectionnée.');
-    } else {
-      print('Image sélectionnée : $pickedFile');
-      setState(() {
-        _selectedImagePath = pickedFile.path;
-        print('Chemin de l\'image sélectionnée : $_selectedImagePath');
-      });
-    }
+  void _pickImagesFromGallery() async {
+  final pickedFiles = await ImagePicker().pickMultiImage();
+  if (pickedFiles == null || pickedFiles.isEmpty) {
+    print('Aucune image sélectionnée.');
+  } else {
+    print('Images sélectionnées : $pickedFiles');
+    setState(() {
+      _selectedImagePaths = pickedFiles.map((file) => file.path).toList();
+    });
   }
+}
+
 
   void _publishPost() async {
+    // Vérifier si au moins l'un des deux champs est rempli
+    if(_textFieldController.text.isEmpty &&
+      (_selectedImagePaths == null || _selectedImagePaths!.isEmpty)){
+      // Afficher un message à l'utilisateur indiquant qu'il doit entrer du texte ou sélectionner une image
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Veuillez entrer du texte ou sélectionner une image."),
+      ));
+      return; // Arrêter la fonction si les deux champs sont vides
+    }
+
     // URL de votre API pour publier les posts
     final String apiUrl = addpost;
 
@@ -52,21 +61,27 @@ class _MyWidgetState extends State<Addpost> {
     final storage = FlutterSecureStorage();
     final accessToken = await storage.read(key: 'accessToken');
 
-    // Création de la requête HTTP pour envoyer l'image, le texte et le token JWT à l'API
+    // Création de la requête HTTP pour envoyer le texte et le token JWT à l'API
     var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
-    request.headers['Authorization'] =
-        'Bearer $accessToken'; // Ajout du token JWT dans l'en-tête de la requête
+    request.headers['Authorization'] = 'Bearer $accessToken';
 
-    if (_selectedImagePath != null) {
-      request.files.add(await http.MultipartFile.fromPath(
-        'images',
-        _selectedImagePath!,
-        contentType: MediaType('image', 'png'),
-      ));
+    // Ajout des images à la requête si elles existent
+    // Ajout des images à la requête si elles existent
+if (_selectedImagePaths != null && _selectedImagePaths!.isNotEmpty) {
+  for (String path in _selectedImagePaths!) {
+    request.files.add(await http.MultipartFile.fromPath(
+      'images',
+      path,
+      contentType: MediaType('image', 'png'),
+    ));
+  }
+}
+
+
+    // Ajout du texte du champ de texte à la requête si le champ de texte n'est pas vide
+    if (_textFieldController.text.isNotEmpty) {
+      request.fields['content'] = _textFieldController.text;
     }
-
-    // Ajout du texte du champ de texte à la requête
-    request.fields['content'] = _textFieldController.text;
 
     // Envoi de la requête à l'API
     var response = await request.send();
@@ -78,14 +93,19 @@ class _MyWidgetState extends State<Addpost> {
       // Effacer le contenu du TextField et réinitialiser l'image sélectionnée
       _textFieldController.clear(); // Effacer le contenu du TextField
       setState(() {
-        _selectedImagePath = null; // Réinitialiser l'image sélectionnée
+        _selectedImagePaths = null; // Réinitialiser l'image sélectionnée
       });
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: const Text("publication reussi"),
-        action: SnackBarAction(label: "undo", onPressed: () {}),
+        content: const Text("Publication réussie"),
+        action: SnackBarAction(label: "Undo", onPressed: () {}),
       ));
     } else {
       print('Échec de la publication. Code d\'état: ${response.statusCode}');
+      // Afficher un message d'erreur en cas d'échec de la publication
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+            "Échec de la publication. Code d'état: ${response.statusCode}"),
+      ));
     }
   }
 
@@ -209,26 +229,28 @@ class _MyWidgetState extends State<Addpost> {
                     ),
                   ),
                   Container(
-                    // Affichage de l'image sélectionnée
-                    child: Column(
-                      children: [
-                        if (_selectedImagePath != null)
-                          Image.file(
-                            File(_selectedImagePath!),
-                            width: 300,
-                            height: 300,
-                            fit: BoxFit
-                                .cover, // Ajuste l'image pour couvrir la boîte de 100x100
-                          )
-                        else
-                          SizedBox(
-                              width: 100,
-                              height:
-                                  100), // Si aucune image n'est sélectionnée, afficher un SizedBox de 100x100
-                      ],
+                    // Affichage des images sélectionnées
+                    height:
+                        300, // Définir une hauteur fixe pour la liste horizontale
+                    child: ListView.builder(
+                      scrollDirection:
+                          Axis.horizontal, // Faire défiler horizontalement
+                      itemCount: (_selectedImagePaths ?? []).length,// Nombre d'images sélectionnées
+                      itemBuilder: (context, index) {
+                        // Construire chaque élément de la liste
+                        return Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Image.file(
+                            File(_selectedImagePaths![index]),
+                            width: 200,
+                            height: 200,
+                            fit: BoxFit.cover,
+                          ),
+                        );
+                      },
                     ),
                   ),
-                  SizedBox(height: 250.0),
+                  SizedBox(height: 150.0),
                   Container(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 25.0, vertical: 00.0),
@@ -274,7 +296,7 @@ class _MyWidgetState extends State<Addpost> {
                                                     ),
                                                     GestureDetector(
                                                       onTap: () {
-                                                        _pickImageFromGallery();
+                                                        _pickImagesFromGallery();
                                                         print(
                                                             "gallery clicked");
                                                       },
@@ -397,7 +419,7 @@ class _MyWidgetState extends State<Addpost> {
                             GestureDetector(
                               onTap: () {
                                 // Logique à exécuter lors du clic sur l'image de la galerie
-                                _pickImageFromGallery();
+                                _pickImagesFromGallery();
                                 print("gallri clicked");
                               },
                               child: Image.asset(
