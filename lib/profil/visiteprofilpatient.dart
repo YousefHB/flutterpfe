@@ -344,6 +344,8 @@ class _AutreProfilPatientState extends State<AutreProfilPatient> {
                   final createdAt = postData['createdAt'];
                   final photoProfil = postData['profilePhotoUrl'];
                   final userId = postData['createdBy']['_id'];
+                  final isOwner = postData['isOwner'] ?? false;
+
                   // Ajouter l'ID de l'utilisateur
 
                   return Post(
@@ -356,6 +358,12 @@ class _AutreProfilPatientState extends State<AutreProfilPatient> {
                     createdAt: createdAt,
                     profilePhotoUrl: photoProfil,
                     createdByUserId: userId,
+                    isOwner: isOwner,
+                   onDelete: fetchpost,
+  
+
+                      
+                    
                     onTapUserName: (userId) {
                       // Définir le comportement lorsqu'on clique sur le nom de l'utilisateur
                       print(
@@ -417,4 +425,8 @@ class _AutreProfilPatientState extends State<AutreProfilPatient> {
       print('Error fetching posts: $e');
     }
   }
+}
+
+void fetchpost() {
+  print("object");
 }

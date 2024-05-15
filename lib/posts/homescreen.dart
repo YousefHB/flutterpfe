@@ -28,6 +28,7 @@ class _HomescreenState extends State<Homescreen> {
     _userInfo = {};
     _fetchUserInfo(); // Appelez fetchUserInfo lors de l'initialisation du widget pour récupérer les informations de l'utilisateur
   }
+  
 
   String userName = '';
   Future<void> _fetchUserInfo() async {
@@ -77,8 +78,16 @@ class _HomescreenState extends State<Homescreen> {
 
   Future<void> fetchPosts() async {
     final url = Uri.parse(getpost);
+    final storage = FlutterSecureStorage();
+    final accessToken = await storage.read(key: 'accessToken');
+
     try {
-      final response = await http.get(url);
+      final response = await http.get(url ,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+      }
+      );
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
         setState(() {
@@ -97,6 +106,7 @@ class _HomescreenState extends State<Homescreen> {
             final firstName = createdBy['firstName'];
             final lastName = createdBy['lastName'];
             final createdAt = item['createdAt'];
+             final isOwner = item['isOwner'] as bool; // Add isOwner field
             String profilePhotoUrl =
                 (item['createdBy']['photoProfil']['url'] as String)
                     .replaceAll('localhost', '10.0.2.2');
@@ -109,6 +119,7 @@ class _HomescreenState extends State<Homescreen> {
             item['lastName'] = lastName;
             item['createdAt'] = createdAt;
             item['profilePhotoUrl'] = profilePhotoUrl;
+            item['isOwner'] = isOwner;
             return item;
           }));
           /*posts.sort((a, b) => DateTime.parse(a['createdAt'])
@@ -228,6 +239,7 @@ class _HomescreenState extends State<Homescreen> {
                     final photoProfil = postData['profilePhotoUrl'];
                     final userId = postData['createdBy']['_id'];
                     // Ajouter l'ID de l'utilisateur
+                    final isOwner = postData['isOwner'];
 
                     return Post(
                       content: postContent,
@@ -239,6 +251,8 @@ class _HomescreenState extends State<Homescreen> {
                       profilePhotoUrl: photoProfil,
                       createdByUserId: userId,
                       postid: postid,
+                      isOwner: isOwner,
+                      onDelete: fetchPosts,
                       onTapUserName: (userId) {
                         String currentUserId = _userInfo['user']['id'];
 
