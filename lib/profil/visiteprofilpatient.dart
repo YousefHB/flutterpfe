@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:ycmedical/config.dart';
@@ -339,7 +338,7 @@ class _AutreProfilPatientState extends State<AutreProfilPatient> {
                   final postid = postData['_id'];
                   final postContent = postData['content'];
                   final postImages = postData['images'];
-                //  final postVideo = postData['videos'];
+                  //  final postVideo = postData['videos'];
                   final firstName = postData['firstName'];
                   final lastName = postData['lastName'];
                   final createdAt = postData['createdAt'];
@@ -351,7 +350,7 @@ class _AutreProfilPatientState extends State<AutreProfilPatient> {
                     postid: postid,
                     content: postContent,
                     images: postImages,
-                  //  videos: postVideo,
+                    //  videos: postVideo,
                     firstName: firstName,
                     lastName: lastName,
                     createdAt: createdAt,
