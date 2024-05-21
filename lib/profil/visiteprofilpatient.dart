@@ -79,6 +79,36 @@ class _AutreProfilPatientState extends State<AutreProfilPatient> {
     }
   }
 
+  Future<void> createConversation(String receiverId) async {
+    final storage = FlutterSecureStorage();
+    String? accessToken = await storage.read(key: 'accessToken');
+
+    try {
+      final String apiUrl = 'http://10.0.2.2:3000/api/chat/createConversation';
+      final Map<String, dynamic> body = {'receiverId': receiverId};
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken',
+        },
+        body: jsonEncode(body),
+      );
+
+      if (response.statusCode == 200) {
+        print('Conversation created successfully');
+        setState(() {
+          var conversationCreated = true;
+        });
+      } else {
+        print('Error creating conversation: ${response.statusCode}');
+        print(jsonDecode(response.body)['msg']);
+      }
+    } catch (error) {
+      print('Error creating conversation: $error');
+    }
+  }
+
   Future<void> sendFriendInvitation(String receiverId) async {
     final storage = FlutterSecureStorage();
     String? accessToken = await storage.read(key: 'accessToken');
@@ -267,7 +297,7 @@ class _AutreProfilPatientState extends State<AutreProfilPatient> {
                         ),
                       ),
                       OutlinedButton(
-                        onPressed: () {},
+                        onPressed: () => createConversation(widget.userId),
                         child: Row(
                           children: [
                             Image.asset(
@@ -359,11 +389,8 @@ class _AutreProfilPatientState extends State<AutreProfilPatient> {
                     profilePhotoUrl: photoProfil,
                     createdByUserId: userId,
                     isOwner: isOwner,
-                   onDelete: fetchpost,
-  
+                    onDelete: fetchpost,
 
-                      
-                    
                     onTapUserName: (userId) {
                       // Définir le comportement lorsqu'on clique sur le nom de l'utilisateur
                       print(

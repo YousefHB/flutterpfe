@@ -103,7 +103,6 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
                     Expanded(
                       child: TextField(
                         decoration: InputDecoration(
-                          labelText: 'Recherche',
                           hintText: 'Rechercher',
                           filled: true, // Activer le remplissage
                           fillColor: const Color.fromARGB(
@@ -112,6 +111,7 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
                             borderRadius:
                                 BorderRadius.circular(10.0), // Rayon de bordure
                           ),
+                          contentPadding: EdgeInsets.symmetric(vertical: 8.0),
                         ),
                         onChanged: (value) {
                           setState(() {
@@ -136,10 +136,17 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
                     children: <Widget>[
                       ListTile(
                         leading: CircleAvatar(
+                          radius: 55,
                           backgroundImage: NetworkImage(user['photoProfil']
                               .replaceAll('localhost', '10.0.2.2')),
                         ),
-                        title: Text('${user['firstName']} ${user['lastName']}'),
+                        title: Text(
+                          '${user['firstName']} ${user['lastName']}',
+                          style: TextStyle(
+                              color: Color.fromARGB(255, 0, 26, 48),
+                              fontSize: 18,
+                              fontFamily: myfont),
+                        ),
                       ),
                       Divider(), // Ajouter un séparateur entre chaque élément
                     ],

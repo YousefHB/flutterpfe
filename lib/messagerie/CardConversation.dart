@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ConversationCard extends StatelessWidget {
+class ConversationCard extends StatefulWidget {
   final String conversationId;
   final String? userImage;
   final String? userName;
@@ -14,6 +14,11 @@ class ConversationCard extends StatelessWidget {
   });
 
   @override
+  State<ConversationCard> createState() => _ConversationCardState();
+}
+
+class _ConversationCardState extends State<ConversationCard> {
+  @override
   Widget build(BuildContext context) {
     const Color myCustomColor = Color(0xFF009EE2);
     const Color myCustomColor1 = Color(0xFF38B8c4);
@@ -25,10 +30,10 @@ class ConversationCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (userImage != null)
+          if (widget.userImage != null)
             ClipOval(
               child: Image.network(
-                userImage!,
+                widget.userImage!,
                 width: 60,
                 height: 60,
                 fit: BoxFit.cover,
@@ -42,17 +47,17 @@ class ConversationCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '$userName',
+                '${widget.userName}',
                 style: TextStyle(
                   fontFamily: myfont,
                   fontSize: 17,
                   color: myCustomColor,
                 ),
               ),
-              if (lastMessage !=
+              if (widget.lastMessage !=
                   null) // Afficher le dernier message s'il est disponible
                 Text(
-                  lastMessage!,
+                  widget.lastMessage!,
                   style: TextStyle(
                     fontFamily: myfont,
                     fontSize: 14,
