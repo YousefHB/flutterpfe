@@ -10,6 +10,7 @@ import 'package:ycmedical/config.dart';
 
 import 'MainHomeNavigator.dart';
 import 'homescreen.dart';
+import 'post.dart';
 
 class Addpost extends StatefulWidget {
   const Addpost({Key? key}) : super(key: key);
@@ -180,12 +181,19 @@ if (_selectedImagePaths != null && _selectedImagePaths!.isNotEmpty) {
                       children: [
                         Row(
                           children: [
-                            Image.asset(
-                              'assets/image/profile.png',
-                              width: 50,
-                              height: 50,
+                            CircleAvatar(
+  radius: 25, // La moitié de la largeur et de la hauteur pour obtenir un diamètre de 50
+  backgroundImage: AssetImage('assets/image/1713728551769.jpeg'),
+),
+
+                            Text("  melek rekik",
+                            style: TextStyle(
+                          fontFamily: myfont,
+                          fontSize: 18,
+                          color: myCustomColor,
+                        ),
+                            
                             ),
-                            Text("Lorem ipsum"),
                           ],
                         ),
                         ElevatedButton(

@@ -228,13 +228,7 @@ class _AutreProfilPatientState extends State<AutreProfilPatient> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text("200 \n Ami(e)s",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontFamily: myfont,
-                            fontSize: 17,
-                            color: myCustomColor,
-                          )),
+                      
                       OutlinedButton(
                         onPressed: invitationSent
                             ? null // Désactivez le bouton si l'invitation a déjà été envoyée

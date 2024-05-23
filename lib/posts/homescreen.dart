@@ -6,7 +6,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:ycmedical/controller/search.dart';
 import 'package:ycmedical/profil/profilpatient.dart';
 import 'package:ycmedical/profil/visiteprofilpatient.dart';
-
+import '../enregistrement/enregistrement.dart';
+import '../pages/pages.dart';
 import 'post.dart';
 import 'stories.dart';
 
@@ -67,6 +68,7 @@ class _HomescreenState extends State<Homescreen> {
         String photoProfilUrl = userInfo['user']['photoProfil'];
         photoProfilUrl = photoProfilUrl.replaceAll('localhost', '10.0.2.2');
         userInfo['user']['photoProfil'] = photoProfilUrl;
+        //userInfo['user']['ProfessionnelSante'];
         return userInfo;
       } else {
         throw Exception('Failed to load user info: ${response.statusCode}');
@@ -388,64 +390,42 @@ class _HomescreenState extends State<Homescreen> {
                   ),
                 ),
               ),
-              GestureDetector(
-                onTap: () {},
-                child: Row(
-                  children: [
-                    SizedBox(width: 20),
-                    Image.asset(
-                      'assets/image/groupes.png',
-                      width: 100,
-                      height: 60,
-                    ),
-                  ],
-                ),
-              ),
-
-              GestureDetector(
-                onTap: () {},
-                child: Row(
-                  children: [
-                    SizedBox(width: 8),
-                    Image.asset(
-                      'assets/image/page.png',
-                      width: 90,
-                      height: 40,
-                    ),
-                  ],
-                ),
-              ),
-              GestureDetector(
-                onTap: () {},
-                child: Row(
-                  children: [
-                    SizedBox(width: 13),
-                    Image.asset(
-                      'assets/image/evenements.png',
-                      width: 145,
-                      height: 75,
-                    ),
-                  ],
-                ),
-              ),
-              GestureDetector(
-                onTap: () {},
-                child: Row(
-                  children: [
-                    SizedBox(width: 7),
-                    Image.asset(
-                      'assets/image/suivies.png',
-                      width: 135,
-                      height: 25,
-                    ),
-                  ],
-                ),
-              ),
+              
+                if (_userInfo['user']['role'] =='ProfessionnelSante')
+                           GestureDetector(
+                               onTap: () {
+                                 print("pp");
+                                   Navigator.push(
+                                       context, 
+                                      MaterialPageRoute(
+                                      builder: (context) =>Pages()
+                                       ),
+                                       );
+                                       },
+                                     child: Row(
+                                        children: [
+                                         SizedBox(width: 8),
+                                         Image.asset(
+                                        'assets/image/page.png',
+                                            width: 90,
+                                             height: 40,
+                                             ),
+                                             ],
+                                               ),
+                                           ),
+             
+              
               SizedBox(
                 height: 5,
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Enregistrement()),
+                          );
+                },
                 child: Row(
                   children: [
                     SizedBox(width: 17),
@@ -457,19 +437,7 @@ class _HomescreenState extends State<Homescreen> {
                   ],
                 ),
               ),
-              GestureDetector(
-                onTap: () {},
-                child: Row(
-                  children: [
-                    SizedBox(width: 2),
-                    Image.asset(
-                      'assets/image/marketplace.png',
-                      width: 155,
-                      height: 34,
-                    ),
-                  ],
-                ),
-              ),
+              
               GestureDetector(
                 onTap: () {},
                 child: Row(
@@ -496,9 +464,11 @@ class _HomescreenState extends State<Homescreen> {
                   ],
                 ),
               ),
+              SizedBox(height: 20,),
               Container(
-                height: 10, // Augmenter la hauteur du bouton
-                width: 10, // Augmenter la largeur du bouton
+                height: 40, // Augmenter la hauteur du bouton
+                width: 40,
+                margin: EdgeInsets.all(30) , // Augmenter la largeur du bouton
                 decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:ycmedical/profil/visiteprofilpatient.dart'; // Update this import to the correct file path
 
 import '../posts/post.dart';
 
@@ -29,6 +30,7 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
           setState(() {
             _searchResults = List<Map<String, dynamic>>.from(users);
           });
+          print(_searchResults);
         } else {
           print('Erreur: ${data['message']}');
         }
@@ -139,7 +141,22 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
                           backgroundImage: NetworkImage(user['photoProfil']
                               .replaceAll('localhost', '10.0.2.2')),
                         ),
-                        title: Text('${user['firstName']} ${user['lastName']}'),
+                        title: Text(
+                          '${user['firstName']} ${user['lastName']}'
+                        ),
+                        subtitle: user['role'] == 'ProfessionnelSante'
+                            ? Text('specialist de sante')
+                            : null,
+                        onTap: user['role'] != 'ProfessionnelSante'
+                            ? () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => AutreProfilPatient(userId: user['id']),
+                                  ),
+                                );
+                              }
+                            : null,
                       ),
                       Divider(), // Ajouter un séparateur entre chaque élément
                     ],

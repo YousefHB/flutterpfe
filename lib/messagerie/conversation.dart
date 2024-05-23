@@ -135,7 +135,10 @@ class _ConversationScreenState extends State<ConversationScreen> {
         }
 
         setState(() {
-          messages = newMessages;
+          // Clear existing messages list before adding new ones
+          messages.clear();
+          // Add the new messages to the list
+          messages.addAll(newMessages);
         });
       } else {
         throw Exception('Failed to load messages: ${response.statusCode}');
@@ -143,22 +146,6 @@ class _ConversationScreenState extends State<ConversationScreen> {
     } catch (error) {
       print('Error fetching messages: $error');
     }
-
-    // Listen for new messages in real-time
-    /* socket.on('newMessage', (data) {
-      print('New message from server: $data');
-      setState(() {
-        if (data['text'] != null) {
-          messages.add(Message(
-            text: data['text'] as String,
-            senderId: data['sender'] as String,
-            images: [],
-            videos: [],
-            documents: [],
-          ));
-        }
-      });
-    });*/
   }
 
   Future<void> selectFiles() async {
@@ -237,19 +224,11 @@ class _ConversationScreenState extends State<ConversationScreen> {
           'text': message,
           // Include any other necessary data here
         });
-        // Update UI with the new message
-        setState(() {
-          messages.add(Message(
-            text: message,
-            senderId: 'current_user_id', // Set the sender ID accordingly
-            images: [],
-            videos: [],
-            documents: [],
-          ));
-          selectedImages.clear();
-          selectedVideos.clear();
-          selectedDocuments.clear();
-        });
+        // Clear selected files
+        selectedImages.clear();
+        selectedVideos.clear();
+        selectedDocuments.clear();
+        await fetchMessages();
       } else {
         throw Exception(
             'Failed to send message: ${streamedResponse.statusCode}');

@@ -220,7 +220,7 @@ class _PostState extends State<Post> {
       );
 
       if (response.statusCode == 201) {
-        FetchPostComment(post);
+        fetchPostComment(post);
         print('Commentaire envoyé');
       } else {
         print('Échec de l\'envoi du commentaire: ${response.statusCode}');
@@ -232,7 +232,7 @@ class _PostState extends State<Post> {
     }
   }
 
-  Future<void> FetchPostComment(String post) async {
+  Future<void> fetchPostComment(String post) async {
   try {
     final storage = FlutterSecureStorage();
     final accessToken = await storage.read(key: 'accessToken');
@@ -398,7 +398,35 @@ void _showEditDialog() {
 );
 
   }
+  void tst () {
+ fetchPostComment(widget.postid);
+}
+Future<void> createEnregistrement( String postId) async {
+ 
+  try {
+ final url = Uri.parse("http://10.0.2.2:3000/enregister");
+  final storage = FlutterSecureStorage();
+  final accessToken = await storage.read(key: 'accessToken');
+   final body = jsonEncode({'post': postId});
+   final response = await http.post(
+     (url),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken'
+        },
+        body: body
+        );
+        if (response.statusCode == 201) {
+      print('Enregistrement créé avec succès.');
+    } else {
+      print('Erreur lors de la création de l\'enregistrement: ${response.statusCode}');
+    }
 
+  } catch (error){
+    print('Erreur lors de la création de l\'enregistrement: $error');
+  }
+
+}
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -713,7 +741,7 @@ void _showEditDialog() {
                           showCommentSection =
                               !showCommentSection; // Afficher ou masquer la section de commentaire
                         });
-                        FetchPostComment(widget.postid);
+                        fetchPostComment(widget.postid);
                       },
                       child: Image.asset(
                         'assets/image/commentaire.png',
@@ -725,7 +753,9 @@ void _showEditDialog() {
                       width: 15,
                     ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        
+                      },
                       child: Image.asset(
                         'assets/image/partager.png',
                         width: 70,
@@ -736,7 +766,9 @@ void _showEditDialog() {
                       width: 40,
                     ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        createEnregistrement(widget.postid);
+                      },
                       child: Image.asset(
                         'assets/image/enregistrement.png',
                         width: 25,
@@ -819,6 +851,7 @@ void _showEditDialog() {
                                             id: comment['_id'],
                                             userid: comment['user']['_id'],
                                             isOwner: comment['isOwner'],
+                                            onRefresh: () => fetchPostComment(widget.postid),
                                     );
                                   },
                                   childCount: comments.length,
