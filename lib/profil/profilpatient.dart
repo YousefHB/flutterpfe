@@ -220,7 +220,7 @@ class _ProfilPatientState extends State<ProfilPatient> {
                       GestureDetector(
                         onTap: () {},
                         child: Text(
-                          '$numberOfFriends Ami(e)s',
+                          '4 Ami(e)s',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: myfont,
@@ -338,9 +338,9 @@ class _ProfilPatientState extends State<ProfilPatient> {
                   final createdAt = postData['createdAt'];
                   final photoProfil = postData['profilePhotoUrl'];
                   final userId = postData['createdBy']['_id'];
-                   final isOwner = postData['isOwner'];
+                  final isOwner = postData['isOwner'];
                   // Ajouter l'ID de l'utilisateur
-                    
+
                   return Post(
                     content: postContent,
                     postid: postid,

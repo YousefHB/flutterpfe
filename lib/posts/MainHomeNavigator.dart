@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:ycmedical/messagerie/discussion.dart';
+import 'package:ycmedical/posts/rendezvous.dart';
 
 import 'Invit.dart';
 import '../messagerie/Message.dart';
@@ -76,7 +77,7 @@ class MainNavState extends State<MainNav> {
     ];
     final List<Widget> _screens = [
       Addpost(),
-      Notif(),
+      RendezVous(),
       Homescreen(),
       Invit(),
       Messagea(),
