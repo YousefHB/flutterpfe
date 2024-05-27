@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -9,81 +8,31 @@ import 'package:http_parser/http_parser.dart';
 import 'package:flutter/material.dart';
 import 'package:ycmedical/config.dart';
 
-import 'MainHomeNavigator.dart';
+import '../posts/post.dart';
+/*import 'MainHomeNavigator.dart';
 import 'homescreen.dart';
-import 'post.dart';
+import 'post.dart';*/
 
-class Addpost extends StatefulWidget {
-  const Addpost({Key? key}) : super(key: key);
+class AddpostPage extends StatefulWidget {
+  final String PageId;
+  const AddpostPage({Key? key, required this.PageId}) : super(key: key);
+
 
   @override
-  State<Addpost> createState() => _MyWidgetState();
+  State<AddpostPage> createState() => _MyWidgetState();
 }
 
-class _MyWidgetState extends State<Addpost> {
+class _MyWidgetState extends State<AddpostPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   List<String>? _selectedImagePaths;
   final TextEditingController _textFieldController = TextEditingController();
-  late Map<String, dynamic> _userInfo;
   @override
   void initState() {
     super.initState();
-    _userInfo = {};
-    _fetchUserInfo();
     _selectedImagePaths =
         null; // Initialisation de _selectedImagePath à null dans initState
   }
-
-Future<void> _fetchUserInfo() async {
-    final storage = FlutterSecureStorage();
-    String? accessToken = await storage.read(key: 'accessToken');
-
-    if (accessToken == null) {
-      return;
-    }
-
-    try {
-      final Map<String, dynamic> fetchedUserInfo =
-          await fetchUserInfo(accessToken);
-      setState(() {
-        _userInfo = fetchedUserInfo;
-      });
-    } catch (error) {
-      print('Error fetching user info: $error');
-    }
-  }
-
-  String convertImageUrl(String imageUrl) {
-    return imageUrl.replaceAll('localhost', '10.0.2.2');
-  }
-
-  Future<Map<String, dynamic>> fetchUserInfo(String accessToken) async {
-    try {
-      final response = await http.get(
-        Uri.parse(userinfo),
-        headers: {'Authorization': 'Bearer $accessToken'},
-      );
-
-      if (response.statusCode == 200) {
-        Map<String, dynamic> userInfo = jsonDecode(response.body);
-
-        userInfo['user']['photoProfil'] =
-            convertImageUrl(userInfo['user']['photoProfil']);
-        userInfo['user']['photoCouverture'] =
-            convertImageUrl(userInfo['user']['photoCouverture']);
-
-        return userInfo;
-      } else {
-        throw Exception('Failed to load user info: ${response.statusCode}');
-      }
-    } catch (error) {
-      throw Exception('Failed to load user info: $error');
-    }
-  }
-
-
-
 
   void _pickImagesFromGallery() async {
   final pickedFiles = await ImagePicker().pickMultiImage();
@@ -98,7 +47,7 @@ Future<void> _fetchUserInfo() async {
 }
 
 
-  void _publishPost() async {
+  void _publishPost(String PageId) async {
     // Vérifier si au moins l'un des deux champs est rempli
     if(_textFieldController.text.isEmpty &&
       (_selectedImagePaths == null || _selectedImagePaths!.isEmpty)){
@@ -110,7 +59,7 @@ Future<void> _fetchUserInfo() async {
     }
 
     // URL de votre API pour publier les posts
-    final String apiUrl = addpost;
+    final String apiUrl = 'http://10.0.2.2:3000/api/page/createPostPage/$PageId';
 
     // Récupération du token JWT de l'utilisateur
     final storage = FlutterSecureStorage();
@@ -236,17 +185,11 @@ if (_selectedImagePaths != null && _selectedImagePaths!.isNotEmpty) {
                         Row(
                           children: [
                             CircleAvatar(
-                        radius: 25,
-                        backgroundImage: NetworkImage(
-                          _userInfo['user']['photoProfil'] ??
-                              'assets/image/people.png',
-                        ),
-                      ),
+  radius: 25, // La moitié de la largeur et de la hauteur pour obtenir un diamètre de 50
+  backgroundImage: AssetImage('assets/image/1713728551769.jpeg'),
+),
 
-                            Text(
-                                _userInfo.isNotEmpty
-                            ? '${_userInfo['user']['firstName']} ${_userInfo['user']['lastName']}'
-                            : 'Chargement...', // le nom de patient ici,
+                            Text("  melek rekik",
                             style: TextStyle(
                           fontFamily: myfont,
                           fontSize: 18,
@@ -257,7 +200,8 @@ if (_selectedImagePaths != null && _selectedImagePaths!.isNotEmpty) {
                           ],
                         ),
                         ElevatedButton(
-                          onPressed: _publishPost,
+                          onPressed: () => _publishPost(widget.PageId),
+
                           child: Text(
                             'publier',
                             style: TextStyle(

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:ycmedical/config.dart';
 import 'package:ycmedical/posts/post.dart';
+import 'package:ycmedical/profil/modif_profil.dart';
 
 import 'listami.dart';
 
@@ -261,7 +262,14 @@ class _ProfilPatientState extends State<ProfilPatient> {
                         ),
                       ),
                       OutlinedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                           Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Modif_profil(),
+                        ),
+                      );
+                        },
                         child: Row(
                           children: [
                             Image.asset(
@@ -332,7 +340,7 @@ class _ProfilPatientState extends State<ProfilPatient> {
                   final postid = postData['_id'];
                   final postContent = postData['content'];
                   final postImages = postData['images'];
-                  // final postVideo = postData['videos'];
+                  final postVideo = postData['videos'];
                   final firstName = postData['firstName'];
                   final lastName = postData['lastName'];
                   final createdAt = postData['createdAt'];
@@ -345,7 +353,7 @@ class _ProfilPatientState extends State<ProfilPatient> {
                     content: postContent,
                     postid: postid,
                     images: postImages,
-                    // videos: postVideo,
+                    videos: postVideo,
                     firstName: firstName,
                     lastName: lastName,
                     createdAt: createdAt,
@@ -389,6 +397,9 @@ class _ProfilPatientState extends State<ProfilPatient> {
                 (item['images'] as List<dynamic>).map((image) {
               return image.toString().replaceAll('localhost', '10.0.2.2');
             }).toList();
+            List<String> video = (item['videos'] as List<dynamic>).map((video) {
+              return video.toString().replaceAll('localhost', '10.0.2.2');
+            }).toList();
             item['images'] = images;
             final createdBy = item['createdBy'];
             final id = item['_id'];
@@ -404,6 +415,7 @@ class _ProfilPatientState extends State<ProfilPatient> {
             item['createdAt'] = createdAt;
             item['profilePhotoUrl'] = profilePhotoUrl;
             item['_id'] = id;
+            item['videos'] = video;
             return item;
           }));
         });

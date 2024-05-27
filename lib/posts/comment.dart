@@ -133,7 +133,7 @@ void _showEditDialog() {
       children: [
         Container(
            decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 226, 222, 222), // Couleur de fond grise
+            color: Color.fromARGB(255, 226, 226, 226), // Couleur de fond grise
             borderRadius: BorderRadius.circular(25),
              border: Border.all(color: Color.fromARGB(255, 136, 228, 240)), // Rayon de 10 pour les coins
           ),
@@ -226,7 +226,9 @@ void _showEditDialog() {
 
     },
     child: Image.asset(
-      'assets/image/menudot.png'
+      'assets/image/menudot.png',
+      width: 15.0,
+      height: 15.0,
     ),
   ),
             ],

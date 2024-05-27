@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:ycmedical/pages/visit_pag.dart';
 import 'package:ycmedical/profil/visiteprofilpatient.dart'; // Update this import to the correct file path
 
 import '../posts/post.dart';
@@ -15,32 +16,34 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
   List<Map<String, dynamic>> _searchResults = [];
 
   Future<void> _executeSearch() async {
-    try {
-      var response = await http.post(
-        Uri.parse('http://10.0.2.2:3000/api/user/rechercheutilisateur'),
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({'searchTerm': _searchTerm}),
-      );
-      if (response.statusCode == 200) {
-        var data = json.decode(response.body);
-        if (data['success']) {
-          var users = data['users'];
-          setState(() {
-            _searchResults = List<Map<String, dynamic>>.from(users);
-          });
-          print(_searchResults);
-        } else {
-          print('Erreur: ${data['message']}');
-        }
+  try {
+    var response = await http.post(
+      Uri.parse('http://10.0.2.2:3000/api/user/rechercheutilisateur'),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({'searchTerm': _searchTerm}),
+    );
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+      if (data['success']) {
+        var users = data['users'];
+        var pages = data['pages'];
+        setState(() {
+          _searchResults = List<Map<String, dynamic>>.from(users)
+            ..addAll(List<Map<String, dynamic>>.from(pages));
+        });
+        print(_searchResults);
       } else {
-        print('Erreur HTTP: ${response.statusCode}');
+        print('Erreur: ${data['message']}');
       }
-    } catch (e) {
-      print('Exception lors de la requête: $e');
+    } else {
+      print('Erreur HTTP: ${response.statusCode}');
     }
+  } catch (e) {
+    print('Exception lors de la requête: $e');
   }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -131,50 +134,75 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
               ),
             ),
             SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  var user = _searchResults[index];
-                  return Column(
-                    children: <Widget>[
-                      ListTile(
-                        leading: CircleAvatar(
-                          radius: 55,
-                          backgroundImage: NetworkImage(user['photoProfil']
-                              .replaceAll('localhost', '10.0.2.2')),
-                        ),
-                        title: Text(
-<<<<<<< HEAD
-                          '${user['firstName']} ${user['lastName']}'
-                        ),
-                        subtitle: user['role'] == 'ProfessionnelSante'
-                            ? Text('specialist de sante')
-                            : null,
-                        onTap: user['role'] != 'ProfessionnelSante'
-                            ? () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => AutreProfilPatient(userId: user['id']),
-                                  ),
-                                );
-                              }
-                            : null,
-=======
-                          '${user['firstName']} ${user['lastName']}',
-                          style: TextStyle(
-                              color: Color.fromARGB(255, 0, 26, 48),
-                              fontSize: 18,
-                              fontFamily: myfont),
-                        ),
->>>>>>> 120c1fdd380d5e41dcb7632dd46abec003ec14a2
-                      ),
-                      Divider(), // Ajouter un séparateur entre chaque élément
-                    ],
-                  );
-                },
-                childCount: _searchResults.length,
+  delegate: SliverChildBuilderDelegate(
+    (BuildContext context, int index) {
+      var item = _searchResults[index];
+      bool isUser = item.containsKey('firstName'); // Check if it's a user
+
+      return Column(
+        children: <Widget>[
+          ListTile(
+            leading: CircleAvatar(
+              radius: 55,
+              backgroundImage: NetworkImage(
+                (isUser ? item['photoProfil'] : item['photoPage'])
+                    .replaceAll('localhost', '10.0.2.2'),
               ),
             ),
+            title: Text(
+              isUser
+                  ? '${item['firstName']} ${item['lastName']}'
+                  : '${item['nom']}',
+                  style: TextStyle(
+                          fontFamily: myfont,
+                          fontSize: 15,
+                          color: myCustomColor,
+                        ),
+            ),
+            subtitle: isUser && item['role'] == 'ProfessionnelSante'
+                ? Text('specialist de sante',
+                style: TextStyle(
+                          fontFamily: myfont,
+                          fontSize: 12,
+                          color: Colors.black,
+                        ),
+                )
+                : Text(item['description'] ?? '',
+                 style: TextStyle(
+                          fontFamily: myfont,
+                          fontSize: 12,
+                          color: Colors.black,
+                        ),
+                
+                ),
+            onTap: () {
+              if (isUser) {
+                if (item['role'] != 'ProfessionnelSante') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AutreProfilPatient(userId: item['id']),
+                    ),
+                  );
+                }
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Visit_Page(PageId: item['id']),
+                  ),
+                );
+              }
+            },
+          ),
+          Divider(), // Ajouter un séparateur entre chaque élément
+        ],
+      );
+    },
+    childCount: _searchResults.length,
+  ),
+)
+
           ],
         ),
       ),

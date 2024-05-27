@@ -332,7 +332,7 @@ class _ProfilPatientState extends State<ProfilPatient> {
                   final postid = postData['_id'];
                   final postContent = postData['content'];
                   final postImages = postData['images'];
-                  // final postVideo = postData['videos'];
+                   final postVideo = postData['videos'];
                   final firstName = postData['firstName'];
                   final lastName = postData['lastName'];
                   final createdAt = postData['createdAt'];
@@ -345,7 +345,7 @@ class _ProfilPatientState extends State<ProfilPatient> {
                     content: postContent,
                     postid: postid,
                     images: postImages,
-                    // videos: postVideo,
+                    videos: postVideo,
                     firstName: firstName,
                     lastName: lastName,
                     createdAt: createdAt,
