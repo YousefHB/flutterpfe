@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:ycmedical/pages/visit_pag.dart';
 import 'package:ycmedical/profil/visiteprofilpatient.dart'; // Update this import to the correct file path
 
 import '../posts/post.dart';
@@ -27,8 +28,10 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
         var data = json.decode(response.body);
         if (data['success']) {
           var users = data['users'];
+          var pages = data['pages'];
           setState(() {
-            _searchResults = List<Map<String, dynamic>>.from(users);
+            _searchResults = List<Map<String, dynamic>>.from(users)
+              ..addAll(List<Map<String, dynamic>>.from(pages));
           });
           print(_searchResults);
         } else {
@@ -133,30 +136,68 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
-                  var user = _searchResults[index];
+                  var item = _searchResults[index];
+                  bool isUser =
+                      item.containsKey('firstName'); // Check if it's a user
+
                   return Column(
                     children: <Widget>[
                       ListTile(
                         leading: CircleAvatar(
                           radius: 55,
-                          backgroundImage: NetworkImage(user['photoProfil']
-                              .replaceAll('localhost', '10.0.2.2')),
+                          backgroundImage: NetworkImage(
+                            (isUser ? item['photoProfil'] : item['photoPage'])
+                                .replaceAll('localhost', '10.0.2.2'),
+                          ),
                         ),
-                        title: Text('${user['firstName']} ${user['lastName']}'),
-                        subtitle: user['role'] == 'ProfessionnelSante'
-                            ? Text('specialist de sante')
-                            : null,
-                        onTap: user['role'] != 'ProfessionnelSante'
-                            ? () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        AutreProfilPatient(userId: user['id']),
-                                  ),
-                                );
-                              }
-                            : null,
+                        title: Text(
+                          isUser
+                              ? '${item['firstName']} ${item['lastName']}'
+                              : '${item['nom']}',
+                          style: TextStyle(
+                            fontFamily: myfont,
+                            fontSize: 15,
+                            color: myCustomColor,
+                          ),
+                        ),
+                        subtitle: isUser && item['role'] == 'ProfessionnelSante'
+                            ? Text(
+                                'specialist de sante',
+                                style: TextStyle(
+                                  fontFamily: myfont,
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                ),
+                              )
+                            : Text(
+                                item['description'] ?? '',
+                                style: TextStyle(
+                                  fontFamily: myfont,
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                ),
+                              ),
+                        onTap: () {
+                          if (isUser) {
+                            if (item['role'] != 'ProfessionnelSante') {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      AutreProfilPatient(userId: item['id']),
+                                ),
+                              );
+                            }
+                          } else {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    Visit_Page(PageId: item['id']),
+                              ),
+                            );
+                          }
+                        },
                       ),
                       Divider(), // Ajouter un séparateur entre chaque élément
                     ],
@@ -164,7 +205,7 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
                 },
                 childCount: _searchResults.length,
               ),
-            ),
+            )
           ],
         ),
       ),

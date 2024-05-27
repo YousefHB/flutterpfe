@@ -4,7 +4,7 @@ import 'package:video_player/video_player.dart';
 class VideoPlayerWidget extends StatefulWidget {
   final String videoUrl;
 
-  VideoPlayerWidget({required this.videoUrl});
+  VideoPlayerWidget({required this.videoUrl, });
 
   @override
   _VideoPlayerWidgetState createState() => _VideoPlayerWidgetState();

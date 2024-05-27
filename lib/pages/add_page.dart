@@ -74,7 +74,7 @@ class _Ajoute_pState extends State<Ajoute_page> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Créer Pages",
+                      "Créer Page",
                       style: TextStyle(
                         fontFamily: myfont,
                         fontSize: 20,

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 import '../posts/post.dart';
 import 'add_page.dart';
-import 'dart:convert';
+import 'page_detaill.dart'; // Import the Page_detaill widget
+
 class Pages extends StatefulWidget {
   const Pages({super.key});
 
@@ -12,16 +15,17 @@ class Pages extends StatefulWidget {
 }
 
 class _PageState extends State<Pages> {
-   List<Map<String, dynamic>> _userPages = [];
-   Future<void> _fetchUserPages() async {
+  List<Map<String, dynamic>> _userPages = [];
+
+  Future<void> _fetchUserPages() async {
     try {
-       final storage = FlutterSecureStorage();
-  final accessToken = await storage.read(key: 'accessToken');
+      final storage = FlutterSecureStorage();
+      final accessToken = await storage.read(key: 'accessToken');
       var response = await http.get(
         Uri.parse('http://10.0.2.2:3000/api/page/getUserPages'),
         headers: <String, String>{
           'Content-Type': 'application/json',
-          'Authorization':'Bearer $accessToken', // Replace with actual token
+          'Authorization': 'Bearer $accessToken',
         },
       );
       if (response.statusCode == 200) {
@@ -42,14 +46,16 @@ class _PageState extends State<Pages> {
       print('Exception lors de la requête: $e');
     }
   }
+
   @override
   void initState() {
     super.initState();
     _fetchUserPages();
   }
+
   @override
   Widget build(BuildContext context) {
-     return Scaffold(
+    return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -74,67 +80,69 @@ class _PageState extends State<Pages> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
-                        onPressed: () {},
-                        icon: Image.asset(
-                          "assets/image/back.png",
-                          width: 30,
-                          height: 30,
-                        )),
+                      onPressed: () {},
+                      icon: Image.asset(
+                        "assets/image/back.png",
+                        width: 30,
+                        height: 30,
+                      ),
+                    ),
                     Text(
-                        "Pages",
-                        style: TextStyle(
-                          fontFamily: myfont,
-                          fontSize: 20,
-                          color: myCustomColor,
-                        )),
-                 SizedBox(width: 30,)
+                      "Pages",
+                      style: TextStyle(
+                        fontFamily: myfont,
+                        fontSize: 20,
+                        color: myCustomColor,
+                      ),
+                    ),
+                    SizedBox(width: 30),
                   ],
                 ),
               ),
             ),
-             SliverToBoxAdapter(
+            SliverToBoxAdapter(
               child: Container(
                 margin: const EdgeInsets.only(top: 45),
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                 decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.blue,
-                  width: 1.5,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.blue,
+                    width: 1.5,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    
                     Text(
-                        "Créer une page",
-                        style: TextStyle(
-                          fontFamily: myfont,
-                          fontSize: 18,
-                          color: myCustomColor,
-                        )),
+                      "Créer une page",
+                      style: TextStyle(
+                        fontFamily: myfont,
+                        fontSize: 18,
+                        color: myCustomColor,
+                      ),
+                    ),
                     IconButton(
-                        onPressed: () {
-                           Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Ajoute_page()),
-                          );
-                        },
-                        icon: Icon(
-                          Icons.add,
-                          color: Colors.blue,
-                          size: 35,
-                        )
-                        ), 
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Ajoute_page(),
+                          ),
+                        );
+                      },
+                      icon: Icon(
+                        Icons.add,
+                        color: Colors.blue,
+                        size: 35,
+                      ),
+                    ),
                   ],
                 ),
               ),
             ),
-           
             SliverToBoxAdapter(
-                  child: Container(
+              child: Container(
                 padding: EdgeInsets.fromLTRB(20, 40, 20, 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,9 +157,9 @@ class _PageState extends State<Pages> {
                       ),
                     ),
                     Divider(
-                      color: myCustomColor, // Couleur du Divider
-                      thickness: 1, // Épaisseur du Divider
-                      height: 1, // Hauteur du Divider
+                      color: myCustomColor,
+                      thickness: 1,
+                      height: 1,
                     ),
                   ],
                 ),
@@ -161,14 +169,23 @@ class _PageState extends State<Pages> {
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
                   var page = _userPages[index];
-                  return Card(
-                      margin: const EdgeInsets.symmetric(vertical: 5 , horizontal: 5),
-                      
+                  return GestureDetector(
+                    onTap: () {
+                      print(page['_id']);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Page_detaill(PageId: page['_id']),
+                        ),
+                      );
+                    },
+                    child: Card(
+                      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15.0),
                         side: BorderSide(color: Colors.blue, width: 2),
                       ),
-                      elevation: 5, // This adds a shadow effect to the card
+                      elevation: 5,
                       child: Row(
                         children: [
                           Padding(
@@ -187,25 +204,24 @@ class _PageState extends State<Pages> {
                               child: Text(
                                 page['nom'],
                                 style: TextStyle(
-                          fontFamily: myfont,
-                          fontSize: 20,
-                          color: myCustomColor,
-                        ),
+                                  fontFamily: myfont,
+                                  fontSize: 20,
+                                  color: myCustomColor,
+                                ),
                               ),
                             ),
                           ),
                         ],
                       ),
-                    );
-                  },
+                    ),
+                  );
+                },
                 childCount: _userPages.length,
               ),
             ),
-          ]
-          ),
+          ],
+        ),
       ),
-    
-            );
+    );
   }
 }
- 
