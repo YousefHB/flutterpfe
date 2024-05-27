@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:ycmedical/config.dart';
 import 'package:ycmedical/rendezvous/cardrendezvous.dart';
 import 'package:ycmedical/rendezvous/classprofsant%C3%A9.dart';
+import 'package:ycmedical/rendezvous/listedesrendezvous.dart';
 
 class RendezVous extends StatefulWidget {
   const RendezVous({super.key});
@@ -50,6 +51,80 @@ class _RendezVousState extends State<RendezVous> {
     }
   }
 
+  /****************
+   * ***************** */
+  final GlobalKey _menuKey = GlobalKey();
+
+  void _showMenu() {
+    final RenderBox renderBox =
+        _menuKey.currentContext!.findRenderObject() as RenderBox;
+    final Offset offset = renderBox.localToGlobal(Offset.zero);
+    final size = renderBox.size;
+
+    showMenu(
+      context: context,
+      position: RelativeRect.fromLTRB(
+        offset.dx,
+        offset.dy + size.height,
+        offset.dx + size.width,
+        offset.dy,
+      ),
+      items: [
+        PopupMenuItem(
+          value: 'requested_appointments',
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors
+                  .white, // Assurez-vous que l'arrière-plan est blanc ou une autre couleur appropriée
+              borderRadius: BorderRadius.circular(8.0), // Radius des bords
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 4.0,
+                  offset: Offset(2, 2),
+                ),
+              ],
+            ),
+            padding: const EdgeInsets.all(
+                8.0), // Padding pour donner de l'espace autour du texte
+            child: Text(
+              'Rendez-vous demandés',
+              style: TextStyle(
+                fontFamily: 'myfont',
+                fontSize:
+                    14, // Assurez-vous que la taille de la police est appropriée
+                color: Color.fromARGB(255, 0, 26, 48),
+              ),
+            ),
+          ),
+        ),
+        // Ajoutez d'autres éléments de menu ici
+      ],
+      elevation:
+          0, // Retirez l'élévation pour enlever le fond du menu contextuel
+      color: Colors.transparent, // Rendre le fond transparent
+    ).then((value) {
+      if (value != null) {
+        _onMenuItemSelected(value);
+      }
+    });
+  }
+
+  void _onMenuItemSelected(String value) {
+    switch (value) {
+      case 'requested_appointments':
+        // Action pour les rendez-vous demandés
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => listrendezvousdemande()),
+        );
+        print('Rendez-vous demandés sélectionnés');
+        break;
+      // Ajoutez d'autres cas si nécessaire
+    }
+  }
+
+  /********** */
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,7 +170,8 @@ class _RendezVousState extends State<RendezVous> {
                           ),
                         ),
                         IconButton(
-                          onPressed: () {},
+                          key: _menuKey,
+                          onPressed: _showMenu,
                           icon: Image.asset(
                             "assets/image/menudot.png",
                             width: 30,

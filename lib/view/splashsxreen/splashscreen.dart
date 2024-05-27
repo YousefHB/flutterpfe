@@ -1,34 +1,83 @@
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
+import 'package:ycmedical/view/authentification/connection.dart';
 
-class Splashscreen extends StatelessWidget {
-  const Splashscreen({Key? key});
+class SplashScreen extends StatefulWidget {
+  @override
+  _SplashScreenState createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen>
+    with TickerProviderStateMixin {
+  late VideoPlayerController _controller;
+  late AnimationController _animationController;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = VideoPlayerController.asset('assets/splash_video.mp4')
+      ..initialize().then((_) {
+        setState(() {});
+        _controller.play();
+
+        // After 4 seconds, start the fade-out animation and navigate to the Connection screen
+        Future.delayed(Duration(seconds: 4), () {
+          _animationController.forward();
+        });
+      });
+
+    _animationController = AnimationController(
+      duration: Duration(seconds: 2),
+      vsync: this,
+    );
+
+    _animation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeOut,
+    );
+
+    _animationController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => Connection()),
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width, // Full width of the screen
-      height: MediaQuery.of(context).size.height, // Full height of the screen
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Color.fromRGBO(56, 184, 196, 0.41),
-            Color(
-                0xFF38B8c4), // Dégradé de blanc à bleu pour la première moitié
-            Color(
-                0xFF38B8c4), // Dégradé de bleu à blanc pour la deuxième moitié
-            Color.fromRGBO(56, 184, 196, 0.42),
-          ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          stops: [0.0, 0.35, 0.93, 1.0],
-        ),
-      ),
-      child: Center(
-        child: Image.asset(
-          'assets/image/logoblanc.png', // Path to your image asset
-          width: 200, // Adjust width as needed    123456
-          height: 200, // Adjust height as needed
-        ),
+    return Scaffold(
+      body: Stack(
+        children: [
+          _controller.value.isInitialized
+              ? SizedBox.expand(
+                  child: FittedBox(
+                    fit: BoxFit.cover,
+                    child: SizedBox(
+                      width: _controller.value.size?.width ?? 0,
+                      height: _controller.value.size?.height ?? 0,
+                      child: VideoPlayer(_controller),
+                    ),
+                  ),
+                )
+              : Center(child: CircularProgressIndicator()),
+          FadeTransition(
+            opacity: _animation,
+            child: Container(
+              color: Color.fromARGB(255, 208, 253, 255),
+            ),
+          ),
+        ],
       ),
     );
   }

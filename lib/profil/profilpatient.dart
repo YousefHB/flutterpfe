@@ -220,7 +220,7 @@ class _ProfilPatientState extends State<ProfilPatient> {
                       GestureDetector(
                         onTap: () {},
                         child: Text(
-                          '4 Ami(e)s',
+                          '1 Ami(e)s',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: myfont,
